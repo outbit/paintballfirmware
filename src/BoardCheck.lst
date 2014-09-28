@@ -1,0 +1,656 @@
+
+
+HI-TECH Software PICC Macro Assembler V9.50PL2
+                                                      Tue Aug 11 23:56:15 2009
+
+
+     1                           	processor	16F648A
+     2                           	opt	pw 79
+     3                           	psect	text0,local,class=CODE,delta=2
+     4                           	psect	text1,local,class=CODE,delta=2
+     5                           	psect	text2,local,class=CODE,delta=2
+     6                           	psect	text3,local,class=CODE,delta=2
+     7                           	psect	text4,local,class=CODE,delta=2
+     8                           	psect	text5,local,class=CODE,delta=2
+     9                           	psect	text6,local,class=CODE,delta=2
+    10                           	psect	text7,local,class=CODE,delta=2
+    11                           	psect	text8,local,class=CODE,delta=2
+    12                           	psect	text9,local,class=CODE,delta=2
+    13                           	psect	text11,local,class=CODE,delta=2
+    14                           	psect	text12,local,class=CODE,delta=2
+    15                           	psect	rbss_0,global,class=BANK0,space=1,delta=
+      +                          1
+    16                           	psect	rbss_1,global,class=BANK1,space=1,delta=
+      +                          1
+    17                           	psect	fpp___NONLBI_DIP1_ISSET,global,ovrld,cla
+      +                          ss=CONST,delta=2
+    18                           	psect	fpp___NONLBI_EYEBUTTON_ISDOWN,global,ovr
+      +                          ld,class=CONST,delta=2
+    19                           	psect	fpp___NONLBI_EYEPOWER_ON,global,ovrld,cl
+      +                          ass=CONST,delta=2
+    20                           	psect	fpp___NONLBI_EYEPOWER_OFF,global,ovrld,c
+      +                          lass=CONST,delta=2
+    21                           	psect	fpp___LBI_DIP1_ISSET,global,ovrld,class=
+      +                          CONST,delta=2
+    22                           	psect	fpp___LBI_EYEBUTTON_ISDOWN,global,ovrld,
+      +                          class=CONST,delta=2
+    23                           	psect	fpp___LBI_EYEPOWER_ON,global,ovrld,class
+      +                          =CONST,delta=2
+    24                           	psect	fpp___LBI_EYEPOWER_OFF,global,ovrld,clas
+      +                          s=CONST,delta=2
+    25  0000                     
+    26  0000                     
+    27  0000                     
+    28  0000                     
+    29  0000                     
+    30  0000                     
+    31  0000                     
+    32  0000                     
+    33  0000                     
+    34  0000                     
+    35                           
+    36                           	psect	text0
+    37  01B4                     __NONLBI_DIP1_ISSET
+    38                           ;BoardCheck.c: 41: BOOL _NONLBI_DIP1_ISSET(void
+      +                          )
+    39  01B4  3000               	movlw	0
+    40  01B5  0183               	clrf	3	;select bank 0
+    41  01B6  1F85               	btfss	5,7
+    42  01B7  3001               	movlw	1
+    43                           ;BoardCheck.c: 44: }
+    44  01B8  0008               	return	;uses W
+    45                           
+    46                           	psect	text1
+    47  01AF                     __LBI_DIP1_ISSET
+    48                           ;BoardCheck.c: 45: BOOL _LBI_DIP1_ISSET(void)
+    49  01AF  3000               	movlw	0
+    50  01B0  0183               	clrf	3	;select bank 0
+    51  01B1  1E05               	btfss	5,4
+    52  01B2  3001               	movlw	1
+    53                           ;BoardCheck.c: 48: }
+    54  01B3  0008               	return	;uses W
+    55                           
+    56                           	psect	text2
+    57  01B9                     __NONLBI_EYEBUTTON_ISDOWN
+    58                           ;BoardCheck.c: 50: BOOL _NONLBI_EYEBUTTON_ISDOW
+      +                          N(void)
+    59  01B9  3000               	movlw	0
+    60  01BA  0183               	clrf	3	;select bank 0
+    61  01BB  1D05               	btfss	5,2
+    62  01BC  3001               	movlw	1
+    63                           ;BoardCheck.c: 53: }
+    64  01BD  0008               	return	;uses W
+    65                           
+    66                           	psect	text3
+    67  01BE                     __LBI_EYEBUTTON_ISDOWN
+    68                           ;BoardCheck.c: 54: BOOL _LBI_EYEBUTTON_ISDOWN(v
+      +                          oid)
+    69  01BE  3000               	movlw	0
+    70  01BF  0183               	clrf	3	;select bank 0
+    71  01C0  1E85               	btfss	5,5
+    72  01C1  3001               	movlw	1
+    73                           ;BoardCheck.c: 57: }
+    74  01C2  0008               	return	;uses W
+    75                           
+    76                           	psect	text4
+    77  01D8                     __NONLBI_EYEPOWER_ON
+    78                           ;BoardCheck.c: 59: void _NONLBI_EYEPOWER_ON(voi
+      +                          d)
+    79  01D8  1683               	bsf	3,5
+    80  01D9  1303               	bcf	3,6	;carry unused
+    81  01DA  1406               	bsf	6,0
+    82  01DB  1283               	bcf	3,5
+    83  01DC  1485               	bsf	5,1
+    84  01DD  0000               	nop	;#
+    85                           ;BoardCheck.c: 62: }
+    86  01DE  0008               	return	;W free
+    87                           
+    88                           	psect	text5
+    89  01CA                     __LBI_EYEPOWER_ON
+    90                           ;BoardCheck.c: 63: void _LBI_EYEPOWER_ON(void)
+    91  01CA  1683               	bsf	3,5
+    92  01CB  1303               	bcf	3,6	;carry unused
+    93  01CC  1406               	bsf	6,0
+    94  01CD  1283               	bcf	3,5
+    95  01CE  1785               	bsf	5,7
+    96  01CF  0000               	nop	;#
+    97                           ;BoardCheck.c: 66: }
+    98  01D0  0008               	return	;W free
+    99                           
+   100                           	psect	text6
+   101  01D1                     __NONLBI_EYEPOWER_OFF
+   102                           ;BoardCheck.c: 67: void _NONLBI_EYEPOWER_OFF(vo
+      +                          id)
+   103  01D1  1683               	bsf	3,5
+   104  01D2  1303               	bcf	3,6	;carry unused
+   105  01D3  1006               	bcf	6,0
+   106  01D4  1283               	bcf	3,5
+   107  01D5  1085               	bcf	5,1
+   108  01D6  0000               	nop	;#
+   109                           ;BoardCheck.c: 70: }
+   110  01D7  0008               	return	;W free
+   111                           
+   112                           	psect	text7
+   113  01C3                     __LBI_EYEPOWER_OFF
+   114                           ;BoardCheck.c: 71: void _LBI_EYEPOWER_OFF(void)
+   115  01C3  1683               	bsf	3,5
+   116  01C4  1303               	bcf	3,6	;carry unused
+   117  01C5  1006               	bcf	6,0
+   118  01C6  1283               	bcf	3,5
+   119  01C7  1385               	bcf	5,7
+   120  01C8  0000               	nop	;#
+   121                           ;BoardCheck.c: 74: }
+   122  01C9  0008               	return	;W free
+   123                           
+   124                           	psect	text8
+   125  024F                     __CHOOSEBOARD
+   126                           ;BoardCheck.c: 76: void _CHOOSEBOARD(void)
+   127  024F  1683               	bsf	3,5
+   128  0250  1303               	bcf	3,6	;carry unused
+   129  0251  0185               	clrf	5	;volatile
+   130                           ;BoardCheck.c: 79: asm("nop");
+   131  0252  0000               	nop	;#
+   132                           ;BoardCheck.c: 80: PORTA = 0x02;
+   133  0253  3002               	movlw	2
+   134  0254  1283               	bcf	3,5
+   135  0255  0085               	movwf	5	;volatile
+   136                           ;BoardCheck.c: 81: asm("nop");
+   137  0256  0000               	nop	;#
+   138                           ;BoardCheck.c: 82: TRISA = 0x02;
+   139  0257  1683               	bsf	3,5
+   140  0258  0085               	movwf	5	;volatile
+   141                           ;BoardCheck.c: 83: asm("nop");
+   142  0259  0000               	nop	;#
+   143                           ;BoardCheck.c: 85: asm("nop"); asm("nop"); asm(
+      +                          "nop");
+   144  025A  0000               	nop	;#
+   145  025B  0000               	nop	;#
+   146  025C  0000               	nop	;#
+   147                           ;BoardCheck.c: 86: asm("nop"); asm("nop"); asm(
+      +                          "nop");
+   148  025D  0000               	nop	;#
+   149  025E  0000               	nop	;#
+   150  025F  0000               	nop	;#
+   151                           ;BoardCheck.c: 87: asm("nop"); asm("nop"); asm(
+      +                          "nop");
+   152  0260  0000               	nop	;#
+   153  0261  0000               	nop	;#
+   154  0262  0000               	nop	;#
+   155                           ;BoardCheck.c: 88: asm("nop"); asm("nop"); asm(
+      +                          "nop");
+   156  0263  0000               	nop	;#
+   157  0264  0000               	nop	;#
+   158  0265  0000               	nop	;#
+   159                           ;BoardCheck.c: 91: if (RA1 == 0)
+   160  0266  1283               	bcf	3,5
+   161                           ;BoardCheck.c: 92: {
+   162  0267  01A1               	clrf	_G_Board_Type
+   163  0268  1885               	btfsc	5,1
+   164  0269  2A8F               	goto	L2
+   165                           ;BoardCheck.c: 95: TRISA = 0x00;
+   166  026A  1683               	bsf	3,5
+   167  026B  0185               	clrf	5	;volatile
+   168                           ;BoardCheck.c: 96: TRISB = 0x03;
+   169  026C  3003               	movlw	3
+   170  026D  0086               	movwf	6	;volatile
+   171                           ;BoardCheck.c: 97: asm("nop");
+   172  026E  0000               	nop	;#
+   173                           ;BoardCheck.c: 98: PORTA = 0x16;
+   174  026F  3016               	movlw	22
+   175  0270  1283               	bcf	3,5
+   176  0271  0085               	movwf	5	;volatile
+   177                           ;BoardCheck.c: 99: PORTB = 0x4F;
+   178  0272  304F               	movlw	79
+   179  0273  0086               	movwf	6	;volatile
+   180                           ;BoardCheck.c: 100: asm("nop");
+   181  0274  0000               	nop	;#
+   182                           ;BoardCheck.c: 102: TRISA3 = 0;
+   183  0275  1683               	bsf	3,5
+   184  0276  1185               	bcf	5,3
+   185                           ;BoardCheck.c: 103: RA3 = 1;
+   186  0277  1283               	bcf	3,5
+   187  0278  1585               	bsf	5,3
+   188                           ;BoardCheck.c: 104: TRISA7 = 1;
+   189  0279  1683               	bsf	3,5
+   190  027A  1785               	bsf	5,7
+   191                           ;BoardCheck.c: 105: TRISA6 = 1;
+   192  027B  1705               	bsf	5,6
+   193                           ;BoardCheck.c: 106: TRISA2 = 1;
+   194  027C  1505               	bsf	5,2
+   195                           ;BoardCheck.c: 107: TRISB3 = 1;
+   196  027D  1586               	bsf	6,3
+   197                           ;BoardCheck.c: 108: TRISB2 = 1;
+   198  027E  1506               	bsf	6,2
+   199                           ;BoardCheck.c: 111: _DIP1_ISSET_PTR = _NONLBI_D
+      +                          IP1_ISSET;
+   200  027F  30BE               	movlw	low fpl___NONLBI_DIP1_ISSET
+   201  0280  00BD               	movwf	__DIP1_ISSET_PTR^(0+128)
+   202  0281  3000               	movlw	high fpl___NONLBI_DIP1_ISSET
+   203  0282  00BE               	movwf	(__DIP1_ISSET_PTR^(0+128)+1)
+   204                           ;BoardCheck.c: 112: _EYEBUTTON_ISDOWN_PTR = _NO
+      +                          NLBI_EYEBUTTON_ISDOWN;
+   205  0283  30BC               	movlw	low fpl___NONLBI_EYEBUTTON_ISDOWN
+   206  0284  00BF               	movwf	__EYEBUTTON_ISDOWN_PTR^(0+128)
+   207  0285  3000               	movlw	high fpl___NONLBI_EYEBUTTON_ISDOWN
+   208  0286  00C0               	movwf	(__EYEBUTTON_ISDOWN_PTR^(0+128)+1)
+   209                           ;BoardCheck.c: 113: _EYEPOWER_ON_PTR = _NONLBI_
+      +                          EYEPOWER_ON;
+   210  0287  30C0               	movlw	low fpl___NONLBI_EYEPOWER_ON
+   211  0288  00C3               	movwf	__EYEPOWER_ON_PTR^(0+128)
+   212  0289  3000               	movlw	high fpl___NONLBI_EYEPOWER_ON
+   213  028A  00C4               	movwf	(__EYEPOWER_ON_PTR+1)^(0+128)
+   214                           ;BoardCheck.c: 114: _EYEPOWER_OFF_PTR = _NONLBI
+      +                          _EYEPOWER_OFF;
+   215  028B  30B6               	movlw	low fpl___NONLBI_EYEPOWER_OFF
+   216  028C  00C1               	movwf	__EYEPOWER_OFF_PTR^(0+128)
+   217  028D  3000               	movlw	high fpl___NONLBI_EYEPOWER_OFF
+   218  028E  2AB5               	goto	L1
+   219                           ;BoardCheck.c: 115: }
+   220                           ;BoardCheck.c: 116: else
+   221  028F                     L2
+   222  028F  0AA1               	incf	_G_Board_Type
+   223                           ;BoardCheck.c: 120: TRISA = 0x26;
+   224  0290  3026               	movlw	38
+   225  0291  1683               	bsf	3,5
+   226  0292  0085               	movwf	5	;volatile
+   227                           ;BoardCheck.c: 121: TRISB = 0x03;
+   228  0293  3003               	movlw	3
+   229  0294  0086               	movwf	6	;volatile
+   230                           ;BoardCheck.c: 122: asm("nop");
+   231  0295  0000               	nop	;#
+   232                           ;BoardCheck.c: 123: PORTA = 0xAC;
+   233  0296  30AC               	movlw	-84
+   234  0297  1283               	bcf	3,5
+   235  0298  0085               	movwf	5	;volatile
+   236                           ;BoardCheck.c: 124: PORTB = 0x4F;
+   237  0299  304F               	movlw	79
+   238  029A  0086               	movwf	6	;volatile
+   239                           ;BoardCheck.c: 125: asm("nop");
+   240  029B  0000               	nop	;#
+   241                           ;BoardCheck.c: 127: TRISA3 = 0;
+   242  029C  1683               	bsf	3,5
+   243  029D  1185               	bcf	5,3
+   244                           ;BoardCheck.c: 128: RA3 = 1;
+   245  029E  1283               	bcf	3,5
+   246  029F  1585               	bsf	5,3
+   247                           ;BoardCheck.c: 129: TRISA4 = 1;
+   248  02A0  1683               	bsf	3,5
+   249  02A1  1605               	bsf	5,4
+   250                           ;BoardCheck.c: 130: TRISA6 = 1;
+   251  02A2  1705               	bsf	5,6
+   252                           ;BoardCheck.c: 131: TRISA5 = 1;
+   253  02A3  1685               	bsf	5,5
+   254                           ;BoardCheck.c: 132: TRISB3 = 1;
+   255  02A4  1586               	bsf	6,3
+   256                           ;BoardCheck.c: 133: TRISB2 = 1;
+   257  02A5  1506               	bsf	6,2
+   258                           ;BoardCheck.c: 135: _DIP1_ISSET_PTR = _LBI_DIP1
+      +                          _ISSET;
+   259  02A6  30C2               	movlw	low fpl___LBI_DIP1_ISSET
+   260  02A7  00BD               	movwf	__DIP1_ISSET_PTR^(0+128)
+   261  02A8  3000               	movlw	high fpl___LBI_DIP1_ISSET
+   262  02A9  00BE               	movwf	(__DIP1_ISSET_PTR^(0+128)+1)
+   263                           ;BoardCheck.c: 136: _EYEBUTTON_ISDOWN_PTR = _LB
+      +                          I_EYEBUTTON_ISDOWN;
+   264  02AA  30BA               	movlw	low fpl___LBI_EYEBUTTON_ISDOWN
+   265  02AB  00BF               	movwf	__EYEBUTTON_ISDOWN_PTR^(0+128)
+   266  02AC  3000               	movlw	high fpl___LBI_EYEBUTTON_ISDOWN
+   267  02AD  00C0               	movwf	(__EYEBUTTON_ISDOWN_PTR^(0+128)+1)
+   268                           ;BoardCheck.c: 137: _EYEPOWER_ON_PTR = _LBI_EYE
+      +                          POWER_ON;
+   269  02AE  30C4               	movlw	low fpl___LBI_EYEPOWER_ON
+   270  02AF  00C3               	movwf	__EYEPOWER_ON_PTR^(0+128)
+   271  02B0  3000               	movlw	high fpl___LBI_EYEPOWER_ON
+   272  02B1  00C4               	movwf	(__EYEPOWER_ON_PTR+1)^(0+128)
+   273                           ;BoardCheck.c: 138: _EYEPOWER_OFF_PTR = _LBI_EY
+      +                          EPOWER_OFF;
+   274  02B2  30B8               	movlw	low fpl___LBI_EYEPOWER_OFF
+   275  02B3  00C1               	movwf	__EYEPOWER_OFF_PTR^(0+128)
+   276  02B4  3000               	movlw	high fpl___LBI_EYEPOWER_OFF
+   277  02B5                     L1
+   278  02B5  00C2               	movwf	(__EYEPOWER_OFF_PTR+1)^(0+128)
+   279                           ;BoardCheck.c: 139: }
+   280  02B6  3004               	movlw	4
+   281  02B7  1283               	bcf	3,5
+   282  02B8  00A0               	movwf	_G_Board_Battery
+   283                           ;BoardCheck.c: 143: RBPU = 0;
+   284  02B9  1683               	bsf	3,5
+   285  02BA  1381               	bcf	1,7
+   286                           ;BoardCheck.c: 144: }
+   287  02BB  1283               	bcf	3,5
+   288  02BC  0008               	return	;W free
+   289                           
+   290                           	psect	text9
+   291  0212                     __COMPARE
+   292                           ;	_vr assigned to ?a__COMPARE+0
+   293  0000                     __COMPARE$vr	set	?a__COMPARE
+   294                           ;_vr stored from w
+   295  0212  0183               	clrf	3	;select bank 0
+   296  0213  00BC               	movwf	?a__COMPARE
+   297                           ;BoardCheck.c: 146: void _COMPARE(BYTE vr)
+   298  0214  300D               	movlw	13
+   299  0215  009F               	movwf	31	;volatile
+   300                           ;BoardCheck.c: 149: VRCON = 0xC0 | vr;
+   301  0216  083C               	movf	?a__COMPARE,w
+   302  0217  38C0               	iorlw	-64
+   303  0218  1683               	bsf	3,5
+   304  0219  009F               	movwf	31
+   305                           ;BoardCheck.c: 150: asm("nop");
+   306  021A  0000               	nop	;#
+   307                           ;BoardCheck.c: 151: wait(100);
+   308  021B  3064               	movlw	100
+   309  021C  1283               	bcf	3,5
+   310  021D  00C6               	movwf	?_wait
+   311  021E  01C7               	clrf	?_wait+1
+   312  021F  01C8               	clrf	?_wait+2
+   313  0220  01C9               	clrf	?_wait+3
+   314  0221  158A  20B6  118A   	fcall	_wait
+   315                           ;BoardCheck.c: 153: if (C2OUT)
+   316  0224  1B9F               	btfsc	31,7
+   317                           ;BoardCheck.c: 154: {
+   318  0225  03A0               	decf	_G_Board_Battery
+   319                           ;BoardCheck.c: 156: }
+   320  0226  3007               	movlw	7
+   321  0227  009F               	movwf	31	;volatile
+   322                           ;BoardCheck.c: 159: VRCON = 0x00;
+   323  0228  1683               	bsf	3,5
+   324  0229  019F               	clrf	31
+   325                           ;BoardCheck.c: 160: asm("nop");
+   326  022A  0000               	nop	;#
+   327                           ;BoardCheck.c: 161: }
+   328  022B  1283               	bcf	3,5
+   329  022C  0008               	return	;W free
+   330  022D                     __CHECKBATTERY
+   331                           ;	_x assigned to ?a__CHECKBATTERY+0
+   332  0000                     __CHECKBATTERY$x	set	?a__CHECKBATTERY
+   333                           ;BoardCheck.c: 163: void _CHECKBATTERY(void)
+   334  022D  3020               	movlw	32
+   335  022E  0183               	clrf	3	;select bank 0
+   336  022F  00C6               	movwf	?_wait
+   337  0230  30A1               	movlw	161
+   338  0231  00C7               	movwf	?_wait+1
+   339  0232  3007               	movlw	7
+   340  0233  00C8               	movwf	?_wait+2
+   341  0234  3000               	movlw	0
+   342  0235  01C9               	clrf	?_wait+3
+   343  0236  158A  20B6  118A   	fcall	_wait
+   344                           ;BoardCheck.c: 170: if (G_Board_Type == 0x01)
+   345  0239  0B21               	decfsz	_G_Board_Type,w
+   346  023A  2A44               	goto	l15
+   347                           ;BoardCheck.c: 171: {
+   348  023B  300F               	movlw	15
+   349  023C  2212  118A         	fcall	__COMPARE
+   350                           ;BoardCheck.c: 173: _COMPARE(0x0D);
+   351  023E  300D               	movlw	13
+   352  023F  2212  118A         	fcall	__COMPARE
+   353                           ;BoardCheck.c: 174: _COMPARE(0x0C);
+   354  0241  300C               	movlw	12
+   355  0242  2212  118A         	fcall	__COMPARE
+   356  0244                     l15
+   357                           ;BoardCheck.c: 175: }
+   358  0244  01BB               	clrf	?a__CHECKBATTERY
+   359  0245                     l19
+   360  0245  0820               	movf	_G_Board_Battery,w
+   361  0246  023B               	subwf	?a__CHECKBATTERY,w
+   362  0247  1803               	btfsc	3,0
+   363  0248  0008               	return
+   364                           ;BoardCheck.c: 179: BLINK(0x02);
+   365  0249  3002               	movlw	2
+   366  024A  158A  24BC  118A   	fcall	_BLINK
+   367  024D  0ABB               	incf	?a__CHECKBATTERY
+   368  024E  2A45               	goto	l19
+   369                           
+   370                           	psect	text11
+   371  01DF                     __POWERSAVE
+   372                           ;BoardCheck.c: 182: void _POWERSAVE(void)
+   373  01DF  0183               	clrf	3	;select bank 0
+   374  01E0  0B21               	decfsz	_G_Board_Type,w
+   375  01E1  29E5               	goto	l21
+   376                           ;BoardCheck.c: 185: {
+   377  01E2  0185               	clrf	5	;volatile
+   378                           ;BoardCheck.c: 187: PORTB = 0x00;
+   379  01E3  0186               	clrf	6	;volatile
+   380                           ;BoardCheck.c: 188: }
+   381  01E4  0008               	return
+   382  01E5                     l21
+   383                           ;BoardCheck.c: 189: else
+   384  01E5  3024               	movlw	36
+   385  01E6  0085               	movwf	5	;volatile
+   386                           ;BoardCheck.c: 192: PORTB = 0x00;
+   387  01E7  0186               	clrf	6	;volatile
+   388                           ;BoardCheck.c: 193: }
+   389  01E8  0008               	return	;W free
+   390                           
+   391                           	psect	text12
+   392  0000                     
+   393  0000                     
+   394  0000                     
+   395  0000                     
+   396  0000                     
+   397  0000                     
+   398  0000                     
+   399  0000                     
+   400  0000                     
+   401  0000                     
+   402  0000                     
+   403  0000                     
+   404  0000                     
+   405  0000                     
+   406  0000                     
+   407  0000                     
+   408  0000                     
+   409  0000                     
+   410  0000                     
+   411  0000                     
+   412  0000                     
+   413  0000                     
+   414  0000                     
+   415  0000                     
+   416  0000                     
+   417  0000                     
+   418  0000                     
+   419  0000                     
+   420  0000                     
+   421  0000                     
+   422  0000                     
+   423  0000                     
+   424  0000                     
+   425  0000                     
+   426  0000                     
+   427  0000                     
+   428  0000                     
+   429  0000                     
+   430  0000                     
+   431  0000                     
+   432  0000                     
+   433  0000                     
+   434  0000                     
+   435  0000                     
+   436  0000                     
+   437  0000                     
+   438  0000                     
+   439  0000                     
+   440  0000                     
+   441  0000                     
+   442  0000                     
+   443  0000                     
+   444  0000                     
+   445  0000                     
+   446  0000                     
+   447  0000                     
+   448  0000                     
+   449  0000                     
+   450  0000                     
+   451  0000                     
+   452  0000                     
+   453  0000                     
+   454  0000                     
+   455  0000                     
+   456  0000                     
+   457  0000                     
+   458  0000                     
+   459  0000                     
+   460  0000                     
+   461  0000                     
+   462  0000                     
+   463  0000                     
+   464  0000                     
+   465  0000                     
+   466  0000                     
+   467  0000                     
+   468  0000                     
+   469  0000                     
+   470  0000                     
+   471  0000                     
+   472  0000                     
+   473  0000                     
+   474  0000                     
+   475  0000                     
+   476  0000                     
+   477  0000                     
+   478  0000                     
+   479  0000                     
+   480  0000                     
+   481  0000                     
+   482  0000                     
+   483  0000                     
+   484  0000                     
+   485  0000                     
+   486  0000                     
+   487  0000                     
+   488  0000                     
+   489  0000                     
+   490  0000                     
+   491  0000                     
+   492  0000                     
+   493  0000                     
+   494  0000                     
+   495  0000                     
+   496  0000                     
+   497  0000                     
+   498  0000                     
+   499  0000                     
+   500  0000                     
+   501  0000                     
+   502  0000                     
+   503  0000                     
+   504  0000                     
+   505  0000                     
+   506  0000                     
+   507  0000                     
+   508  0000                     
+   509  0000                     
+   510  0000                     
+   511  0000                     
+   512  0000                     
+   513  0000                     
+   514  0000                     
+   515  0000                     
+   516  0000                     
+   517  0000                     
+   518  0000                     
+   519  0000                     
+   520  0000                     
+   521  0000                     
+   522  0000                     
+   523  0000                     
+   524  0000                     
+   525  0000                     
+   526  0000                     
+   527                           
+   528                           	psect	rbss_0
+   529  0020                     _G_Board_Battery
+   530  0020                     	ds	1
+   531  0021                     _G_Board_Type
+   532  0021                     	ds	1
+   533  0000                     
+   534  0000                     
+   535  0000                     
+   536  0000                     
+   537  0000                     
+   538  0000                     
+   539  0000                     
+   540  0000                     
+   541  0000                     
+   542  0000                     
+   543  0000                     
+   544  0000                     
+   545  0000                     
+   546  0000                     
+   547  0000                     
+   548  0000                     
+   549  0000                     
+   550  0000                     
+   551  0000                     
+   552  0000                     
+   553  0000                     
+   554  0000                     
+   555  0000                     
+   556  0000                     
+   557  0000                     
+   558                           
+   559                           	psect	rbss_1
+   560  00BD                     __DIP1_ISSET_PTR
+   561  00BD                     	ds	2
+   562  00BF                     __EYEBUTTON_ISDOWN_PTR
+   563  00BF                     	ds	2
+   564  00C1                     __EYEPOWER_OFF_PTR
+   565  00C1                     	ds	2
+   566  00C3                     __EYEPOWER_ON_PTR
+   567  00C3                     	ds	2
+   568                           
+   569                           	psect	fpp___NONLBI_DIP1_ISSET
+   570                           ;function pointer lookups
+   571  00BE                     fpl___NONLBI_DIP1_ISSET
+   572  00BE  118A  29B4         	ljmp	__NONLBI_DIP1_ISSET
+   573                           
+   574                           	psect	fpp___NONLBI_EYEBUTTON_ISDOWN
+   575  00BC                     fpl___NONLBI_EYEBUTTON_ISDOWN
+   576  00BC  118A  29B9         	ljmp	__NONLBI_EYEBUTTON_ISDOWN
+   577                           
+   578                           	psect	fpp___NONLBI_EYEPOWER_ON
+   579  00C0                     fpl___NONLBI_EYEPOWER_ON
+   580  00C0  118A  29D8         	ljmp	__NONLBI_EYEPOWER_ON
+   581                           
+   582                           	psect	fpp___NONLBI_EYEPOWER_OFF
+   583  00B6                     fpl___NONLBI_EYEPOWER_OFF
+   584  00B6  118A  29D1         	ljmp	__NONLBI_EYEPOWER_OFF
+   585                           
+   586                           	psect	fpp___LBI_DIP1_ISSET
+   587  00C2                     fpl___LBI_DIP1_ISSET
+   588  00C2  118A  29AF         	ljmp	__LBI_DIP1_ISSET
+   589                           
+   590                           	psect	fpp___LBI_EYEBUTTON_ISDOWN
+   591  00BA                     fpl___LBI_EYEBUTTON_ISDOWN
+   592  00BA  118A  29BE         	ljmp	__LBI_EYEBUTTON_ISDOWN
+   593                           
+   594                           	psect	fpp___LBI_EYEPOWER_ON
+   595  00C4                     fpl___LBI_EYEPOWER_ON
+   596  00C4  118A  29CA         	ljmp	__LBI_EYEPOWER_ON
+   597                           
+   598                           	psect	fpp___LBI_EYEPOWER_OFF
+   599  00B8                     fpl___LBI_EYEPOWER_OFF
+   600  00B8  118A  29C3         	ljmp	__LBI_EYEPOWER_OFF
+
+
+HI-TECH Software PICC Macro Assembler V9.50PL2
+Symbol Table                                          Tue Aug 11 23:56:15 2009
+
+        __NONLBI_EYEPOWER_OFF 01D1                            l21 01E5  
+                          l15 0244                            l19 0245  
+       __LBI_EYEBUTTON_ISDOWN 01BE              __EYEPOWER_ON_PTR 00C3  
+           __EYEPOWER_OFF_PTR 00C1            __NONLBI_DIP1_ISSET 01B4  
+                        _wait 08B6               __DIP1_ISSET_PTR 00BD  
+    fpl___NONLBI_EYEPOWER_OFF 00B6         __EYEBUTTON_ISDOWN_PTR 00BF  
+         fpl___LBI_DIP1_ISSET 00C2              __LBI_EYEPOWER_ON 01CA  
+             _G_Board_Battery 0020      __NONLBI_EYEBUTTON_ISDOWN 01B9  
+         __NONLBI_EYEPOWER_ON 01D8                         ?_wait 0046  
+                       _BLINK 0CBC                      __COMPARE 0212  
+   fpl___LBI_EYEBUTTON_ISDOWN 00BA                    __POWERSAVE 01DF  
+       fpl___LBI_EYEPOWER_OFF 00B8       fpl___NONLBI_EYEPOWER_ON 00C0  
+                       status 0003               __LBI_DIP1_ISSET 01AF  
+               __CHECKBATTERY 022D          fpl___LBI_EYEPOWER_ON 00C4  
+                __CHOOSEBOARD 024F        fpl___NONLBI_DIP1_ISSET 00BE  
+           __LBI_EYEPOWER_OFF 01C3  fpl___NONLBI_EYEBUTTON_ISDOWN 00BC  
+             ?a__CHECKBATTERY 003B                  _G_Board_Type 0021  
+                  ?a__COMPARE 003C  

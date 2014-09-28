@@ -1,0 +1,33 @@
+Advisory[1207]   : some of the command line options you are using are now obsolete
+Advisory[1208]   : use --help option or refer to the user manual for option details
+
+Memory Usage Map:
+
+Program space:
+    CODE                 used   E5Bh (  3675) of  1000h words   ( 89.7%)
+    CONST                used    10h (    16) of  1000h words   (  0.4%)
+    ENTRY                used    16h (    22) of  1000h words   (  0.5%)
+    STRING               used     0h (     0) of  1000h words   (  0.0%)
+
+Data space:
+    BANK0                used    40h (    64) of    60h bytes   ( 66.7%)
+    BANK1                used    4Ah (    74) of    50h bytes   ( 92.5%)
+    BANK2                used     0h (     0) of    50h bytes   (  0.0%)
+    COMBANK              used     1h (     1) of    10h bytes   (  6.3%)
+
+EEPROM space:
+    EEDATA               used     0h (     0) of   100h bytes   (  0.0%)
+
+ID Location space:
+    IDLOC                used     0h (     0) of     4h bytes   (  0.0%)
+
+Configuration bits:
+    CONFIG               used     1h (     1) of     1h word    (100.0%)
+
+Summary:
+    Program space        used   E81h (  3713) of  1000h words   ( 90.6%)
+    Data space           used    8Bh (   139) of   100h bytes   ( 54.3%)
+    EEPROM space         used     0h (     0) of   100h bytes   (  0.0%)
+    ID Location space    used     0h (     0) of     4h bytes   (  0.0%)
+    Configuration bits   used     1h (     1) of     1h word    (100.0%)
+

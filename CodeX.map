@@ -1,0 +1,697 @@
+HI-TECH Software PICC Compiler V9.50PL2
+
+Linker command line:
+
+--edf=C:\Program Files\HI-TECH Software\PICC\9.50\dat\en_msgs.txt \
+  -h+CodeX.sym -z -Q16F648A -ol.obj -MCodeX.map -E1 -ver=PICC#V9.50PL2 \
+  -ACODE=00h-07FFhx2 -ACONST=00h-0FFhx16 -AENTRY=00h-0FFhx16 \
+  -ASTRING=00h-0FFhx16 -ABANK0=020h-07Fh -ABANK1=0A0h-0EFh \
+  -ABANK2=0120h-016Fh -ACOMBANK=070h-07Fh -ppowerup=CODE \
+  -preset_vec=00h,intentry=04h,intcode,intret,init,init23,end_init,clrtext,maintext,stringtable,pstrings,strings \
+  -prbit_0=BANK0,rbss_0=BANK0,rdata_0=BANK0,idata_0=CODE -pnvram=BANK0 \
+  -prbit_1=BANK1,rbss_1=BANK1,rdata_1=BANK1,idata_1=CODE \
+  -pnvram_1=BANK1,nvbit_1=BANK1 \
+  -prbit_2=BANK2,rbss_2=BANK2,rdata_2=BANK2,idata_2=CODE \
+  -pnvram_2=BANK2,nvbit_2=BANK2 \
+  -prbit_3=BANK3,rbss_3=BANK3,rdata_3=BANK3,idata_3=CODE \
+  -pnvram_3=BANK3,nvbit_3=BANK3 -ptemp=COMBANK -ACONFIG=02007h-02007h \
+  -pconfig=CONFIG -AIDLOC=02000h-02003h -pidloc=IDLOC \
+  -AEEDATA=00h-0FFh/02100h -peeprom_data=EEDATA \
+  -pfloat_text0=CODE,float_text1=CODE,float_text2=CODE \
+  -pfloat_text3=CODE,float_text4=CODE -pintsave_0=COMBANK -pintsave_1=BANK1 \
+  -pintsave_2=BANK2 -pintsave_3=BANK3 \
+  C:\DOCUME~1\david\LOCALS~1\Temp\s17s.obj \
+  C:\Business\FirmwareDev\OpenSource\paintballcodex\src\Algorithms.obj \
+  C:\Business\FirmwareDev\OpenSource\paintballcodex\src\BoardCheck.obj \
+  C:\Business\FirmwareDev\OpenSource\paintballcodex\src\CustomDM4.obj \
+  C:\Program Files\HI-TECH Software\PICC\9.50\lib\pic5---u.lib \
+  C:\Program Files\HI-TECH Software\PICC\9.50\lib\pic41c-c.lib \
+  C:\Program Files\HI-TECH Software\PICC\9.50\lib\pic5---u.lib 
+
+Object code version is 3.7
+
+Machine type is 16F648A
+
+Call graph:
+
+*_main size 0,0 offset 0
+     _StartUp size 0,4 offset 0
+         __CHOOSEBOARD size 0,0 offset 4
+         _CLEAREYEMALFUNC size 0,0 offset 24
+         _CLEARTIMER size 0,0 offset 4
+         _wait size 4,0 offset 15
+         _EDITMODECYCLE size 0,0 offset 14
+             _LEDOFF size 0,0 offset 24
+             _COLORCYCLE size 0,0 offset 14
+                 _BLINK_FAST size 0,1 offset 14
+                     _LEDCOLOR size 0,1 offset 15
+                     _wait size 4,0 offset 15
+                     _LEDOFF size 0,0 offset 24
+             _wait size 4,0 offset 15
+         __CHECKBATTERY size 0,1 offset 4
+             _wait size 4,0 offset 15
+             __COMPARE size 0,1 offset 5
+                 _wait size 4,0 offset 15
+             _BLINK size 0,1 offset 14
+                 _LEDCOLOR size 0,1 offset 15
+                 _wait size 4,0 offset 15
+                 _LEDOFF size 0,0 offset 24
+         _BLINK size 0,1 offset 14
+             _LEDCOLOR size 0,1 offset 15
+             _wait size 4,0 offset 15
+             _LEDOFF size 0,0 offset 24
+         _eeprom_read size 0,1 offset 7
+         _eeprom_read_word size 0,3 offset 4
+             _eeprom_read size 0,1 offset 7
+         string_table size 0,0 offset 10
+         INDIRECT 73
+             INDIRECT 73
+                 __LBI_EYEBUTTON_ISDOWN size 0,0 offset 10
+                 __NONLBI_DIP1_ISSET size 0,0 offset 10
+                 __NONLBI_EYEBUTTON_ISDOWN size 0,0 offset 10
+                 __LBI_DIP1_ISSET size 0,0 offset 10
+     _ShutDown size 0,0 offset 0
+         _eeprom_write size 1,1 offset 3
+         _eeprom_write_word size 2,1 offset 0
+             _eeprom_write size 1,1 offset 3
+         _LEDOFF size 0,0 offset 24
+         _T_POWERBUTTON_ISDOWN size 0,0 offset 0
+         __POWERSAVE size 0,0 offset 0
+*    _Mode_Proc size 9,5 offset 0
+         _LEDCOLOR size 0,1 offset 15
+         _BLINK size 0,1 offset 14
+             _LEDCOLOR size 0,1 offset 15
+             _wait size 4,0 offset 15
+             _LEDOFF size 0,0 offset 24
+         _ACTION size 0,0 offset 18
+*        _TRIGGER_FIRSTPULL size 0,4 offset 14
+*            _TRIGGER_ISUP size 2,4 offset 18
+             _ACTION size 0,0 offset 18
+             lldiv size 0,0 offset 18
+             lltoft size 0,0 offset 18
+                 l0neg size 0,0 offset 18
+             fttol size 0,0 offset 18
+                 ftunpack1 size 0,0 offset 18
+                 l0neg size 0,0 offset 18
+             lbtoft size 0,0 offset 18
+             ftmul size 0,0 offset 18
+                 ftunpack1 size 0,0 offset 18
+                 ftunpack2 size 0,0 offset 18
+             aldiv size 0,0 offset 18
+         _EDITMODECYCLE size 0,0 offset 14
+             _LEDOFF size 0,0 offset 24
+             _COLORCYCLE size 0,0 offset 14
+                 _BLINK_FAST size 0,1 offset 14
+                     _LEDCOLOR size 0,1 offset 15
+                     _wait size 4,0 offset 15
+                     _LEDOFF size 0,0 offset 24
+             _wait size 4,0 offset 15
+         lwdiv size 0,0 offset 14
+     _NEXTMODE size 0,0 offset 0
+*    _ChangeModeProc size 0,0 offset 0
+*        _TRIGGER_ISUP size 2,4 offset 18
+         _NEXTMODE size 0,0 offset 0
+         _EDITMODECYCLE size 0,0 offset 14
+             _LEDOFF size 0,0 offset 24
+             _COLORCYCLE size 0,0 offset 14
+                 _BLINK_FAST size 0,1 offset 14
+                     _LEDCOLOR size 0,1 offset 15
+                     _wait size 4,0 offset 15
+                     _LEDOFF size 0,0 offset 24
+             _wait size 4,0 offset 15
+*    _Mode_Fire size 0,4 offset 0
+*        _TRIGGER_FIRSTPULL size 0,4 offset 14
+*            _TRIGGER_ISUP size 2,4 offset 18
+             _ACTION size 0,0 offset 18
+             lldiv size 0,0 offset 18
+             lltoft size 0,0 offset 18
+                 l0neg size 0,0 offset 18
+             fttol size 0,0 offset 18
+                 ftunpack1 size 0,0 offset 18
+                 l0neg size 0,0 offset 18
+             lbtoft size 0,0 offset 18
+             ftmul size 0,0 offset 18
+                 ftunpack1 size 0,0 offset 18
+                 ftunpack2 size 0,0 offset 18
+             aldiv size 0,0 offset 18
+         _wait size 4,0 offset 15
+*        _CLEAREYEMALFUNC size 0,0 offset 24
+         _Cycle_BreakBeam size 0,4 offset 4
+             _Cycle size 0,2 offset 8
+                 _wait size 4,0 offset 15
+                 string_table size 0,0 offset 10
+                 aldiv size 0,0 offset 18
+                 INDIRECT 73
+                     INDIRECT 73
+                         __LBI_EYEBUTTON_ISDOWN size 0,0 offset 10
+                         __NONLBI_DIP1_ISSET size 0,0 offset 10
+                         __NONLBI_EYEBUTTON_ISDOWN size 0,0 offset 10
+                         __LBI_DIP1_ISSET size 0,0 offset 10
+             string_table size 0,0 offset 10
+             INDIRECT 88
+                 INDIRECT 88
+                     __NONLBI_EYEPOWER_OFF size 0,0 offset 8
+                     __LBI_EYEPOWER_ON size 0,0 offset 8
+                     __NONLBI_EYEPOWER_ON size 0,0 offset 8
+                     __LBI_EYEPOWER_OFF size 0,0 offset 8
+         string_table size 0,0 offset 10
+         INDIRECT 88
+             INDIRECT 88
+                 __NONLBI_EYEPOWER_OFF size 0,0 offset 8
+                 __LBI_EYEPOWER_ON size 0,0 offset 8
+                 __NONLBI_EYEPOWER_ON size 0,0 offset 8
+                 __LBI_EYEPOWER_OFF size 0,0 offset 8
+         INDIRECT 73
+             INDIRECT 73
+                 __LBI_EYEBUTTON_ISDOWN size 0,0 offset 10
+                 __NONLBI_DIP1_ISSET size 0,0 offset 10
+                 __NONLBI_EYEBUTTON_ISDOWN size 0,0 offset 10
+                 __LBI_DIP1_ISSET size 0,0 offset 10
+     _T_POWERBUTTON_ISDOWN size 0,0 offset 0
+     _ACTION size 0,0 offset 18
+     _CLEARTIMER size 0,0 offset 4
+*_INT size 0,0 offset 24
+*    _LEDOFF size 0,0 offset 24
+*    _CLEAREYEMALFUNC size 0,0 offset 24
+
+		Name          Link     Load   Length Selector Space Scale
+C:\DOCUME~1\david\LOCALS~1\Temp\s17s.obj
+		reset_vec        0        0        3       0     0
+		init            7B       7B       10       8     0
+		end_init        8B       8B       15       8     0
+		temp            70       70        1      70     1
+C:\Business\FirmwareDev\OpenSource\paintballcodex\src\Algorithms.obj
+		rbss_1          A0       A0       1D      A0     1
+		temp            70       70        8      70     1
+		text2          2BD      2BD      18B     57A     0
+		text0          448      448      1DF     890     0
+C:\Business\FirmwareDev\OpenSource\paintballcodex\src\BoardCheck.obj
+		rbss_1          BD       BD        8      A0     1
+		rbss_0          20       20        2      20     1
+		fpp___NON       BE       BE        2     16C     0
+		text11         1DF      1DF        A     3BE     0
+		fpp___NON       BC       BC        2     16C     0
+		fpp___LBI       BA       BA        2     16C     0
+		fpp___LBI       C4       C4        2     16C     0
+		fpp___LBI       C2       C2        2     16C     0
+		fpp___NON       C0       C0        2     16C     0
+		fpp___NON       B6       B6        2     16C     0
+		fpp___LBI       B8       B8        2     16C     0
+		text2          1B9      1B9        5     372     0
+		text3          1BE      1BE        5     37C     0
+		text1          1AF      1AF        5     35E     0
+		text0          1B4      1B4        5     368     0
+		text4          1D8      1D8        7     3B0     0
+		text8          24F      24F       6E     49E     0
+		text9          212      212       3D     424     0
+		text7          1C3      1C3        7     386     0
+		text5          1CA      1CA        7     394     0
+		text6          1D1      1D1        7     3A2     0
+C:\Business\FirmwareDev\OpenSource\paintballcodex\src\CustomDM4.obj
+		idata_1          3        3        1       0     0
+		intcode          B        B       69       8     0
+		intentry         4        4        7       8     0
+		intret          74       74        7       8     0
+		intsave_0       7C       7C        1      70     1
+		rdata_1         E9       E9        1      A0     1
+		config        2007     2007        1    400E     0
+		rbss_1          C5       C5       24      A0     1
+		rbss_0          22       22       15      20     1
+		temp            70       70        8      70     1
+		intsave         4F       4F        2      20     1
+		text0          896      896      76A    112C     0
+
+C:\Program Files\HI-TECH Software\PICC\9.50\lib\pic5---u.lib
+eeread.obj      text0          1E9      1E9        D     3D2     0
+eewrite.obj     text0          1F6      1F6       1C     3EC     0
+
+C:\Program Files\HI-TECH Software\PICC\9.50\lib\pic41c-c.lib
+aldiv.obj       float_tex      73F      73F       28     E7E     0
+		temp            70       70        C      70     1
+		xtemp           53       53        1      20     1
+btemp0.obj      temp            70       70        1      70     1
+btemp10.obj     temp            70       70        B      70     1
+btemp11.obj     temp            70       70        C      70     1
+btemp12.obj     xtemp           53       53        1      20     1
+btemp1.obj      temp            70       70        2      70     1
+btemp2.obj      temp            70       70        3      70     1
+btemp3.obj      temp            70       70        4      70     1
+btemp4.obj      temp            70       70        5      70     1
+btemp5.obj      temp            70       70        6      70     1
+btemp6.obj      temp            70       70        7      70     1
+btemp7.obj      temp            70       70        8      70     1
+btemp8.obj      temp            70       70        9      70     1
+btemp9.obj      temp            70       70        A      70     1
+btoft.obj       float_tex      633      633        D     C66     0
+		temp            70       70        9      70     1
+codeptr.obj     
+float.obj       float_tex      640      640       4E     C66     0
+		temp            70       70        9      70     1
+ftmul.obj       float_tex      68E      68E       41     C66     0
+		temp            70       70        C      70     1
+fttol.obj       float_tex      6CF      6CF       23     C66     0
+		temp            70       70        9      70     1
+l0neg.obj       float_tex      767      767        E     E7E     0
+		temp            70       70        4      70     1
+ldiv.obj        float_tex      775      775       7C     E7E     0
+		temp            70       70        C      70     1
+		xtemp           53       53        1      20     1
+ltoft.obj       float_tex      6F2      6F2       13     C66     0
+		temp            70       70        9      70     1
+store3.obj      temp            70       70        9      70     1
+		ftext0         627      627        C     C4E     0
+store.obj       float_tex      7F1      7F1        F     E7E     0
+		temp            70       70        4      70     1
+stringtab.obj   stringtab       A0       A0       16       8     0
+		code_ptr        51       51        2      20     1
+wdiv.obj        float_tex      705      705       3A     E0A     0
+		temp            70       70        7      70     1
+
+C:\Program Files\HI-TECH Software\PICC\9.50\lib\pic5---u.lib
+
+COMMON          rbss_0          37       37       18      20     1
+
+TOTAL		Name          Link     Load   Length
+	CLASS	CODE     
+		idata_1          3        3        1
+		intcode          B        B       69
+		intentry         4        4        7
+		intret          74       74        7
+		reset_vec        0        0        3
+		float_tex      705      705       3A
+		float_tex      73F      73F       C1
+		float_tex      633      633       D2
+		init            7B       7B       10
+		end_init        8B       8B       15
+		text2          2BD      2BD      18B
+		text0          448      448      1DF
+		text11         1DF      1DF        A
+		text2          1B9      1B9        5
+		text3          1BE      1BE        5
+		text1          1AF      1AF        5
+		text0          1B4      1B4        5
+		text4          1D8      1D8        7
+		text8          24F      24F       6E
+		text9          212      212       3D
+		text7          1C3      1C3        7
+		text5          1CA      1CA        7
+		text6          1D1      1D1        7
+		text0          896      896      76A
+		text0          1E9      1E9        D
+		text0          1F6      1F6       1C
+		ftext0         627      627        C
+
+	CLASS	CONST    
+		fpp___NON       BE       BE        2
+		fpp___NON       BC       BC        2
+		fpp___LBI       BA       BA        2
+		fpp___LBI       C4       C4        2
+		fpp___LBI       C2       C2        2
+		fpp___NON       C0       C0        2
+		fpp___NON       B6       B6        2
+		fpp___LBI       B8       B8        2
+
+	CLASS	ENTRY    
+		stringtab       A0       A0       16
+
+	CLASS	STRING   
+
+	CLASS	BANK0    
+		rbss_0          20       20       2F
+		temp            70       70        C
+		intsave         4F       4F        2
+		xtemp           53       53        1
+		code_ptr        51       51        2
+
+	CLASS	BANK1    
+		rdata_1         E9       E9        1
+		rbss_1          A0       A0       49
+
+	CLASS	BANK2    
+
+	CLASS	COMBANK  
+		intsave_0       7C       7C        1
+
+	CLASS	CONFIG   
+		config        2007     2007        1
+
+	CLASS	IDLOC    
+
+	CLASS	EEDATA   
+
+	CLASS	BANK3    
+
+
+
+SEGMENTS	Name		Load	Length	 Top	Selector    Space Class
+
+		reset_vec       000000	000004	000004	       0       0  CODE    
+		intentry        000004	0000B2	0000B6	       8       0  CODE    
+		rbit_0          000020	000034	000054	      20       1  BANK0   
+		temp            000070	00000D	00007D	      70       1  COMBANK 
+		rbit_1          0000A0	00004A	0000EA	      A0       1  BANK1   
+		fpp___NONLBI_EY 0000B6	000010	0000C6	     16C       0  CONST   
+		text1           0001AF	000005	0001B4	     35E       0  CODE    
+		text0           0001B4	000005	0001B9	     368       0  CODE    
+		text2           0001B9	000005	0001BE	     372       0  CODE    
+		text3           0001BE	000005	0001C3	     37C       0  CODE    
+		text7           0001C3	000007	0001CA	     386       0  CODE    
+		text5           0001CA	000007	0001D1	     394       0  CODE    
+		text6           0001D1	000007	0001D8	     3A2       0  CODE    
+		text4           0001D8	000007	0001DF	     3B0       0  CODE    
+		text11          0001DF	00000A	0001E9	     3BE       0  CODE    
+		text0           0001E9	00000D	0001F6	     3D2       0  CODE    
+		text0           0001F6	00001C	000212	     3EC       0  CODE    
+		text9           000212	00003D	00024F	     424       0  CODE    
+		text8           00024F	00006E	0002BD	     49E       0  CODE    
+		text2           0002BD	00018B	000448	     57A       0  CODE    
+		text0           000448	0001DF	000627	     890       0  CODE    
+		ftext0          000627	00000C	000633	     C4E       0  CODE    
+		float_text4     000633	0000D2	000705	     C66       0  CODE    
+		float_text1     000705	00003A	00073F	     E0A       0  CODE    
+		float_text0     00073F	0000C1	000800	     E7E       0  CODE    
+		text0           000896	00076A	001000	    112C       0  CODE    
+		config          002007	000001	002008	    400E       0  CONFIG  
+
+
+UNUSED ADDRESS RANGES
+
+	BANK0            0054-006F
+	                 007D-007F
+	BANK1            00EA-00EF
+	BANK2            0120-016F
+	CODE             00C6-01AE
+	                 0800-0895
+	COMBANK          007D-007F
+	CONST            00C6-01AE
+	                 0800-0895
+	EEDATA           2100-21FF
+	ENTRY            00C6-01AE
+	                 0800-0895
+	IDLOC            2000-2003
+	STRING           00C6-01AE
+	                 0800-0895
+
+                                  Symbol Table
+
+?_Mode_Proc                      rbss_0                        0037
+?_TRIGGER_ISUP                   rbss_0                        0049
+?_eeprom_write                   rbss_0                        003A
+?_eeprom_write_word              rbss_0                        0037
+?_wait                           rbss_0                        0046
+?a_BLINK                         rbss_0                        0045
+?a_BLINK_FAST                    rbss_0                        0045
+?a_Cycle                         rbss_0                        003F
+?a_Cycle_BreakBeam               rbss_0                        003B
+?a_LEDCOLOR                      rbss_0                        0046
+?a_Mode_Fire                     rbss_0                        0037
+?a_Mode_Proc                     rbss_0                        0040
+?a_StartUp                       rbss_0                        0037
+?a_TRIGGER_FIRSTPULL             rbss_0                        0045
+?a_TRIGGER_ISUP                  rbss_0                        004B
+?a__CHECKBATTERY                 rbss_0                        003B
+?a__COMPARE                      rbss_0                        003C
+?a_eeprom_read                   rbss_0                        003E
+?a_eeprom_read_word              rbss_0                        003B
+?a_eeprom_write                  rbss_0                        003B
+?a_eeprom_write_word             rbss_0                        0039
+_ACTION                          text0                         0896
+_BLINK                           text0                         0CBC
+_BLINK_FAST                      text0                         0CD1
+_CLEAREYEMALFUNC                 text0                         0BBC
+_CLEARTIMER                      text0                         0B88
+_COLORCYCLE                      text0                         0CE4
+_ChangeModeProc                  text0                         0D86
+_Cycle                           text2                         02BD
+_Cycle_BreakBeam                 text2                         0377
+_EDITMODECYCLE                   text0                         0CF1
+_G_AMB                           rbss_0                        0027
+_G_BIP                           rbss_0                        0029
+_G_BPS                           rbss_1                        00C5
+_G_Board_Battery                 rbss_0                        0020
+_G_Board_Type                    rbss_0                        0021
+_G_Current_ROF                   rbss_1                        00C6
+_G_Debounce                      rbss_0                        002B
+_G_Dwell                         rbss_0                        002D
+_G_EyeButton_FP                  rbss_1                        00D1
+_G_Eye_Malfunc                   rbss_1                        00C7
+_G_Eye_NextCheck                 rbss_1                        00D5
+_G_Eye_On                        rbss_1                        00C8
+_G_Eye_Waiting                   rbss_1                        00C9
+_G_FMD                           rbss_0                        0022
+_G_Fire_RGB                      rbss_1                        00CA
+_G_Hybrid                        rbss_1                        00A3
+_G_LED_Bright                    rbss_1                        00CB
+_G_LED_DelayOffTime              rbss_1                        00D9
+_G_LED_DelayOnTime               rbss_1                        00DD
+_G_LED_NextBlink                 rbss_1                        00E1
+_G_LED_Off                       rbss_1                        00CC
+_G_Last_Action                   rbss_0                        002F
+_G_Last_Pull                     rbss_1                        00AD
+_G_Last_Shot                     rbss_1                        00B1
+_G_LimitROF                      rbss_1                        00A4
+_G_Mode                          rbss_0                        0023
+_G_Mode_Choose                   rbss_0                        0024
+_G_Next_Shot                     rbss_1                        00B5
+_G_PowerButton_FP                rbss_1                        00E5
+_G_Quit                          rbss_0                        0025
+_G_ROF                           rbss_0                        0026
+_G_RampIt                        rbss_1                        00A5
+_G_Ramping                       rbss_1                        00A6
+_G_ShotBuffer                    rbss_1                        00A7
+_G_TickCount                     rbss_0                        0033
+_G_Trigger_FP                    rbss_1                        00B9
+_INT                             intcode                       000B
+_LEDCOLOR                        text0                         0CA9
+_LEDOFF                          text0                         0CEC
+_Mode_Fire                       text0                         08F5
+_Mode_Proc                       text0                         0D02
+_NEXTMODE                        text0                         0D77
+_ShutDown                        text0                         0FAA
+_StartUp                         text0                         0BD4
+_TRIGGER_FIRSTPULL               text0                         047E
+_TRIGGER_ISUP                    text0                         0448
+_T_POWERBUTTON_ISDOWN            text0                         0F92
+__Beeprom_data                   eeprom_data                   2100
+__Bnvbit_0                       nvbit_0                       0120
+__Bnvbit_1                       nvbit_1                       00EA
+__Bnvbit_2                       nvbit_2                       0120
+__Bnvbit_3                       nvbit_3                       0006
+__Bptbit_0                       ptbit_0                       0120
+__Brbit_0                        rbit_0                        0020
+__Brbit_1                        rbit_1                        00A0
+__Brbit_2                        rbit_2                        0120
+__Brbit_3                        rbit_3                        0120
+__CHECKBATTERY                   text9                         022D
+__CHOOSEBOARD                    text8                         024F
+__COMPARE                        text9                         0212
+__DIP1_ISSET_PTR                 rbss_1                        00BD
+__EYEBUTTON_ISDOWN_PTR           rbss_1                        00BF
+__EYEPOWER_OFF_PTR               rbss_1                        00C1
+__EYEPOWER_ON_PTR                rbss_1                        00C3
+__Hclrtext                       clrtext                       00A0
+__Hcode                          code                          0120
+__Hcode_ptr                      code_ptr                      0053
+__Hcommon_ram                    common_ram                    0120
+__Hconfig                        config                        2008
+__Heeprom_data                   eeprom_data                   0000
+__Hend_init                      end_init                      00A0
+__Hfloat_text0                   float_text0                   0800
+__Hfloat_text1                   float_text1                   073F
+__Hfloat_text2                   float_text2                   0003
+__Hfloat_text3                   float_text3                   0003
+__Hfloat_text4                   float_text4                   0705
+__Hfpp___LBI_DIP1_ISSET          fpp___LBI_DIP1_ISSET          00C4
+__Hfpp___LBI_EYEBUTTON_ISDOWN    fpp___LBI_EYEBUTTON_ISDOWN    00BC
+__Hfpp___LBI_EYEPOWER_OFF        fpp___LBI_EYEPOWER_OFF        00BA
+__Hfpp___LBI_EYEPOWER_ON         fpp___LBI_EYEPOWER_ON         00C6
+__Hfpp___NONLBI_DIP1_ISSET       fpp___NONLBI_DIP1_ISSET       00C0
+__Hfpp___NONLBI_EYEBUTTON_ISDOWN fpp___NONLBI_EYEBUTTON_ISDOWN 00BE
+__Hfpp___NONLBI_EYEPOWER_OFF     fpp___NONLBI_EYEPOWER_OFF     00B8
+__Hfpp___NONLBI_EYEPOWER_ON      fpp___NONLBI_EYEPOWER_ON      00C2
+__Hidata_0                       idata_0                       0003
+__Hidata_1                       idata_1                       0004
+__Hidata_2                       idata_2                       0003
+__Hidata_3                       idata_3                       0003
+__Hidloc                         idloc                         2000
+__Hinit                          init                          008B
+__Hinit23                        init23                        008B
+__Hintcode                       intcode                       0074
+__Hintentry                      intentry                      000B
+__Hintret                        intret                        007B
+__Hintsave                       intsave                       0120
+__Hintsave_0                     intsave_0                     007D
+__Hintsave_1                     intsave_1                     00EA
+__Hintsave_2                     intsave_2                     0120
+__Hintsave_3                     intsave_3                     0120
+__Hmaintext                      maintext                      00A0
+__Hnvbit_0                       nvbit_0                       0900
+__Hnvbit_1                       nvbit_1                       0750
+__Hnvbit_2                       nvbit_2                       0900
+__Hnvbit_3                       nvbit_3                       0030
+__Hnvram                         nvram                         004F
+__Hnvram_1                       nvram_1                       00EA
+__Hnvram_2                       nvram_2                       0120
+__Hnvram_3                       nvram_3                       0006
+__Hpowerup                       powerup                       0000
+__Hpstrings                      pstrings                      00B6
+__Hptbit_0                       ptbit_0                       0900
+__Hrbit_0                        rbit_0                        0100
+__Hrbit_1                        rbit_1                        0500
+__Hrbit_2                        rbit_2                        0900
+__Hrbit_3                        rbit_3                        0900
+__Hrbss_0                        rbss_0                        004F
+__Hrbss_1                        rbss_1                        00E9
+__Hrbss_2                        rbss_2                        0120
+__Hrbss_3                        rbss_3                        0120
+__Hrdata_0                       rdata_0                       004F
+__Hrdata_1                       rdata_1                       00EA
+__Hrdata_2                       rdata_2                       0120
+__Hrdata_3                       rdata_3                       0120
+__Hreset_vec                     reset_vec                     0003
+__Hstrings                       strings                       00B6
+__Hstringtable                   stringtable                   00B6
+__Hstruct                        struct                        0054
+__Htemp                          temp                          007C
+__Htext                          text                          0120
+__Hxtemp                         xtemp                         0054
+__LBI_DIP1_ISSET                 text1                         01AF
+__LBI_EYEBUTTON_ISDOWN           text3                         01BE
+__LBI_EYEPOWER_OFF               text7                         01C3
+__LBI_EYEPOWER_ON                text5                         01CA
+__Lclrtext                       clrtext                       00A0
+__Lcode                          code                          0120
+__Lcode_ptr                      code_ptr                      0051
+__Lcommon_ram                    common_ram                    0120
+__Lconfig                        config                        2007
+__Leeprom_data                   eeprom_data                   0000
+__Lend_init                      end_init                      008B
+__Lfloat_text0                   float_text0                   073F
+__Lfloat_text1                   float_text1                   0705
+__Lfloat_text2                   float_text2                   0003
+__Lfloat_text3                   float_text3                   0003
+__Lfloat_text4                   float_text4                   0633
+__Lfpp___LBI_DIP1_ISSET          fpp___LBI_DIP1_ISSET          00C2
+__Lfpp___LBI_EYEBUTTON_ISDOWN    fpp___LBI_EYEBUTTON_ISDOWN    00BA
+__Lfpp___LBI_EYEPOWER_OFF        fpp___LBI_EYEPOWER_OFF        00B8
+__Lfpp___LBI_EYEPOWER_ON         fpp___LBI_EYEPOWER_ON         00C4
+__Lfpp___NONLBI_DIP1_ISSET       fpp___NONLBI_DIP1_ISSET       00BE
+__Lfpp___NONLBI_EYEBUTTON_ISDOWN fpp___NONLBI_EYEBUTTON_ISDOWN 00BC
+__Lfpp___NONLBI_EYEPOWER_OFF     fpp___NONLBI_EYEPOWER_OFF     00B6
+__Lfpp___NONLBI_EYEPOWER_ON      fpp___NONLBI_EYEPOWER_ON      00C0
+__Lidata_0                       idata_0                       0003
+__Lidata_1                       idata_1                       0003
+__Lidata_2                       idata_2                       0003
+__Lidata_3                       idata_3                       0003
+__Lidloc                         idloc                         2000
+__Linit                          init                          007B
+__Linit23                        init23                        008B
+__Lintcode                       intcode                       000B
+__Lintentry                      intentry                      0004
+__Lintret                        intret                        0074
+__Lintsave                       intsave                       0120
+__Lintsave_0                     intsave_0                     007C
+__Lintsave_1                     intsave_1                     00EA
+__Lintsave_2                     intsave_2                     0120
+__Lintsave_3                     intsave_3                     0120
+__Lmaintext                      maintext                      00A0
+__Lnvbit_0                       nvbit_0                       0900
+__Lnvbit_1                       nvbit_1                       0750
+__Lnvbit_2                       nvbit_2                       0900
+__Lnvbit_3                       nvbit_3                       0030
+__Lnvram                         nvram                         004F
+__Lnvram_1                       nvram_1                       00EA
+__Lnvram_2                       nvram_2                       0120
+__Lnvram_3                       nvram_3                       0006
+__Lpowerup                       powerup                       0000
+__Lpstrings                      pstrings                      00B6
+__Lptbit_0                       ptbit_0                       0900
+__Lrbit_0                        rbit_0                        0100
+__Lrbit_1                        rbit_1                        0500
+__Lrbit_2                        rbit_2                        0900
+__Lrbit_3                        rbit_3                        0900
+__Lrbss_0                        rbss_0                        0020
+__Lrbss_1                        rbss_1                        00A0
+__Lrbss_2                        rbss_2                        0120
+__Lrbss_3                        rbss_3                        0120
+__Lrdata_0                       rdata_0                       004F
+__Lrdata_1                       rdata_1                       00E9
+__Lrdata_2                       rdata_2                       0120
+__Lrdata_3                       rdata_3                       0120
+__Lreset_vec                     reset_vec                     0000
+__Lstrings                       strings                       00B6
+__Lstringtable                   stringtable                   00A0
+__Lstruct                        struct                        0054
+__Ltemp                          temp                          0070
+__Ltext                          text                          0120
+__Lxtemp                         xtemp                         0053
+__NONLBI_DIP1_ISSET              text0                         01B4
+__NONLBI_EYEBUTTON_ISDOWN        text2                         01B9
+__NONLBI_EYEPOWER_OFF            text6                         01D1
+__NONLBI_EYEPOWER_ON             text4                         01D8
+__POWERSAVE                      text11                        01DF
+__S0                             (abs)                         2008
+__S1                             (abs)                         0120
+__S2                             (abs)                         2100
+_eeprom_read                     text0                         01E9
+_eeprom_read_word                text0                         08A4
+_eeprom_write                    text0                         01F6
+_eeprom_write_word               text0                         0F9E
+_exit                            init                          007B
+_main                            text0                         0E2B
+_wait                            text0                         08B6
+abtoft                           float_text4                   0633
+aldiv                            float_text0                   073F
+aldiv_x                          float_text0                   0740
+almod                            float_text0                   073F
+altoft                           float_text4                   06F2
+clear_bank0                      init                          007B
+clear_bank1                      init                          007F
+clear_bit0                       init                          007B
+clear_bit1                       init                          007F
+clear_ram                        end_init                      0090
+code_ptr                         code_ptr                      0051
+copy_bank1                       init                          0083
+copy_data                        end_init                      0095
+doldiv                           float_text0                   0779
+dowdiv                           float_text1                   0706
+ftmul                            float_text4                   068E
+ftmul_x                          float_text4                   068F
+ftnorm1                          float_text4                   066A
+fttol                            float_text4                   06CF
+ftunpack1                        float_text4                   0640
+ftunpack2                        float_text4                   064F
+int_entry                        intentry                      0004
+int_func                         intcode                       000B
+int_restore                      intret                        0076
+intlevel0                        intentry                      0004
+intlevel1                        intentry                      0004
+l0neg                            float_text0                   0767
+lbtoft                           float_text4                   063C
+lldiv                            float_text0                   0775
+lldiv_x                          float_text0                   0776
+llmod                            float_text0                   0775
+lltoft                           float_text4                   06F7
+lwdiv                            float_text1                   0705
+lwmod                            float_text1                   0705
+reset_vec                        reset_vec                     0000
+start                            init                          007B
+storeback                        float_text0                   07F1
+storeback_3                      ftext0                        0627
+string_indir                     stringtable                   00A3
+string_table                     stringtable                   00A0
+used_btemp0                      (abs)                         0001
+used_btemp1                      (abs)                         0001
+used_btemp10                     (abs)                         0001
+used_btemp11                     (abs)                         0001
+used_btemp12                     (abs)                         0001
+used_btemp2                      (abs)                         0001
+used_btemp3                      (abs)                         0001
+used_btemp4                      (abs)                         0001
+used_btemp5                      (abs)                         0001
+used_btemp6                      (abs)                         0001
+used_btemp7                      (abs)                         0001
+used_btemp8                      (abs)                         0001
+used_btemp9                      (abs)                         0001
+used_code_ptr                    (abs)                         0001
+zerctt                           float_text4                   064B

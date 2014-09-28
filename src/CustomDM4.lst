@@ -1,0 +1,3027 @@
+
+
+HI-TECH Software PICC Macro Assembler V9.50PL2
+                                                      Tue Aug 11 23:56:16 2009
+
+
+     1                           	processor	16F648A
+     2                           	opt	pw 79
+     3                           	psect	text0,local,class=CODE,delta=2
+     4                           	psect	config,global,class=CONFIG,delta=2
+     5                           	psect	text13,local,class=CODE,delta=2
+     6                           	psect	intcode,global,class=CODE,delta=2
+     7                           	psect	intsave_0,global,ovrld,class=COMBANK,spa
+      +                          ce=1,delta=1
+     8                           	psect	intret,global,class=CODE,delta=2
+     9                           	psect	intentry,global,class=CODE,delta=2
+    10                           	psect	intsave,global,class=BANK0,space=1,delta
+      +                          =1
+    11                           	psect	rdata_1,global,class=BANK1,space=1,delta
+      +                          =1
+    12                           	psect	idata_1,global,class=CODE,delta=2
+    13                           	psect	text21,local,class=CODE,delta=2
+    14                           	psect	rbss_1,global,class=BANK1,space=1,delta=
+      +                          1
+    15                           	psect	rbss_0,global,class=BANK0,space=1,delta=
+      +                          1
+    16                           	psect	temp,global,ovrld,class=BANK0,space=1,de
+      +                          lta=1
+    17  0000                     
+    18  0000                     
+    19  0000                     
+    20  0000                     
+    21  0000                     
+    22  0000                     
+    23  0000                     
+    24  0000                     
+    25  0000                     
+    26  0000                     	;#
+    27                           
+    28                           	psect	text0
+    29  0896                     _ACTION
+    30                           ;CustomDM4.c: 95: void ACTION(void)
+    31  0896  138B               	bcf	11,7
+    32                           ;CustomDM4.c: 98: G_Last_Action = G_TickCount;
+    33  0897  1283               	bcf	3,5
+    34  0898  1303               	bcf	3,6	;carry unused
+    35  0899  0833               	movf	_G_TickCount,w	;volatile
+    36  089A  00AF               	movwf	_G_Last_Action
+    37  089B  0834               	movf	_G_TickCount+1,w	;volatile
+    38  089C  00B0               	movwf	_G_Last_Action+1
+    39  089D  0835               	movf	_G_TickCount+2,w	;volatile
+    40  089E  00B1               	movwf	_G_Last_Action+2
+    41  089F  0836               	movf	_G_TickCount+3,w	;volatile
+    42  08A0  00B2               	movwf	_G_Last_Action+3
+    43                           ;CustomDM4.c: 99: (GIE = 1);
+    44  08A1  178B               	bsf	11,7
+    45                           ;CustomDM4.c: 100: asm("nop");
+    46  08A2  0000               	nop	;#
+    47                           ;CustomDM4.c: 101: }
+    48  08A3  0008               	return	;W free
+    49  08A4                     _eeprom_read_word
+    50                           ;	_addr assigned to ?a_eeprom_read_word+0
+    51  0000                     _eeprom_read_word$addr	set	?a_eeprom_read_word
+    52                           ;_addr stored from w
+    53  08A4  0183               	clrf	3	;select bank 0
+    54  08A5  00BB               	movwf	?a_eeprom_read_word
+    55                           ;CustomDM4.c: 235: WORD eeprom_read_word(BYTE a
+      +                          ddr)
+    56  08A6  0A3B               	incf	?a_eeprom_read_word,w
+    57  08A7  118A  21E9         	fcall	_eeprom_read
+    58  08A9  00BC               	movwf	?a_eeprom_read_word+1
+    59  08AA  01BD               	clrf	?a_eeprom_read_word+2
+    60  08AB  083B               	movf	?a_eeprom_read_word,w
+    61  08AC  118A  21E9  158A   	fcall	_eeprom_read
+    62  08AF  00F1               	movwf	btemp+1
+    63  08B0  01F0               	clrf	btemp
+    64  08B1  083C               	movf	?a_eeprom_read_word+1,w
+    65  08B2  04F0               	iorwf	btemp
+    66  08B3  083D               	movf	?a_eeprom_read_word+2,w
+    67  08B4  04F1               	iorwf	btemp+1
+    68                           ;CustomDM4.c: 238: }
+    69  08B5  0008               	return	;W free
+    70  0000                     
+    71  08B6                     _wait
+    72                           ;CustomDM4.c: 316: void wait(DWORD microseconds
+      +                          )
+    73  08B6  138B               	bcf	11,7
+    74                           ;CustomDM4.c: 321: end = G_TickCount + microsec
+      +                          onds;
+    75  08B7  1283               	bcf	3,5
+    76  08B8  1303               	bcf	3,6	;carry unused
+    77  08B9  0846               	movf	?_wait,w
+    78  08BA  0733               	addwf	_G_TickCount,w	;volatile
+    79  08BB  00F0               	movwf	btemp
+    80  08BC  0834               	movf	_G_TickCount+1,w	;volatile
+    81  08BD  00F1               	movwf	btemp+1
+    82  08BE  0847               	movf	?_wait+1,w
+    83  08BF  1803               	btfsc	3,0
+    84  08C0  0F47               	incfsz	?_wait+1,w
+    85  08C1  07F1               	addwf	btemp+1
+    86  08C2  0835               	movf	_G_TickCount+2,w	;volatile
+    87  08C3  00F2               	movwf	btemp+2
+    88  08C4  0848               	movf	?_wait+2,w
+    89  08C5  1803               	btfsc	3,0
+    90  08C6  0F48               	incfsz	?_wait+2,w
+    91  08C7  07F2               	addwf	btemp+2
+    92  08C8  0836               	movf	_G_TickCount+3,w	;volatile
+    93  08C9  00F3               	movwf	btemp+3
+    94  08CA  0849               	movf	?_wait+3,w
+    95  08CB  1803               	btfsc	3,0
+    96  08CC  0F49               	incfsz	?_wait+3,w
+    97  08CD  07F3               	addwf	btemp+3
+    98  08CE  0870               	movf	btemp,w
+    99  08CF  1683               	bsf	3,5
+   100  08D0  00CD               	movwf	F440^(0+128)
+   101  08D1  0871               	movf	btemp+1,w
+   102  08D2  00CE               	movwf	(F440+1)^(0+128)
+   103  08D3  0872               	movf	btemp+2,w
+   104  08D4  00CF               	movwf	(F440+2)^(0+128)
+   105  08D5  0873               	movf	btemp+3,w
+   106  08D6  00D0               	movwf	(F440+3)^(0+128)
+   107                           ;CustomDM4.c: 322: while (G_TickCount < end)
+   108  08D7  28DA               	goto	l29
+   109                           ;CustomDM4.c: 323: {
+   110                           ;CustomDM4.c: 325: asm("nop");
+   111  08D8                     L4
+   112                           ;CustomDM4.c: 326: asm("clrwdt");
+   113  08D8  0064               	clrwdt	;#
+   114                           ;CustomDM4.c: 327: (GIE = 0);
+   115  08D9  138B               	bcf	11,7
+   116  08DA                     l29
+   117  08DA  1683               	bsf	3,5
+   118  08DB  0850               	movf	(F440+3)^(0+128),w
+   119  08DC  1283               	bcf	3,5
+   120  08DD  0236               	subwf	_G_TickCount+3,w	;volatile
+   121  08DE  1D03               	btfss	3,2
+   122  08DF  28F0               	goto	u325
+   123  08E0  1683               	bsf	3,5
+   124  08E1  084F               	movf	(F440+2)^(0+128),w
+   125  08E2  1283               	bcf	3,5
+   126  08E3  0235               	subwf	_G_TickCount+2,w	;volatile
+   127  08E4  1D03               	btfss	3,2
+   128  08E5  28F0               	goto	u325
+   129  08E6  1683               	bsf	3,5
+   130  08E7  084E               	movf	(F440+1)^(0+128),w
+   131  08E8  1283               	bcf	3,5
+   132  08E9  0234               	subwf	_G_TickCount+1,w	;volatile
+   133  08EA  1D03               	btfss	3,2
+   134  08EB  28F0               	goto	u325
+   135  08EC  1683               	bsf	3,5
+   136  08ED  084D               	movf	F440^(0+128),w
+   137  08EE  1283               	bcf	3,5
+   138  08EF  0233               	subwf	_G_TickCount,w	;volatile
+   139  08F0                     u325
+   140                           ;CustomDM4.c: 328: }
+   141  08F0  178B               	bsf	11,7
+   142                           ;CustomDM4.c: 330: asm("nop");
+   143  08F1  0000               	nop	;#
+   144  08F2  1803               	btfsc	3,0
+   145                           ;CustomDM4.c: 331: }
+   146  08F3  0008               	return	;W free
+   147  08F4  28D8               	goto	L4
+   148  08F5                     _Mode_Fire
+   149                           ;CustomDM4.c: 339: static bank1 BOOL shotforced
+      +                           = 1;
+   150  08F5  118A  247E  158A   	fcall	_TRIGGER_FIRSTPULL
+   151  08F8  3800               	iorlw	0
+   152                           ;CustomDM4.c: 344: {
+   153  08F9  1683               	bsf	3,5
+   154  08FA  1903               	btfsc	3,2
+   155  08FB  291F               	goto	L5
+   156  08FC  01A7               	clrf	_G_ShotBuffer^(0+128)
+   157  08FD  0AA7               	incf	_G_ShotBuffer^(0+128)
+   158                           ;CustomDM4.c: 349: if ((G_Hybrid == 1) && (G_FM
+      +                          D == 0x03))
+   159  08FE  0B23               	decfsz	_G_Hybrid^(0+128),w
+   160  08FF  2908               	goto	l34
+   161  0900  1283               	bcf	3,5
+   162  0901  0822               	movf	_G_FMD,w
+   163  0902  3A03               	xorlw	3
+   164  0903  1D03               	btfss	3,2
+   165  0904  2908               	goto	l34
+   166                           ;CustomDM4.c: 350: {
+   167  0905  3003               	movlw	3
+   168  0906  1683               	bsf	3,5
+   169  0907  00A7               	movwf	_G_ShotBuffer^(0+128)
+   170  0908                     l34
+   171                           ;CustomDM4.c: 352: }
+   172  0908  1683               	bsf	3,5
+   173  0909  01E9               	clrf	F442^(0+128)
+   174                           ;CustomDM4.c: 358: if (!G_Eye_On)
+   175  090A  08C8               	movf	_G_Eye_On^(0+128)
+   176  090B  1D03               	btfss	3,2
+   177  090C  291F               	goto	L5
+   178                           ;CustomDM4.c: 359: {
+   179  090D  3003               	movlw	3
+   180  090E  00CA               	movwf	_G_Fire_RGB^(0+128)
+   181                           ;CustomDM4.c: 362: (RA0 = 1);
+   182  090F  1283               	bcf	3,5
+   183  0910  1405               	bsf	5,0
+   184                           ;CustomDM4.c: 363: (RB5 = 1);
+   185  0911  1686               	bsf	6,5
+   186                           ;CustomDM4.c: 364: wait(500);
+   187  0912  30F4               	movlw	244
+   188  0913  00C6               	movwf	?_wait
+   189  0914  3001               	movlw	1
+   190  0915  00C7               	movwf	?_wait+1
+   191  0916  3000               	movlw	0
+   192  0917  01C8               	clrf	?_wait+2
+   193  0918  01C9               	clrf	?_wait+3
+   194  0919  20B6               	fcall	_wait
+   195                           ;CustomDM4.c: 365: (RA0 = 0);
+   196  091A  1005               	bcf	5,0
+   197                           ;CustomDM4.c: 366: (RB5 = 0);
+   198  091B  1286               	bcf	6,5
+   199                           ;CustomDM4.c: 367: G_Fire_RGB = 0x02;
+   200  091C  3002               	movlw	2
+   201  091D  1683               	bsf	3,5
+   202  091E  00CA               	movwf	_G_Fire_RGB^(0+128)
+   203                           ;CustomDM4.c: 368: }
+   204  091F                     L5
+   205  091F  0B48               	decfsz	_G_Eye_On^(0+128),w
+   206  0920  2A88               	goto	l36
+   207                           ;CustomDM4.c: 375: {
+   208  0921  138B               	bcf	11,7
+   209                           ;CustomDM4.c: 378: if ((G_TickCount > G_Eye_Nex
+      +                          tCheck) || G_ShotBuffer)
+   210  0922  1283               	bcf	3,5
+   211  0923  0836               	movf	_G_TickCount+3,w	;volatile
+   212  0924  1683               	bsf	3,5
+   213  0925  0258               	subwf	(_G_Eye_NextCheck+3)^(0+128),w
+   214  0926  1D03               	btfss	3,2
+   215  0927  2938               	goto	u395
+   216  0928  1283               	bcf	3,5
+   217  0929  0835               	movf	_G_TickCount+2,w	;volatile
+   218  092A  1683               	bsf	3,5
+   219  092B  0257               	subwf	(_G_Eye_NextCheck+2)^(0+128),w
+   220  092C  1D03               	btfss	3,2
+   221  092D  2938               	goto	u395
+   222  092E  1283               	bcf	3,5
+   223  092F  0834               	movf	_G_TickCount+1,w	;volatile
+   224  0930  1683               	bsf	3,5
+   225  0931  0256               	subwf	(_G_Eye_NextCheck+1)^(0+128),w
+   226  0932  1D03               	btfss	3,2
+   227  0933  2938               	goto	u395
+   228  0934  1283               	bcf	3,5
+   229  0935  0833               	movf	_G_TickCount,w	;volatile
+   230  0936  1683               	bsf	3,5
+   231  0937  0255               	subwf	_G_Eye_NextCheck^(0+128),w
+   232  0938                     u395
+   233  0938  1C03               	btfss	3,0
+   234  0939  293D               	goto	u410
+   235  093A  08A7               	movf	_G_ShotBuffer^(0+128)
+   236  093B  1903               	btfsc	3,2
+   237  093C  2A85               	goto	l37
+   238  093D                     u410
+   239                           ;CustomDM4.c: 379: {
+   240  093D  178B               	bsf	11,7
+   241                           ;CustomDM4.c: 381: asm("nop");
+   242  093E  0000               	nop	;#
+   243                           ;CustomDM4.c: 383: _EYEPOWER_ON_PTR();
+   244  093F  0844               	movf	(__EYEPOWER_ON_PTR+1)^(0+128),w
+   245  0940  1283               	bcf	3,5
+   246  0941  00D2               	movwf	code_ptr+1
+   247  0942  1683               	bsf	3,5
+   248  0943  0843               	movf	__EYEPOWER_ON_PTR^(0+128),w
+   249  0944  1283               	bcf	3,5
+   250  0945  118A  20A0  158A   	fcall	string_table
+   251                           ;CustomDM4.c: 386: (GIE = 0);
+   252  0948  138B               	bcf	11,7
+   253                           ;CustomDM4.c: 387: G_Eye_NextCheck = G_TickCoun
+      +                          t+(1000000/125);
+   254  0949  3040               	movlw	64
+   255  094A  00F0               	movwf	btemp
+   256  094B  301F               	movlw	31
+   257  094C  00F1               	movwf	btemp+1
+   258  094D  01F2               	clrf	btemp+2
+   259  094E  01F3               	clrf	btemp+3
+   260  094F  0870               	movf	btemp,w
+   261  0950  0733               	addwf	_G_TickCount,w	;volatile
+   262  0951  00F4               	movwf	btemp+4
+   263  0952  0834               	movf	_G_TickCount+1,w	;volatile
+   264  0953  00F5               	movwf	btemp+5
+   265  0954  0871               	movf	btemp+1,w
+   266  0955  1803               	btfsc	3,0
+   267  0956  0F71               	incfsz	btemp+1,w
+   268  0957  07F5               	addwf	btemp+5
+   269  0958  0835               	movf	_G_TickCount+2,w	;volatile
+   270  0959  00F6               	movwf	btemp+6
+   271  095A  0872               	movf	btemp+2,w
+   272  095B  1803               	btfsc	3,0
+   273  095C  0F72               	incfsz	btemp+2,w
+   274  095D  07F6               	addwf	btemp+6
+   275  095E  0836               	movf	_G_TickCount+3,w	;volatile
+   276  095F  00F7               	movwf	btemp+7
+   277  0960  0873               	movf	btemp+3,w
+   278  0961  1803               	btfsc	3,0
+   279  0962  0F73               	incfsz	btemp+3,w
+   280  0963  07F7               	addwf	btemp+7
+   281  0964  0874               	movf	btemp+4,w
+   282  0965  1683               	bsf	3,5
+   283  0966  00D5               	movwf	_G_Eye_NextCheck^(0+128)
+   284  0967  0875               	movf	btemp+5,w
+   285  0968  00D6               	movwf	(_G_Eye_NextCheck+1)^(0+128)
+   286  0969  0876               	movf	btemp+6,w
+   287  096A  00D7               	movwf	(_G_Eye_NextCheck+2)^(0+128)
+   288  096B  0877               	movf	btemp+7,w
+   289  096C  00D8               	movwf	(_G_Eye_NextCheck+3)^(0+128)
+   290                           ;CustomDM4.c: 388: (GIE = 1);
+   291  096D  178B               	bsf	11,7
+   292                           ;CustomDM4.c: 389: asm("nop");
+   293  096E  0000               	nop	;#
+   294                           ;CustomDM4.c: 392: wait(20);
+   295  096F  3014               	movlw	20
+   296  0970  1283               	bcf	3,5
+   297  0971  00C6               	movwf	?_wait
+   298  0972  01C7               	clrf	?_wait+1
+   299  0973  01C8               	clrf	?_wait+2
+   300  0974  01C9               	clrf	?_wait+3
+   301  0975  20B6               	fcall	_wait
+   302                           ;CustomDM4.c: 395: (GIE = 0);
+   303  0976  138B               	bcf	11,7
+   304                           ;CustomDM4.c: 396: if (G_Eye_Waiting)
+   305  0977  1683               	bsf	3,5
+   306  0978  0849               	movf	_G_Eye_Waiting^(0+128),w	;volatile
+   307  0979  1903               	btfsc	3,2
+   308  097A  29CF               	goto	l38
+   309                           ;CustomDM4.c: 397: {
+   310  097B  306A               	movlw	106
+   311  097C  00F0               	movwf	btemp
+   312  097D  3004               	movlw	4
+   313  097E  00F1               	movwf	btemp+1
+   314  097F  3001               	movlw	1
+   315  0980  00F2               	movwf	btemp+2
+   316  0981  01F3               	clrf	btemp+3
+   317  0982  0870               	movf	btemp,w
+   318  0983  0731               	addwf	_G_Last_Shot^(0+128),w
+   319  0984  00F4               	movwf	btemp+4
+   320  0985  0832               	movf	(_G_Last_Shot+1)^(0+128),w
+   321  0986  00F5               	movwf	btemp+5
+   322  0987  0871               	movf	btemp+1,w
+   323  0988  1803               	btfsc	3,0
+   324  0989  0F71               	incfsz	btemp+1,w
+   325  098A  07F5               	addwf	btemp+5
+   326  098B  0833               	movf	(_G_Last_Shot+2)^(0+128),w
+   327  098C  00F6               	movwf	btemp+6
+   328  098D  0872               	movf	btemp+2,w
+   329  098E  1803               	btfsc	3,0
+   330  098F  0F72               	incfsz	btemp+2,w
+   331  0990  07F6               	addwf	btemp+6
+   332  0991  0834               	movf	(_G_Last_Shot+3)^(0+128),w
+   333  0992  00F7               	movwf	btemp+7
+   334  0993  0873               	movf	btemp+3,w
+   335  0994  1803               	btfsc	3,0
+   336  0995  0F73               	incfsz	btemp+3,w
+   337  0996  07F7               	addwf	btemp+7
+   338  0997  1283               	bcf	3,5
+   339  0998  0836               	movf	_G_TickCount+3,w	;volatile
+   340  0999  0277               	subwf	btemp+7,w
+   341  099A  1D03               	btfss	3,2
+   342  099B  29A6               	goto	u435
+   343  099C  0835               	movf	_G_TickCount+2,w	;volatile
+   344  099D  0276               	subwf	btemp+6,w
+   345  099E  1D03               	btfss	3,2
+   346  099F  29A6               	goto	u435
+   347  09A0  0834               	movf	_G_TickCount+1,w	;volatile
+   348  09A1  0275               	subwf	btemp+5,w
+   349  09A2  1D03               	btfss	3,2
+   350  09A3  29A6               	goto	u435
+   351  09A4  0833               	movf	_G_TickCount,w	;volatile
+   352  09A5  0274               	subwf	btemp+4,w
+   353  09A6                     u435
+   354                           ;CustomDM4.c: 399: {
+   355  09A6  178B               	bsf	11,7
+   356                           ;CustomDM4.c: 401: asm("nop");
+   357  09A7  0000               	nop	;#
+   358  09A8  1803               	btfsc	3,0
+   359  09A9  29D1               	goto	L6
+   360                           ;CustomDM4.c: 403: (GIE = 0);
+   361  09AA  138B               	bcf	11,7
+   362                           ;CustomDM4.c: 404: if (G_Eye_Malfunc == 0)
+   363  09AB  1683               	bsf	3,5
+   364  09AC  0847               	movf	_G_Eye_Malfunc^(0+128),w	;volatile
+   365                           ;CustomDM4.c: 405: {
+   366  09AD  178B               	bsf	11,7
+   367  09AE  1D03               	btfss	3,2
+   368  09AF  29CA               	goto	L7
+   369                           ;CustomDM4.c: 407: asm("nop");
+   370  09B0  0000               	nop	;#
+   371                           ;CustomDM4.c: 408: (GIE = 0);
+   372  09B1  138B               	bcf	11,7
+   373                           ;CustomDM4.c: 409: G_LED_DelayOnTime = (1000000
+      +                          /4);
+   374  09B2  3090               	movlw	144
+   375  09B3  00DD               	movwf	_G_LED_DelayOnTime^(0+128)	;volatile
+   376  09B4  30D0               	movlw	208
+   377  09B5  00DE               	movwf	(_G_LED_DelayOnTime+1)^(0+128)	;volatile
+   378  09B6  3003               	movlw	3
+   379  09B7  00DF               	movwf	(_G_LED_DelayOnTime+2)^(0+128)	;volatile
+   380  09B8  01E0               	clrf	(_G_LED_DelayOnTime+3)^(0+128)	;volatile
+   381                           ;CustomDM4.c: 410: G_LED_DelayOffTime = (100000
+      +                          0/8);
+   382  09B9  3048               	movlw	72
+   383  09BA  00D9               	movwf	_G_LED_DelayOffTime^(0+128)	;volatile
+   384  09BB  30E8               	movlw	232
+   385  09BC  00DA               	movwf	(_G_LED_DelayOffTime+1)^(0+128)	;volatil
+      +                          e
+   386  09BD  3001               	movlw	1
+   387  09BE  00DB               	movwf	(_G_LED_DelayOffTime+2)^(0+128)	;volatil
+      +                          e
+   388  09BF  01DC               	clrf	(_G_LED_DelayOffTime+3)^(0+128)	;volatile
+   389                           ;CustomDM4.c: 411: G_Eye_Malfunc = 1;
+   390  09C0  00C7               	movwf	_G_Eye_Malfunc^(0+128)	;volatile
+   391                           ;CustomDM4.c: 412: G_Current_ROF = 10;
+   392  09C1  300A               	movlw	10
+   393  09C2  00C6               	movwf	_G_Current_ROF^(0+128)	;volatile
+   394                           ;CustomDM4.c: 413: G_Ramping = G_RampIt = 0;
+   395  09C3  01A5               	clrf	_G_RampIt^(0+128)
+   396  09C4  01A6               	clrf	_G_Ramping^(0+128)
+   397                           ;CustomDM4.c: 414: G_LimitROF = 1;
+   398  09C5  01A4               	clrf	_G_LimitROF^(0+128)
+   399  09C6  0AA4               	incf	_G_LimitROF^(0+128)
+   400                           ;CustomDM4.c: 415: (GIE = 1);
+   401  09C7  178B               	bsf	11,7
+   402                           ;CustomDM4.c: 416: asm("nop");
+   403  09C8  0000               	nop	;#
+   404                           ;CustomDM4.c: 417: }
+   405  09C9  178B               	bsf	11,7
+   406  09CA                     L7
+   407                           ;CustomDM4.c: 419: asm("nop");
+   408  09CA  0000               	nop	;#
+   409                           ;CustomDM4.c: 421: (GIE = 0);
+   410  09CB  138B               	bcf	11,7
+   411                           ;CustomDM4.c: 422: G_Eye_Waiting = 0;
+   412  09CC  01C9               	clrf	_G_Eye_Waiting^(0+128)	;volatile
+   413                           ;CustomDM4.c: 423: (GIE = 1);
+   414  09CD  178B               	bsf	11,7
+   415                           ;CustomDM4.c: 424: asm("nop");
+   416  09CE  0000               	nop	;#
+   417  09CF                     l38
+   418                           ;CustomDM4.c: 425: }
+   419  09CF  178B               	bsf	11,7
+   420                           ;CustomDM4.c: 428: asm("nop");
+   421  09D0  0000               	nop	;#
+   422  09D1                     L6
+   423                           ;CustomDM4.c: 431: if ((RB0 == 1))
+   424  09D1  1283               	bcf	3,5
+   425                           ;CustomDM4.c: 432: {
+   426  09D2  138B               	bcf	11,7
+   427  09D3  1C06               	btfss	6,0
+   428  09D4  29D9               	goto	L8
+   429                           ;CustomDM4.c: 434: G_Fire_RGB = 0x01;
+   430  09D5  1683               	bsf	3,5
+   431  09D6  01CA               	clrf	_G_Fire_RGB^(0+128)
+   432  09D7  0ACA               	incf	_G_Fire_RGB^(0+128)
+   433  09D8  29E5               	goto	l43
+   434                           ;CustomDM4.c: 435: (GIE = 1);
+   435                           ;CustomDM4.c: 436: asm("nop");
+   436                           ;CustomDM4.c: 437: }
+   437                           ;CustomDM4.c: 438: else
+   438  09D9                     L8
+   439                           ;CustomDM4.c: 441: G_Fire_RGB = 0x02;
+   440  09D9  3002               	movlw	2
+   441  09DA  1683               	bsf	3,5
+   442  09DB  00CA               	movwf	_G_Fire_RGB^(0+128)
+   443                           ;CustomDM4.c: 442: (GIE = 1);
+   444  09DC  178B               	bsf	11,7
+   445                           ;CustomDM4.c: 443: asm("nop");
+   446  09DD  0000               	nop	;#
+   447                           ;CustomDM4.c: 445: (GIE = 0);
+   448  09DE  138B               	bcf	11,7
+   449                           ;CustomDM4.c: 446: if (G_Eye_Malfunc)
+   450  09DF  0847               	movf	_G_Eye_Malfunc^(0+128),w	;volatile
+   451                           ;CustomDM4.c: 447: {
+   452  09E0  178B               	bsf	11,7
+   453  09E1  1903               	btfsc	3,2
+   454  09E2  29E6               	goto	L9
+   455                           ;CustomDM4.c: 449: asm("nop");
+   456  09E3  0000               	nop	;#
+   457                           ;CustomDM4.c: 450: CLEAREYEMALFUNC();
+   458  09E4  23BC               	fcall	_CLEAREYEMALFUNC
+   459  09E5                     l43
+   460                           ;CustomDM4.c: 451: }
+   461  09E5  178B               	bsf	11,7
+   462  09E6                     L9
+   463                           ;CustomDM4.c: 453: asm("nop");
+   464  09E6  0000               	nop	;#
+   465                           ;CustomDM4.c: 454: }
+   466  09E7  1683               	bsf	3,5
+   467  09E8  08A7               	movf	_G_ShotBuffer^(0+128)
+   468  09E9  1903               	btfsc	3,2
+   469  09EA  29EE               	goto	l44
+   470                           ;CustomDM4.c: 458: {
+   471  09EB  118A  2377  158A   	fcall	_Cycle_BreakBeam
+   472  09EE                     l44
+   473                           ;CustomDM4.c: 460: }
+   474  09EE  138B               	bcf	11,7
+   475                           ;CustomDM4.c: 464: if ((G_FMD != 0x02) && (RB1 
+      +                          == 0) && !(RB0 == 1) && !shotforced && (G_TickC
+      +                          ount > G_Last_Pull+(1000000/4)))
+   476  09EF  1283               	bcf	3,5
+   477  09F0  0822               	movf	_G_FMD,w
+   478  09F1  3A02               	xorlw	2
+   479  09F2  1D03               	btfss	3,2
+   480  09F3  1886               	btfsc	6,1
+   481  09F4  2A71               	goto	l45
+   482  09F5  1806               	btfsc	6,0
+   483  09F6  2A71               	goto	l45
+   484  09F7  1683               	bsf	3,5
+   485  09F8  08E9               	movf	F442^(0+128)
+   486  09F9  1D03               	btfss	3,2
+   487  09FA  2A71               	goto	l45
+   488  09FB  3090               	movlw	144
+   489  09FC  00F0               	movwf	btemp
+   490  09FD  30D0               	movlw	208
+   491  09FE  00F1               	movwf	btemp+1
+   492  09FF  3003               	movlw	3
+   493  0A00  00F2               	movwf	btemp+2
+   494  0A01  01F3               	clrf	btemp+3
+   495  0A02  0870               	movf	btemp,w
+   496  0A03  072D               	addwf	_G_Last_Pull^(0+128),w
+   497  0A04  00F4               	movwf	btemp+4
+   498  0A05  082E               	movf	(_G_Last_Pull+1)^(0+128),w
+   499  0A06  00F5               	movwf	btemp+5
+   500  0A07  0871               	movf	btemp+1,w
+   501  0A08  1803               	btfsc	3,0
+   502  0A09  0F71               	incfsz	btemp+1,w
+   503  0A0A  07F5               	addwf	btemp+5
+   504  0A0B  082F               	movf	(_G_Last_Pull+2)^(0+128),w
+   505  0A0C  00F6               	movwf	btemp+6
+   506  0A0D  0872               	movf	btemp+2,w
+   507  0A0E  1803               	btfsc	3,0
+   508  0A0F  0F72               	incfsz	btemp+2,w
+   509  0A10  07F6               	addwf	btemp+6
+   510  0A11  0830               	movf	(_G_Last_Pull+3)^(0+128),w
+   511  0A12  00F7               	movwf	btemp+7
+   512  0A13  0873               	movf	btemp+3,w
+   513  0A14  1803               	btfsc	3,0
+   514  0A15  0F73               	incfsz	btemp+3,w
+   515  0A16  07F7               	addwf	btemp+7
+   516  0A17  1283               	bcf	3,5
+   517  0A18  0836               	movf	_G_TickCount+3,w	;volatile
+   518  0A19  0277               	subwf	btemp+7,w
+   519  0A1A  1D03               	btfss	3,2
+   520  0A1B  2A26               	goto	u555
+   521  0A1C  0835               	movf	_G_TickCount+2,w	;volatile
+   522  0A1D  0276               	subwf	btemp+6,w
+   523  0A1E  1D03               	btfss	3,2
+   524  0A1F  2A26               	goto	u555
+   525  0A20  0834               	movf	_G_TickCount+1,w	;volatile
+   526  0A21  0275               	subwf	btemp+5,w
+   527  0A22  1D03               	btfss	3,2
+   528  0A23  2A26               	goto	u555
+   529  0A24  0833               	movf	_G_TickCount,w	;volatile
+   530  0A25  0274               	subwf	btemp+4,w
+   531  0A26                     u555
+   532                           ;CustomDM4.c: 465: {
+   533  0A26  178B               	bsf	11,7
+   534                           ;CustomDM4.c: 467: asm("nop");
+   535  0A27  0000               	nop	;#
+   536                           ;CustomDM4.c: 468: (GIE = 0);
+   537  0A28  138B               	bcf	11,7
+   538  0A29  1803               	btfsc	3,0
+   539  0A2A  2A74               	goto	L10
+   540                           ;CustomDM4.c: 469: end = G_TickCount+(1000000/2
+      +                          );
+   541  0A2B  3020               	movlw	32
+   542  0A2C  0733               	addwf	_G_TickCount,w	;volatile
+   543  0A2D  00B7               	movwf	?a_Mode_Fire
+   544  0A2E  30A1               	movlw	161
+   545  0A2F  00B8               	movwf	?a_Mode_Fire+1
+   546  0A30  0834               	movf	_G_TickCount+1,w	;volatile
+   547  0A31  1803               	btfsc	3,0
+   548  0A32  0F34               	incfsz	_G_TickCount+1,w	;volatile
+   549  0A33  07B8               	addwf	?a_Mode_Fire+1
+   550  0A34  3007               	movlw	7
+   551  0A35  00B9               	movwf	?a_Mode_Fire+2
+   552  0A36  0835               	movf	_G_TickCount+2,w	;volatile
+   553  0A37  1803               	btfsc	3,0
+   554  0A38  0F35               	incfsz	_G_TickCount+2,w	;volatile
+   555  0A39  07B9               	addwf	?a_Mode_Fire+2
+   556  0A3A  01BA               	clrf	?a_Mode_Fire+3
+   557  0A3B  0836               	movf	_G_TickCount+3,w	;volatile
+   558  0A3C  1803               	btfsc	3,0
+   559  0A3D  0F36               	incfsz	_G_TickCount+3,w	;volatile
+   560  0A3E  07BA               	addwf	?a_Mode_Fire+3
+   561                           ;CustomDM4.c: 470: while (G_TickCount < end)
+   562  0A3F                     l46
+   563  0A3F  083A               	movf	?a_Mode_Fire+3,w
+   564  0A40  0236               	subwf	_G_TickCount+3,w	;volatile
+   565  0A41  1D03               	btfss	3,2
+   566  0A42  2A4D               	goto	u605
+   567  0A43  0839               	movf	?a_Mode_Fire+2,w
+   568  0A44  0235               	subwf	_G_TickCount+2,w	;volatile
+   569  0A45  1D03               	btfss	3,2
+   570  0A46  2A4D               	goto	u605
+   571  0A47  0838               	movf	?a_Mode_Fire+1,w
+   572  0A48  0234               	subwf	_G_TickCount+1,w	;volatile
+   573  0A49  1D03               	btfss	3,2
+   574  0A4A  2A4D               	goto	u605
+   575  0A4B  0837               	movf	?a_Mode_Fire,w
+   576  0A4C  0233               	subwf	_G_TickCount,w	;volatile
+   577  0A4D                     u605
+   578                           ;CustomDM4.c: 471: {
+   579  0A4D  178B               	bsf	11,7
+   580                           ;CustomDM4.c: 473: asm("nop");
+   581  0A4E  0000               	nop	;#
+   582  0A4F  1803               	btfsc	3,0
+   583  0A50  2A60               	goto	L11
+   584                           ;CustomDM4.c: 474: asm("clrwdt");
+   585  0A51  0064               	clrwdt	;#
+   586                           ;CustomDM4.c: 475: if (!(RB1 == 0) || (RB0 == 1
+      +                          ))
+   587  0A52  1886               	btfsc	6,1
+   588  0A53  2A56               	goto	u590
+   589  0A54  1C06               	btfss	6,0
+   590  0A55  2A5E               	goto	l49
+   591  0A56                     u590
+   592                           ;CustomDM4.c: 476: {
+   593  0A56  1683               	bsf	3,5
+   594  0A57  01E9               	clrf	F442^(0+128)
+   595  0A58  0AE9               	incf	F442^(0+128)
+   596                           ;CustomDM4.c: 478: end = 0;
+   597  0A59  1283               	bcf	3,5
+   598  0A5A  01B7               	clrf	?a_Mode_Fire
+   599  0A5B  01B8               	clrf	?a_Mode_Fire+1
+   600  0A5C  01B9               	clrf	?a_Mode_Fire+2
+   601  0A5D  01BA               	clrf	?a_Mode_Fire+3
+   602  0A5E                     l49
+   603                           ;CustomDM4.c: 479: }
+   604  0A5E  138B               	bcf	11,7
+   605  0A5F  2A3F               	goto	l46
+   606                           ;CustomDM4.c: 481: }
+   607                           ;CustomDM4.c: 483: asm("nop");
+   608  0A60                     L11
+   609                           ;CustomDM4.c: 486: if (!shotforced)
+   610  0A60  1683               	bsf	3,5
+   611  0A61  08E9               	movf	F442^(0+128)
+   612  0A62  1D03               	btfss	3,2
+   613  0A63  2A6E               	goto	l50
+   614                           ;CustomDM4.c: 487: {
+   615  0A64  1283               	bcf	3,5
+   616  0A65  1786               	bsf	6,7
+   617                           ;CustomDM4.c: 490: wait(G_Dwell);
+   618  0A66  082D               	movf	_G_Dwell,w
+   619  0A67  00C6               	movwf	?_wait
+   620  0A68  082E               	movf	_G_Dwell+1,w
+   621  0A69  00C7               	movwf	?_wait+1
+   622  0A6A  01C8               	clrf	?_wait+2
+   623  0A6B  01C9               	clrf	?_wait+3
+   624  0A6C  20B6               	fcall	_wait
+   625                           ;CustomDM4.c: 491: (RB7 = 0);
+   626  0A6D  1386               	bcf	6,7
+   627  0A6E                     l50
+   628                           ;CustomDM4.c: 492: }
+   629  0A6E  1683               	bsf	3,5
+   630  0A6F  01E9               	clrf	F442^(0+128)
+   631  0A70  0AE9               	incf	F442^(0+128)
+   632  0A71                     l45
+   633                           ;CustomDM4.c: 495: }
+   634  0A71  178B               	bsf	11,7
+   635                           ;CustomDM4.c: 497: asm("nop");
+   636  0A72  0000               	nop	;#
+   637                           ;CustomDM4.c: 500: (GIE = 0);
+   638  0A73  138B               	bcf	11,7
+   639  0A74                     L10
+   640                           ;CustomDM4.c: 501: if (G_Eye_Waiting == 0)
+   641  0A74  1683               	bsf	3,5
+   642  0A75  0849               	movf	_G_Eye_Waiting^(0+128),w	;volatile
+   643                           ;CustomDM4.c: 502: {
+   644  0A76  178B               	bsf	11,7
+   645  0A77  1D03               	btfss	3,2
+   646  0A78  2A84               	goto	L12
+   647                           ;CustomDM4.c: 504: asm("nop");
+   648  0A79  0000               	nop	;#
+   649                           ;CustomDM4.c: 505: _EYEPOWER_OFF_PTR();
+   650  0A7A  0842               	movf	(__EYEPOWER_OFF_PTR+1)^(0+128),w
+   651  0A7B  1283               	bcf	3,5
+   652  0A7C  00D2               	movwf	code_ptr+1
+   653  0A7D  1683               	bsf	3,5
+   654  0A7E  0841               	movf	__EYEPOWER_OFF_PTR^(0+128),w
+   655  0A7F  1283               	bcf	3,5
+   656  0A80  118A  20A0  158A   	fcall	string_table
+   657                           ;CustomDM4.c: 506: }
+   658  0A83  178B               	bsf	11,7
+   659  0A84                     L12
+   660                           ;CustomDM4.c: 508: asm("nop");
+   661  0A84  0000               	nop	;#
+   662  0A85                     l37
+   663                           ;CustomDM4.c: 509: }
+   664  0A85  178B               	bsf	11,7
+   665                           ;CustomDM4.c: 511: asm("nop");
+   666  0A86  0000               	nop	;#
+   667                           ;CustomDM4.c: 512: }
+   668  0A87  2A8E               	goto	l52
+   669  0A88                     l36
+   670                           ;CustomDM4.c: 513: else
+   671  0A88  08A7               	movf	_G_ShotBuffer^(0+128)
+   672  0A89  1903               	btfsc	3,2
+   673  0A8A  2A8E               	goto	l52
+   674                           ;CustomDM4.c: 516: {
+   675  0A8B  118A  2377  158A   	fcall	_Cycle_BreakBeam
+   676  0A8E                     l52
+   677                           ;CustomDM4.c: 518: }
+   678  0A8E  138B               	bcf	11,7
+   679                           ;CustomDM4.c: 523: if ((G_TickCount > G_LED_Nex
+      +                          tBlink) && G_LED_DelayOnTime && G_LED_DelayOnTi
+      +                          me)
+   680  0A8F  1283               	bcf	3,5
+   681  0A90  0836               	movf	_G_TickCount+3,w	;volatile
+   682  0A91  1683               	bsf	3,5
+   683  0A92  0264               	subwf	(_G_LED_NextBlink+3)^(0+128),w
+   684  0A93  1D03               	btfss	3,2
+   685  0A94  2AA5               	goto	u645
+   686  0A95  1283               	bcf	3,5
+   687  0A96  0835               	movf	_G_TickCount+2,w	;volatile
+   688  0A97  1683               	bsf	3,5
+   689  0A98  0263               	subwf	(_G_LED_NextBlink+2)^(0+128),w
+   690  0A99  1D03               	btfss	3,2
+   691  0A9A  2AA5               	goto	u645
+   692  0A9B  1283               	bcf	3,5
+   693  0A9C  0834               	movf	_G_TickCount+1,w	;volatile
+   694  0A9D  1683               	bsf	3,5
+   695  0A9E  0262               	subwf	(_G_LED_NextBlink+1)^(0+128),w
+   696  0A9F  1D03               	btfss	3,2
+   697  0AA0  2AA5               	goto	u645
+   698  0AA1  1283               	bcf	3,5
+   699  0AA2  0833               	movf	_G_TickCount,w	;volatile
+   700  0AA3  1683               	bsf	3,5
+   701  0AA4  0261               	subwf	_G_LED_NextBlink^(0+128),w
+   702  0AA5                     u645
+   703  0AA5  1803               	btfsc	3,0
+   704  0AA6  2B01               	goto	l54
+   705  0AA7  0860               	movf	(_G_LED_DelayOnTime+3)^(0+128),w	;volatil
+      +                          e
+   706  0AA8  045F               	iorwf	(_G_LED_DelayOnTime+2)^(0+128),w	;volati
+      +                          le
+   707  0AA9  045E               	iorwf	(_G_LED_DelayOnTime+1)^(0+128),w	;volati
+      +                          le
+   708  0AAA  045D               	iorwf	_G_LED_DelayOnTime^(0+128),w	;volatile
+   709  0AAB  1903               	btfsc	3,2
+   710  0AAC  2B01               	goto	l54
+   711  0AAD  0860               	movf	(_G_LED_DelayOnTime+3)^(0+128),w	;volatil
+      +                          e
+   712  0AAE  045F               	iorwf	(_G_LED_DelayOnTime+2)^(0+128),w	;volati
+      +                          le
+   713  0AAF  045E               	iorwf	(_G_LED_DelayOnTime+1)^(0+128),w	;volati
+      +                          le
+   714  0AB0  045D               	iorwf	_G_LED_DelayOnTime^(0+128),w	;volatile
+   715  0AB1  1903               	btfsc	3,2
+   716  0AB2  2B01               	goto	l54
+   717                           ;CustomDM4.c: 524: {
+   718  0AB3  084C               	movf	_G_LED_Off^(0+128),w	;volatile
+   719  0AB4  3000               	movlw	0
+   720  0AB5  1903               	btfsc	3,2
+   721  0AB6  3001               	movlw	1
+   722  0AB7  00CC               	movwf	_G_LED_Off^(0+128)	;volatile
+   723                           ;CustomDM4.c: 527: if (G_LED_Off == 1)
+   724  0AB8  0B4C               	decfsz	_G_LED_Off^(0+128),w	;volatile
+   725  0AB9  2ADE               	goto	l55
+   726                           ;CustomDM4.c: 528: G_LED_NextBlink = G_TickCoun
+      +                          t+G_LED_DelayOffTime;
+   727  0ABA  0859               	movf	_G_LED_DelayOffTime^(0+128),w	;volatile
+   728  0ABB  1283               	bcf	3,5
+   729  0ABC  0733               	addwf	_G_TickCount,w	;volatile
+   730  0ABD  00F0               	movwf	btemp
+   731  0ABE  0834               	movf	_G_TickCount+1,w	;volatile
+   732  0ABF  00F1               	movwf	btemp+1
+   733  0AC0  1683               	bsf	3,5
+   734  0AC1  085A               	movf	(_G_LED_DelayOffTime+1)^(0+128),w	;volati
+      +                          le
+   735  0AC2  1803               	btfsc	3,0
+   736  0AC3  0F5A               	incfsz	(_G_LED_DelayOffTime+1)^(0+128),w	;vola
+      +                          tile
+   737  0AC4  07F1               	addwf	btemp+1
+   738  0AC5  1283               	bcf	3,5
+   739  0AC6  0835               	movf	_G_TickCount+2,w	;volatile
+   740  0AC7  00F2               	movwf	btemp+2
+   741  0AC8  1683               	bsf	3,5
+   742  0AC9  085B               	movf	(_G_LED_DelayOffTime+2)^(0+128),w	;volati
+      +                          le
+   743  0ACA  1803               	btfsc	3,0
+   744  0ACB  0F5B               	incfsz	(_G_LED_DelayOffTime+2)^(0+128),w	;vola
+      +                          tile
+   745  0ACC  07F2               	addwf	btemp+2
+   746  0ACD  1283               	bcf	3,5
+   747  0ACE  0836               	movf	_G_TickCount+3,w	;volatile
+   748  0ACF  00F3               	movwf	btemp+3
+   749  0AD0  1683               	bsf	3,5
+   750  0AD1  085C               	movf	(_G_LED_DelayOffTime+3)^(0+128),w	;volati
+      +                          le
+   751  0AD2  1803               	btfsc	3,0
+   752  0AD3  0F5C               	incfsz	(_G_LED_DelayOffTime+3)^(0+128),w	;vola
+      +                          tile
+   753  0AD4  07F3               	addwf	btemp+3
+   754  0AD5  0870               	movf	btemp,w
+   755  0AD6  00E1               	movwf	_G_LED_NextBlink^(0+128)
+   756  0AD7  0871               	movf	btemp+1,w
+   757  0AD8  00E2               	movwf	(_G_LED_NextBlink+1)^(0+128)
+   758  0AD9  0872               	movf	btemp+2,w
+   759  0ADA  00E3               	movwf	(_G_LED_NextBlink+2)^(0+128)
+   760  0ADB  0873               	movf	btemp+3,w
+   761  0ADC  00E4               	movwf	(_G_LED_NextBlink+3)^(0+128)
+   762  0ADD  2B01               	goto	l54
+   763  0ADE                     l55
+   764                           ;CustomDM4.c: 529: else
+   765  0ADE  085D               	movf	_G_LED_DelayOnTime^(0+128),w	;volatile
+   766  0ADF  1283               	bcf	3,5
+   767  0AE0  0733               	addwf	_G_TickCount,w	;volatile
+   768  0AE1  00F0               	movwf	btemp
+   769  0AE2  0834               	movf	_G_TickCount+1,w	;volatile
+   770  0AE3  00F1               	movwf	btemp+1
+   771  0AE4  1683               	bsf	3,5
+   772  0AE5  085E               	movf	(_G_LED_DelayOnTime+1)^(0+128),w	;volatil
+      +                          e
+   773  0AE6  1803               	btfsc	3,0
+   774  0AE7  0F5E               	incfsz	(_G_LED_DelayOnTime+1)^(0+128),w	;volat
+      +                          ile
+   775  0AE8  07F1               	addwf	btemp+1
+   776  0AE9  1283               	bcf	3,5
+   777  0AEA  0835               	movf	_G_TickCount+2,w	;volatile
+   778  0AEB  00F2               	movwf	btemp+2
+   779  0AEC  1683               	bsf	3,5
+   780  0AED  085F               	movf	(_G_LED_DelayOnTime+2)^(0+128),w	;volatil
+      +                          e
+   781  0AEE  1803               	btfsc	3,0
+   782  0AEF  0F5F               	incfsz	(_G_LED_DelayOnTime+2)^(0+128),w	;volat
+      +                          ile
+   783  0AF0  07F2               	addwf	btemp+2
+   784  0AF1  1283               	bcf	3,5
+   785  0AF2  0836               	movf	_G_TickCount+3,w	;volatile
+   786  0AF3  00F3               	movwf	btemp+3
+   787  0AF4  1683               	bsf	3,5
+   788  0AF5  0860               	movf	(_G_LED_DelayOnTime+3)^(0+128),w	;volatil
+      +                          e
+   789  0AF6  1803               	btfsc	3,0
+   790  0AF7  0F60               	incfsz	(_G_LED_DelayOnTime+3)^(0+128),w	;volat
+      +                          ile
+   791  0AF8  07F3               	addwf	btemp+3
+   792  0AF9  0870               	movf	btemp,w
+   793  0AFA  00E1               	movwf	_G_LED_NextBlink^(0+128)
+   794  0AFB  0871               	movf	btemp+1,w
+   795  0AFC  00E2               	movwf	(_G_LED_NextBlink+1)^(0+128)
+   796  0AFD  0872               	movf	btemp+2,w
+   797  0AFE  00E3               	movwf	(_G_LED_NextBlink+2)^(0+128)
+   798  0AFF  0873               	movf	btemp+3,w
+   799  0B00  00E4               	movwf	(_G_LED_NextBlink+3)^(0+128)
+   800  0B01                     l54
+   801                           ;CustomDM4.c: 531: }
+   802  0B01  178B               	bsf	11,7
+   803                           ;CustomDM4.c: 533: asm("nop");
+   804  0B02  0000               	nop	;#
+   805                           ;CustomDM4.c: 536: if (_EYEBUTTON_ISDOWN_PTR())
+   806  0B03  0840               	movf	(__EYEBUTTON_ISDOWN_PTR+1)^(0+128),w
+   807  0B04  1283               	bcf	3,5
+   808  0B05  00D2               	movwf	code_ptr+1
+   809  0B06  1683               	bsf	3,5
+   810  0B07  083F               	movf	__EYEBUTTON_ISDOWN_PTR^(0+128),w
+   811  0B08  1283               	bcf	3,5
+   812  0B09  118A  20A0  158A   	fcall	string_table
+   813  0B0C  3800               	iorlw	0
+   814                           ;CustomDM4.c: 537: {
+   815  0B0D  1683               	bsf	3,5
+   816  0B0E  1903               	btfsc	3,2
+   817  0B0F  2B82               	goto	L13
+   818  0B10  0854               	movf	(_G_EyeButton_FP+3)^(0+128),w
+   819  0B11  0453               	iorwf	(_G_EyeButton_FP+2)^(0+128),w
+   820  0B12  0452               	iorwf	(_G_EyeButton_FP+1)^(0+128),w
+   821  0B13  0451               	iorwf	_G_EyeButton_FP^(0+128),w
+   822                           ;CustomDM4.c: 539: {
+   823  0B14  138B               	bcf	11,7
+   824  0B15  1D03               	btfss	3,2
+   825  0B16  2B2A               	goto	L14
+   826                           ;CustomDM4.c: 541: G_EyeButton_FP = G_TickCount
+      +                          ;
+   827  0B17  1283               	bcf	3,5
+   828  0B18  0833               	movf	_G_TickCount,w	;volatile
+   829  0B19  1683               	bsf	3,5
+   830  0B1A  00D1               	movwf	_G_EyeButton_FP^(0+128)
+   831  0B1B  1283               	bcf	3,5
+   832  0B1C  0834               	movf	_G_TickCount+1,w	;volatile
+   833  0B1D  1683               	bsf	3,5
+   834  0B1E  00D2               	movwf	(_G_EyeButton_FP+1)^(0+128)
+   835  0B1F  1283               	bcf	3,5
+   836  0B20  0835               	movf	_G_TickCount+2,w	;volatile
+   837  0B21  1683               	bsf	3,5
+   838  0B22  00D3               	movwf	(_G_EyeButton_FP+2)^(0+128)
+   839  0B23  1283               	bcf	3,5
+   840  0B24  0836               	movf	_G_TickCount+3,w	;volatile
+   841  0B25  1683               	bsf	3,5
+   842  0B26  00D4               	movwf	(_G_EyeButton_FP+3)^(0+128)
+   843                           ;CustomDM4.c: 542: (GIE = 1);
+   844  0B27  178B               	bsf	11,7
+   845                           ;CustomDM4.c: 543: asm("nop");
+   846  0B28  0000               	nop	;#
+   847                           ;CustomDM4.c: 544: }
+   848  0B29  138B               	bcf	11,7
+   849  0B2A                     L14
+   850                           ;CustomDM4.c: 547: if (G_TickCount > G_EyeButto
+      +                          n_FP+1000000)
+   851  0B2A  3040               	movlw	64
+   852  0B2B  00F0               	movwf	btemp
+   853  0B2C  3042               	movlw	66
+   854  0B2D  00F1               	movwf	btemp+1
+   855  0B2E  300F               	movlw	15
+   856  0B2F  00F2               	movwf	btemp+2
+   857  0B30  01F3               	clrf	btemp+3
+   858  0B31  0870               	movf	btemp,w
+   859  0B32  0751               	addwf	_G_EyeButton_FP^(0+128),w
+   860  0B33  00F4               	movwf	btemp+4
+   861  0B34  0852               	movf	(_G_EyeButton_FP+1)^(0+128),w
+   862  0B35  00F5               	movwf	btemp+5
+   863  0B36  0871               	movf	btemp+1,w
+   864  0B37  1803               	btfsc	3,0
+   865  0B38  0F71               	incfsz	btemp+1,w
+   866  0B39  07F5               	addwf	btemp+5
+   867  0B3A  0853               	movf	(_G_EyeButton_FP+2)^(0+128),w
+   868  0B3B  00F6               	movwf	btemp+6
+   869  0B3C  0872               	movf	btemp+2,w
+   870  0B3D  1803               	btfsc	3,0
+   871  0B3E  0F72               	incfsz	btemp+2,w
+   872  0B3F  07F6               	addwf	btemp+6
+   873  0B40  0854               	movf	(_G_EyeButton_FP+3)^(0+128),w
+   874  0B41  00F7               	movwf	btemp+7
+   875  0B42  0873               	movf	btemp+3,w
+   876  0B43  1803               	btfsc	3,0
+   877  0B44  0F73               	incfsz	btemp+3,w
+   878  0B45  07F7               	addwf	btemp+7
+   879  0B46  1283               	bcf	3,5
+   880  0B47  0836               	movf	_G_TickCount+3,w	;volatile
+   881  0B48  0277               	subwf	btemp+7,w
+   882  0B49  1D03               	btfss	3,2
+   883  0B4A  2B55               	goto	u725
+   884  0B4B  0835               	movf	_G_TickCount+2,w	;volatile
+   885  0B4C  0276               	subwf	btemp+6,w
+   886  0B4D  1D03               	btfss	3,2
+   887  0B4E  2B55               	goto	u725
+   888  0B4F  0834               	movf	_G_TickCount+1,w	;volatile
+   889  0B50  0275               	subwf	btemp+5,w
+   890  0B51  1D03               	btfss	3,2
+   891  0B52  2B55               	goto	u725
+   892  0B53  0833               	movf	_G_TickCount,w	;volatile
+   893  0B54  0274               	subwf	btemp+4,w
+   894  0B55                     u725
+   895                           ;CustomDM4.c: 548: {
+   896  0B55  178B               	bsf	11,7
+   897                           ;CustomDM4.c: 550: asm("nop");
+   898  0B56  0000               	nop	;#
+   899  0B57  1803               	btfsc	3,0
+   900  0B58  2B86               	goto	l32
+   901                           ;CustomDM4.c: 551: G_EyeButton_FP = 0;
+   902  0B59  1683               	bsf	3,5
+   903  0B5A  01D1               	clrf	_G_EyeButton_FP^(0+128)
+   904  0B5B  01D2               	clrf	(_G_EyeButton_FP+1)^(0+128)
+   905  0B5C  01D3               	clrf	(_G_EyeButton_FP+2)^(0+128)
+   906  0B5D  01D4               	clrf	(_G_EyeButton_FP+3)^(0+128)
+   907                           ;CustomDM4.c: 552: CLEAREYEMALFUNC();
+   908  0B5E  23BC               	fcall	_CLEAREYEMALFUNC
+   909                           ;CustomDM4.c: 553: G_Eye_On = !G_Eye_On;
+   910  0B5F  1683               	bsf	3,5
+   911  0B60  08C8               	movf	_G_Eye_On^(0+128)
+   912  0B61  3000               	movlw	0
+   913  0B62  1903               	btfsc	3,2
+   914  0B63  3001               	movlw	1
+   915  0B64  00C8               	movwf	_G_Eye_On^(0+128)
+   916                           ;CustomDM4.c: 555: if (G_Eye_On == 0)
+   917  0B65  08C8               	movf	_G_Eye_On^(0+128)
+   918                           ;CustomDM4.c: 556: {
+   919  0B66  1283               	bcf	3,5
+   920  0B67  1D03               	btfss	3,2
+   921  0B68  2B7E               	goto	L16
+   922  0B69  1085               	bcf	5,1
+   923                           ;CustomDM4.c: 558: G_LED_DelayOnTime = (1000000
+      +                          /4);
+   924  0B6A  3090               	movlw	144
+   925  0B6B  1683               	bsf	3,5
+   926  0B6C  00DD               	movwf	_G_LED_DelayOnTime^(0+128)	;volatile
+   927  0B6D  30D0               	movlw	208
+   928  0B6E  00DE               	movwf	(_G_LED_DelayOnTime+1)^(0+128)	;volatile
+   929  0B6F  3003               	movlw	3
+   930  0B70  00DF               	movwf	(_G_LED_DelayOnTime+2)^(0+128)	;volatile
+   931  0B71  01E0               	clrf	(_G_LED_DelayOnTime+3)^(0+128)	;volatile
+   932                           ;CustomDM4.c: 559: G_LED_DelayOffTime = (100000
+      +                          0/6);
+   933  0B72  300A               	movlw	10
+   934  0B73  00D9               	movwf	_G_LED_DelayOffTime^(0+128)	;volatile
+   935  0B74  308B               	movlw	139
+   936  0B75  00DA               	movwf	(_G_LED_DelayOffTime+1)^(0+128)	;volatil
+      +                          e
+   937  0B76  3002               	movlw	2
+   938  0B77  00DB               	movwf	(_G_LED_DelayOffTime+2)^(0+128)	;volatil
+      +                          e
+   939  0B78  01DC               	clrf	(_G_LED_DelayOffTime+3)^(0+128)	;volatile
+   940                           ;CustomDM4.c: 560: (GIE = 0);
+   941  0B79  138B               	bcf	11,7
+   942                           ;CustomDM4.c: 561: G_Fire_RGB = 0x02;
+   943  0B7A  00CA               	movwf	_G_Fire_RGB^(0+128)
+   944                           ;CustomDM4.c: 562: (GIE = 1);
+   945  0B7B  178B               	bsf	11,7
+   946                           ;CustomDM4.c: 563: asm("nop");
+   947  0B7C  0000               	nop	;#
+   948                           ;CustomDM4.c: 564: }
+   949  0B7D  2B7F               	goto	l59
+   950                           ;CustomDM4.c: 565: else
+   951  0B7E                     L16
+   952  0B7E  1485               	bsf	5,1
+   953  0B7F                     l59
+   954                           ;CustomDM4.c: 568: }
+   955  0B7F  178B               	bsf	11,7
+   956                           ;CustomDM4.c: 571: asm("nop");
+   957  0B80  0000               	nop	;#
+   958                           ;CustomDM4.c: 572: }
+   959  0B81  2B86               	goto	l32
+   960                           ;CustomDM4.c: 573: else
+   961  0B82                     L13
+   962  0B82  01D1               	clrf	_G_EyeButton_FP^(0+128)
+   963  0B83  01D2               	clrf	(_G_EyeButton_FP+1)^(0+128)
+   964  0B84  01D3               	clrf	(_G_EyeButton_FP+2)^(0+128)
+   965  0B85  01D4               	clrf	(_G_EyeButton_FP+3)^(0+128)
+   966                           ;CustomDM4.c: 575: }
+   967  0B86                     l32
+   968  0B86  1283               	bcf	3,5
+   969  0B87  0008               	return	;W free
+   970  0B88                     _CLEARTIMER
+   971                           ;CustomDM4.c: 119: void CLEARTIMER(void)
+   972  0B88  0183               	clrf	3	;select bank 0
+   973  0B89  01B3               	clrf	_G_TickCount	;volatile
+   974  0B8A  01B4               	clrf	_G_TickCount+1	;volatile
+   975  0B8B  01B5               	clrf	_G_TickCount+2	;volatile
+   976  0B8C  01B6               	clrf	_G_TickCount+3	;volatile
+   977                           ;CustomDM4.c: 123: G_Last_Action = 0;
+   978  0B8D  01AF               	clrf	_G_Last_Action
+   979  0B8E  01B0               	clrf	_G_Last_Action+1
+   980  0B8F  01B1               	clrf	_G_Last_Action+2
+   981  0B90  01B2               	clrf	_G_Last_Action+3
+   982                           ;CustomDM4.c: 124: G_LED_DelayOnTime = 0;
+   983  0B91  1683               	bsf	3,5
+   984  0B92  01DD               	clrf	_G_LED_DelayOnTime^(0+128)	;volatile
+   985  0B93  01DE               	clrf	(_G_LED_DelayOnTime+1)^(0+128)	;volatile
+   986  0B94  01DF               	clrf	(_G_LED_DelayOnTime+2)^(0+128)	;volatile
+   987  0B95  01E0               	clrf	(_G_LED_DelayOnTime+3)^(0+128)	;volatile
+   988                           ;CustomDM4.c: 125: G_LED_DelayOffTime = 0;
+   989  0B96  01D9               	clrf	_G_LED_DelayOffTime^(0+128)	;volatile
+   990  0B97  01DA               	clrf	(_G_LED_DelayOffTime+1)^(0+128)	;volatile
+   991  0B98  01DB               	clrf	(_G_LED_DelayOffTime+2)^(0+128)	;volatile
+   992  0B99  01DC               	clrf	(_G_LED_DelayOffTime+3)^(0+128)	;volatile
+   993                           ;CustomDM4.c: 126: G_LED_NextBlink = 0;
+   994  0B9A  01E1               	clrf	_G_LED_NextBlink^(0+128)
+   995  0B9B  01E2               	clrf	(_G_LED_NextBlink+1)^(0+128)
+   996  0B9C  01E3               	clrf	(_G_LED_NextBlink+2)^(0+128)
+   997  0B9D  01E4               	clrf	(_G_LED_NextBlink+3)^(0+128)
+   998                           ;CustomDM4.c: 127: G_Eye_NextCheck = 0;
+   999  0B9E  01D5               	clrf	_G_Eye_NextCheck^(0+128)
+  1000  0B9F  01D6               	clrf	(_G_Eye_NextCheck+1)^(0+128)
+  1001  0BA0  01D7               	clrf	(_G_Eye_NextCheck+2)^(0+128)
+  1002  0BA1  01D8               	clrf	(_G_Eye_NextCheck+3)^(0+128)
+  1003                           ;CustomDM4.c: 128: G_PowerButton_FP = 0;
+  1004  0BA2  01E5               	clrf	_G_PowerButton_FP^(0+128)
+  1005  0BA3  01E6               	clrf	(_G_PowerButton_FP+1)^(0+128)
+  1006  0BA4  01E7               	clrf	(_G_PowerButton_FP+2)^(0+128)
+  1007  0BA5  01E8               	clrf	(_G_PowerButton_FP+3)^(0+128)
+  1008                           ;CustomDM4.c: 129: G_EyeButton_FP = 0;
+  1009  0BA6  01D1               	clrf	_G_EyeButton_FP^(0+128)
+  1010  0BA7  01D2               	clrf	(_G_EyeButton_FP+1)^(0+128)
+  1011  0BA8  01D3               	clrf	(_G_EyeButton_FP+2)^(0+128)
+  1012  0BA9  01D4               	clrf	(_G_EyeButton_FP+3)^(0+128)
+  1013                           ;CustomDM4.c: 130: G_Last_Shot = 0;
+  1014  0BAA  01B1               	clrf	_G_Last_Shot^(0+128)
+  1015  0BAB  01B2               	clrf	(_G_Last_Shot+1)^(0+128)
+  1016  0BAC  01B3               	clrf	(_G_Last_Shot+2)^(0+128)
+  1017  0BAD  01B4               	clrf	(_G_Last_Shot+3)^(0+128)
+  1018                           ;CustomDM4.c: 131: G_Next_Shot = 0;
+  1019  0BAE  01B5               	clrf	_G_Next_Shot^(0+128)
+  1020  0BAF  01B6               	clrf	(_G_Next_Shot+1)^(0+128)
+  1021  0BB0  01B7               	clrf	(_G_Next_Shot+2)^(0+128)
+  1022  0BB1  01B8               	clrf	(_G_Next_Shot+3)^(0+128)
+  1023                           ;CustomDM4.c: 132: G_Trigger_FP = 0;
+  1024  0BB2  01B9               	clrf	_G_Trigger_FP^(0+128)
+  1025  0BB3  01BA               	clrf	(_G_Trigger_FP+1)^(0+128)
+  1026  0BB4  01BB               	clrf	(_G_Trigger_FP+2)^(0+128)
+  1027  0BB5  01BC               	clrf	(_G_Trigger_FP+3)^(0+128)
+  1028                           ;CustomDM4.c: 133: G_Last_Pull = 0;
+  1029  0BB6  01AD               	clrf	_G_Last_Pull^(0+128)
+  1030  0BB7  01AE               	clrf	(_G_Last_Pull+1)^(0+128)
+  1031  0BB8  01AF               	clrf	(_G_Last_Pull+2)^(0+128)
+  1032  0BB9  01B0               	clrf	(_G_Last_Pull+3)^(0+128)
+  1033                           ;CustomDM4.c: 134: }
+  1034  0BBA  1283               	bcf	3,5
+  1035  0BBB  0008               	return	;W free
+  1036  0BBC                     _CLEAREYEMALFUNC
+  1037                           ;CustomDM4.c: 106: void CLEAREYEMALFUNC(void)
+  1038  0BBC  1683               	bsf	3,5
+  1039  0BBD  1303               	bcf	3,6	;carry unused
+  1040  0BBE  01CC               	clrf	_G_LED_Off^(0+128)	;volatile
+  1041                           ;CustomDM4.c: 109: G_LED_DelayOnTime = 0;
+  1042  0BBF  01DD               	clrf	_G_LED_DelayOnTime^(0+128)	;volatile
+  1043  0BC0  01DE               	clrf	(_G_LED_DelayOnTime+1)^(0+128)	;volatile
+  1044  0BC1  01DF               	clrf	(_G_LED_DelayOnTime+2)^(0+128)	;volatile
+  1045  0BC2  01E0               	clrf	(_G_LED_DelayOnTime+3)^(0+128)	;volatile
+  1046                           ;CustomDM4.c: 110: G_LED_DelayOffTime = 0;
+  1047  0BC3  01D9               	clrf	_G_LED_DelayOffTime^(0+128)	;volatile
+  1048  0BC4  01DA               	clrf	(_G_LED_DelayOffTime+1)^(0+128)	;volatile
+  1049  0BC5  01DB               	clrf	(_G_LED_DelayOffTime+2)^(0+128)	;volatile
+  1050  0BC6  01DC               	clrf	(_G_LED_DelayOffTime+3)^(0+128)	;volatile
+  1051                           ;CustomDM4.c: 111: G_Eye_Malfunc = 0;
+  1052  0BC7  01C7               	clrf	_G_Eye_Malfunc^(0+128)	;volatile
+  1053                           ;CustomDM4.c: 112: G_Current_ROF = G_ROF;
+  1054  0BC8  1283               	bcf	3,5
+  1055  0BC9  0826               	movf	_G_ROF,w
+  1056  0BCA  1683               	bsf	3,5
+  1057  0BCB  00C6               	movwf	_G_Current_ROF^(0+128)	;volatile
+  1058                           ;CustomDM4.c: 113: G_LimitROF = (RB2 == 0);
+  1059  0BCC  3000               	movlw	0
+  1060  0BCD  1283               	bcf	3,5
+  1061  0BCE  1D06               	btfss	6,2
+  1062  0BCF  3001               	movlw	1
+  1063  0BD0  1683               	bsf	3,5
+  1064  0BD1  00A4               	movwf	_G_LimitROF^(0+128)
+  1065                           ;CustomDM4.c: 114: }
+  1066  0BD2  1283               	bcf	3,5
+  1067  0BD3  0008               	return	;W free
+  1068  0BD4                     _StartUp
+  1069                           ;	_checksum assigned to ?a_StartUp+0
+  1070  0000                     _StartUp$checksum	set	?a_StartUp
+  1071                           ;	_version assigned to ?a_StartUp+1
+  1072  0000                     _StartUp$version	set	?a_StartUp+1
+  1073                           ;CustomDM4.c: 701: void StartUp(void)
+  1074  0BD4  138B               	bcf	11,7
+  1075                           ;CustomDM4.c: 710: CMCON = 0x07;
+  1076  0BD5  3007               	movlw	7
+  1077  0BD6  1283               	bcf	3,5
+  1078  0BD7  1303               	bcf	3,6	;carry unused
+  1079  0BD8  009F               	movwf	31	;volatile
+  1080                           ;CustomDM4.c: 711: _CHOOSEBOARD();
+  1081  0BD9  118A  224F  158A   	fcall	__CHOOSEBOARD
+  1082                           ;CustomDM4.c: 714: T0CS = 0;
+  1083  0BDC  1683               	bsf	3,5
+  1084  0BDD  1281               	bcf	1,5
+  1085                           ;CustomDM4.c: 715: T0IE = 1;
+  1086  0BDE  168B               	bsf	11,5
+  1087                           ;CustomDM4.c: 716: TMR0 = 0;
+  1088  0BDF  1283               	bcf	3,5
+  1089  0BE0  0181               	clrf	1	;volatile
+  1090                           ;CustomDM4.c: 719: TMR1IE = 1;
+  1091  0BE1  1683               	bsf	3,5
+  1092  0BE2  140C               	bsf	12,0
+  1093                           ;CustomDM4.c: 720: TMR1ON = 1;
+  1094  0BE3  1283               	bcf	3,5
+  1095  0BE4  1410               	bsf	16,0
+  1096                           ;CustomDM4.c: 721: TMR1L = 0x17;
+  1097  0BE5  3017               	movlw	23
+  1098  0BE6  008E               	movwf	14	;volatile
+  1099                           ;CustomDM4.c: 722: TMR1H = 0xFC;
+  1100  0BE7  30FC               	movlw	-4
+  1101  0BE8  008F               	movwf	15	;volatile
+  1102                           ;CustomDM4.c: 725: RBIE = 0;
+  1103  0BE9  118B               	bcf	11,3
+  1104                           ;CustomDM4.c: 726: INTE = 0;
+  1105  0BEA  120B               	bcf	11,4
+  1106                           ;CustomDM4.c: 727: INTEDG = 0;
+  1107  0BEB  1683               	bsf	3,5
+  1108  0BEC  1301               	bcf	1,6
+  1109                           ;CustomDM4.c: 731: G_Eye_On = 1;
+  1110  0BED  01C8               	clrf	_G_Eye_On^(0+128)
+  1111  0BEE  0AC8               	incf	_G_Eye_On^(0+128)
+  1112                           ;CustomDM4.c: 732: G_Mode = 0x00;
+  1113  0BEF  1283               	bcf	3,5
+  1114  0BF0  01A3               	clrf	_G_Mode	;volatile
+  1115                           ;CustomDM4.c: 733: G_LimitROF = (RB2 == 0);
+  1116  0BF1  3000               	movlw	0
+  1117  0BF2  1D06               	btfss	6,2
+  1118  0BF3  3001               	movlw	1
+  1119  0BF4  1683               	bsf	3,5
+  1120  0BF5  00A4               	movwf	_G_LimitROF^(0+128)
+  1121                           ;CustomDM4.c: 734: CLEAREYEMALFUNC();
+  1122  0BF6  23BC               	fcall	_CLEAREYEMALFUNC
+  1123                           ;CustomDM4.c: 737: CLEARTIMER();
+  1124  0BF7  2388               	fcall	_CLEARTIMER
+  1125                           ;CustomDM4.c: 740: (GIE = 1);
+  1126  0BF8  178B               	bsf	11,7
+  1127                           ;CustomDM4.c: 741: asm("nop");
+  1128  0BF9  0000               	nop	;#
+  1129                           ;CustomDM4.c: 743: if (G_Quit == 1)
+  1130  0BFA  0B25               	decfsz	_G_Quit,w	;volatile
+  1131  0BFB  2C2B               	goto	l87
+  1132                           ;CustomDM4.c: 744: {
+  1133  0BFC  1606               	bsf	6,4
+  1134                           ;CustomDM4.c: 747: wait(500000*3);
+  1135  0BFD  3060               	movlw	96
+  1136  0BFE  00C6               	movwf	?_wait
+  1137  0BFF  30E3               	movlw	227
+  1138  0C00  00C7               	movwf	?_wait+1
+  1139  0C01  3016               	movlw	22
+  1140  0C02  00C8               	movwf	?_wait+2
+  1141  0C03  3000               	movlw	0
+  1142  0C04  01C9               	clrf	?_wait+3
+  1143  0C05  20B6               	fcall	_wait
+  1144                           ;CustomDM4.c: 748: (RB4 = 0);
+  1145  0C06  1206               	bcf	6,4
+  1146                           ;CustomDM4.c: 751: if ((RB1 == 0))
+  1147  0C07  1886               	btfsc	6,1
+  1148  0C08  2C27               	goto	l88
+  1149                           ;CustomDM4.c: 752: {
+  1150  0C09  1B05               	btfsc	5,6
+  1151  0C0A  2C13               	goto	l89
+  1152                           ;CustomDM4.c: 754: {
+  1153  0C0B  24F1  158A         	fcall	_EDITMODECYCLE
+  1154                           ;CustomDM4.c: 757: (GIE = 0);
+  1155  0C0D  138B               	bcf	11,7
+  1156                           ;CustomDM4.c: 758: G_Mode = 0x00+1;
+  1157  0C0E  3001               	movlw	1
+  1158  0C0F  00A3               	movwf	_G_Mode	;volatile
+  1159                           ;CustomDM4.c: 759: (GIE = 1);
+  1160  0C10  178B               	bsf	11,7
+  1161                           ;CustomDM4.c: 760: asm("nop");
+  1162  0C11  0000               	nop	;#
+  1163                           ;CustomDM4.c: 761: }
+  1164  0C12  2C27               	goto	l88
+  1165  0C13                     l89
+  1166                           ;CustomDM4.c: 762: else
+  1167  0C13  118A  222D         	fcall	__CHECKBATTERY
+  1168                           ;CustomDM4.c: 768: if (_DIP1_ISSET_PTR())
+  1169  0C15  1683               	bsf	3,5
+  1170  0C16  083E               	movf	(__DIP1_ISSET_PTR+1)^(0+128),w
+  1171  0C17  1283               	bcf	3,5
+  1172  0C18  00D2               	movwf	code_ptr+1
+  1173  0C19  1683               	bsf	3,5
+  1174  0C1A  083D               	movf	__DIP1_ISSET_PTR^(0+128),w
+  1175  0C1B  1283               	bcf	3,5
+  1176  0C1C  118A  20A0  158A   	fcall	string_table
+  1177  0C1F  3800               	iorlw	0
+  1178                           ;CustomDM4.c: 769: {
+  1179  0C20  3004               	movlw	4
+  1180  0C21  1903               	btfsc	3,2
+  1181  0C22  2C26               	goto	L19
+  1182  0C23  24BC  158A         	fcall	_BLINK
+  1183                           ;CustomDM4.c: 771: }
+  1184  0C25  3004               	movlw	4
+  1185  0C26                     L19
+  1186  0C26  24BC               	fcall	_BLINK
+  1187  0C27                     l88
+  1188                           ;CustomDM4.c: 773: }
+  1189  0C27  138B               	bcf	11,7
+  1190                           ;CustomDM4.c: 777: G_Quit = 0;
+  1191  0C28  01A5               	clrf	_G_Quit	;volatile
+  1192                           ;CustomDM4.c: 778: (GIE = 1);
+  1193  0C29  178B               	bsf	11,7
+  1194                           ;CustomDM4.c: 779: asm("nop");
+  1195  0C2A  0000               	nop	;#
+  1196  0C2B                     l87
+  1197                           ;CustomDM4.c: 780: }
+  1198  0C2B  3000               	movlw	0
+  1199  0C2C  118A  21E9         	fcall	_eeprom_read
+  1200  0C2E  00B8               	movwf	?a_StartUp+1
+  1201                           ;CustomDM4.c: 784: checksum = eeprom_read(0x01)
+      +                          ;
+  1202  0C2F  3001               	movlw	1
+  1203  0C30  118A  21E9  158A   	fcall	_eeprom_read
+  1204  0C33  00B7               	movwf	?a_StartUp
+  1205                           ;CustomDM4.c: 785: G_Debounce = eeprom_read_wor
+      +                          d(0x02);
+  1206  0C34  3002               	movlw	2
+  1207  0C35  20A4  158A         	fcall	_eeprom_read_word
+  1208  0C37  0870               	movf	btemp,w
+  1209  0C38  00AB               	movwf	_G_Debounce
+  1210  0C39  0871               	movf	btemp+1,w
+  1211  0C3A  00AC               	movwf	_G_Debounce+1
+  1212                           ;CustomDM4.c: 786: G_Dwell = eeprom_read_word(0
+      +                          x04);
+  1213  0C3B  3004               	movlw	4
+  1214  0C3C  20A4               	fcall	_eeprom_read_word
+  1215  0C3D  0870               	movf	btemp,w
+  1216  0C3E  00AD               	movwf	_G_Dwell
+  1217  0C3F  0871               	movf	btemp+1,w
+  1218  0C40  00AE               	movwf	_G_Dwell+1
+  1219                           ;CustomDM4.c: 787: G_ROF = eeprom_read(0x06);
+  1220  0C41  3006               	movlw	6
+  1221  0C42  118A  21E9  158A   	fcall	_eeprom_read
+  1222  0C45  00A6               	movwf	_G_ROF
+  1223                           ;CustomDM4.c: 788: G_AMB = eeprom_read_word(0x0
+      +                          7);
+  1224  0C46  3007               	movlw	7
+  1225  0C47  20A4  158A         	fcall	_eeprom_read_word
+  1226  0C49  0870               	movf	btemp,w
+  1227  0C4A  00A7               	movwf	_G_AMB
+  1228  0C4B  0871               	movf	btemp+1,w
+  1229  0C4C  00A8               	movwf	_G_AMB+1
+  1230                           ;CustomDM4.c: 789: G_BIP = eeprom_read_word(0x0
+      +                          9);
+  1231  0C4D  3009               	movlw	9
+  1232  0C4E  20A4               	fcall	_eeprom_read_word
+  1233  0C4F  0870               	movf	btemp,w
+  1234  0C50  00A9               	movwf	_G_BIP
+  1235  0C51  0871               	movf	btemp+1,w
+  1236  0C52  00AA               	movwf	_G_BIP+1
+  1237                           ;CustomDM4.c: 790: G_FMD = eeprom_read(0x0B);
+  1238  0C53  300B               	movlw	11
+  1239  0C54  118A  21E9  158A   	fcall	_eeprom_read
+  1240  0C57  00A2               	movwf	_G_FMD
+  1241                           ;CustomDM4.c: 793: if ((checksum != 0x100-(0xFF
+      +                          &(0x09+(0x00FF&G_Dwell)+G_ROF))) || (version !=
+      +                           0x09))
+  1242  0C58  082E               	movf	_G_Dwell+1,w
+  1243  0C59  00F1               	movwf	btemp+1
+  1244  0C5A  082D               	movf	_G_Dwell,w
+  1245  0C5B  00F0               	movwf	btemp
+  1246  0C5C  01F1               	clrf	btemp+1
+  1247  0C5D  0826               	movf	_G_ROF,w
+  1248  0C5E  00F2               	movwf	btemp+2
+  1249  0C5F  01F3               	clrf	btemp+3
+  1250  0C60  0870               	movf	btemp,w
+  1251  0C61  07F2               	addwf	btemp+2
+  1252  0C62  1803               	btfsc	3,0
+  1253  0C63  0AF3               	incf	btemp+3
+  1254  0C64  0871               	movf	btemp+1,w
+  1255  0C65  07F3               	addwf	btemp+3
+  1256  0C66  3009               	movlw	9
+  1257  0C67  07F2               	addwf	btemp+2
+  1258  0C68  1803               	btfsc	3,0
+  1259  0C69  0AF3               	incf	btemp+3
+  1260  0C6A  01F3               	clrf	btemp+3
+  1261  0C6B  01F0               	clrf	btemp
+  1262  0C6C  3001               	movlw	1
+  1263  0C6D  00F1               	movwf	btemp+1
+  1264  0C6E  0872               	movf	btemp+2,w
+  1265  0C6F  02F0               	subwf	btemp
+  1266  0C70  1C03               	btfss	3,0
+  1267  0C71  03F1               	decf	btemp+1
+  1268  0C72  0873               	movf	btemp+3,w
+  1269  0C73  02F1               	subwf	btemp+1
+  1270  0C74  0870               	movf	btemp,w
+  1271  0C75  00B9               	movwf	?a_StartUp+2
+  1272  0C76  0871               	movf	btemp+1,w
+  1273  0C77  00BA               	movwf	?a_StartUp+3
+  1274  0C78  0837               	movf	?a_StartUp,w
+  1275  0C79  00F0               	movwf	btemp
+  1276  0C7A  01F1               	clrf	btemp+1
+  1277  0C7B  083A               	movf	?a_StartUp+3,w
+  1278  0C7C  0671               	xorwf	btemp+1,w
+  1279  0C7D  1D03               	btfss	3,2
+  1280  0C7E  2C81               	goto	u925
+  1281  0C7F  0839               	movf	?a_StartUp+2,w
+  1282  0C80  0670               	xorwf	btemp,w
+  1283  0C81                     u925
+  1284  0C81  1D03               	btfss	3,2
+  1285  0C82  2C87               	goto	u940
+  1286  0C83  0838               	movf	?a_StartUp+1,w
+  1287  0C84  3A09               	xorlw	9
+  1288  0C85  1903               	btfsc	3,2
+  1289  0C86  2C9B               	goto	l92
+  1290  0C87                     u940
+  1291                           ;CustomDM4.c: 794: {
+  1292  0C87  3088               	movlw	136
+  1293  0C88  00AB               	movwf	_G_Debounce
+  1294  0C89  3013               	movlw	19
+  1295  0C8A  00AC               	movwf	_G_Debounce+1
+  1296                           ;CustomDM4.c: 796: G_Dwell = 18000;
+  1297  0C8B  3050               	movlw	80
+  1298  0C8C  00AD               	movwf	_G_Dwell
+  1299  0C8D  3046               	movlw	70
+  1300  0C8E  00AE               	movwf	_G_Dwell+1
+  1301                           ;CustomDM4.c: 797: G_ROF = 20;
+  1302  0C8F  3014               	movlw	20
+  1303  0C90  00A6               	movwf	_G_ROF
+  1304                           ;CustomDM4.c: 798: G_AMB = 10000;
+  1305  0C91  3010               	movlw	16
+  1306  0C92  00A7               	movwf	_G_AMB
+  1307  0C93  3027               	movlw	39
+  1308  0C94  00A8               	movwf	_G_AMB+1
+  1309                           ;CustomDM4.c: 799: G_BIP = 1000;
+  1310  0C95  30E8               	movlw	232
+  1311  0C96  00A9               	movwf	_G_BIP
+  1312  0C97  3003               	movlw	3
+  1313  0C98  00AA               	movwf	_G_BIP+1
+  1314                           ;CustomDM4.c: 800: G_FMD = 4;
+  1315  0C99  3004               	movlw	4
+  1316  0C9A  00A2               	movwf	_G_FMD
+  1317  0C9B                     l92
+  1318                           ;CustomDM4.c: 801: }
+  1319  0C9B  138B               	bcf	11,7
+  1320                           ;CustomDM4.c: 804: G_Current_ROF = G_ROF;
+  1321  0C9C  0826               	movf	_G_ROF,w
+  1322  0C9D  1683               	bsf	3,5
+  1323  0C9E  00C6               	movwf	_G_Current_ROF^(0+128)	;volatile
+  1324                           ;CustomDM4.c: 805: (GIE = 1);
+  1325  0C9F  178B               	bsf	11,7
+  1326                           ;CustomDM4.c: 806: asm("nop");
+  1327  0CA0  0000               	nop	;#
+  1328                           ;CustomDM4.c: 808: G_ShotBuffer = 0;
+  1329  0CA1  01A7               	clrf	_G_ShotBuffer^(0+128)
+  1330                           ;CustomDM4.c: 809: G_Trigger_FP = 1;
+  1331  0CA2  01B9               	clrf	_G_Trigger_FP^(0+128)
+  1332  0CA3  0AB9               	incf	_G_Trigger_FP^(0+128)
+  1333  0CA4  01BA               	clrf	(_G_Trigger_FP+1)^(0+128)
+  1334  0CA5  01BB               	clrf	(_G_Trigger_FP+2)^(0+128)
+  1335  0CA6  01BC               	clrf	(_G_Trigger_FP+3)^(0+128)
+  1336                           ;CustomDM4.c: 810: }
+  1337  0CA7  1283               	bcf	3,5
+  1338  0CA8  0008               	return	;W free
+  1339  0CA9                     _LEDCOLOR
+  1340                           ;	_RGB assigned to ?a_LEDCOLOR+0
+  1341  0000                     _LEDCOLOR$RGB	set	?a_LEDCOLOR
+  1342                           ;_RGB stored from w
+  1343  0CA9  0183               	clrf	3	;select bank 0
+  1344  0CAA  00C6               	movwf	?a_LEDCOLOR
+  1345                           ;CustomDM4.c: 191: void LEDCOLOR(BYTE RGB)
+  1346  0CAB  0C46               	rrf	?a_LEDCOLOR,w
+  1347  0CAC  1C03               	btfss	3,0
+  1348  0CAD  2CB0               	goto	u20
+  1349  0CAE  1405               	bsf	5,0
+  1350  0CAF  2CB1               	goto	u34
+  1351  0CB0                     u20
+  1352  0CB0  1005               	bcf	5,0
+  1353  0CB1                     u34
+  1354                           ;CustomDM4.c: 194: RB5 = ((0x02&RGB) == 0x02);
+  1355  0CB1  1CC6               	btfss	?a_LEDCOLOR,1
+  1356  0CB2  2CB5               	goto	u40
+  1357  0CB3  1686               	bsf	6,5
+  1358  0CB4  2CB6               	goto	u54
+  1359  0CB5                     u40
+  1360  0CB5  1286               	bcf	6,5
+  1361  0CB6                     u54
+  1362                           ;CustomDM4.c: 195: RB4 = ((0x04&RGB) == 0x04);
+  1363  0CB6  1D46               	btfss	?a_LEDCOLOR,2
+  1364  0CB7  2CBA               	goto	u60
+  1365  0CB8  1606               	bsf	6,4
+  1366  0CB9  0008               	return
+  1367  0CBA                     u60
+  1368  0CBA  1206               	bcf	6,4
+  1369                           ;CustomDM4.c: 196: }
+  1370  0CBB  0008               	return	;W free
+  1371  0CBC                     _BLINK
+  1372                           ;	_RGB assigned to ?a_BLINK+0
+  1373  0000                     _BLINK$RGB	set	?a_BLINK
+  1374                           ;_RGB stored from w
+  1375  0CBC  0183               	clrf	3	;select bank 0
+  1376  0CBD  00C5               	movwf	?a_BLINK
+  1377                           ;CustomDM4.c: 201: void BLINK(BYTE RGB)
+  1378  0CBE  24A9               	fcall	_LEDCOLOR
+  1379                           ;CustomDM4.c: 205: wait(180000);
+  1380  0CBF  3020               	movlw	32
+  1381  0CC0  00C6               	movwf	?_wait
+  1382  0CC1  30BF               	movlw	191
+  1383  0CC2  00C7               	movwf	?_wait+1
+  1384  0CC3  3002               	movlw	2
+  1385  0CC4  00C8               	movwf	?_wait+2
+  1386  0CC5  3000               	movlw	0
+  1387  0CC6  01C9               	clrf	?_wait+3
+  1388  0CC7  20B6               	fcall	_wait
+  1389                           ;CustomDM4.c: 206: LEDOFF();
+  1390  0CC8  24EC               	fcall	_LEDOFF
+  1391                           ;CustomDM4.c: 207: wait(350000);
+  1392  0CC9  3030               	movlw	48
+  1393  0CCA  00C6               	movwf	?_wait
+  1394  0CCB  3057               	movlw	87
+  1395  0CCC  00C7               	movwf	?_wait+1
+  1396  0CCD  3005               	movlw	5
+  1397  0CCE  00C8               	movwf	?_wait+2
+  1398  0CCF  01C9               	clrf	?_wait+3
+  1399  0CD0  28B6               	ljmp	_wait
+  1400  0CD1                     _BLINK_FAST
+  1401                           ;	_RGB assigned to ?a_BLINK_FAST+0
+  1402  0000                     _BLINK_FAST$RGB	set	?a_BLINK_FAST
+  1403                           ;_RGB stored from w
+  1404  0CD1  0183               	clrf	3	;select bank 0
+  1405  0CD2  00C5               	movwf	?a_BLINK_FAST
+  1406                           ;CustomDM4.c: 213: void BLINK_FAST(BYTE RGB)
+  1407  0CD3  24A9               	fcall	_LEDCOLOR
+  1408                           ;CustomDM4.c: 217: wait(50000);
+  1409  0CD4  3050               	movlw	80
+  1410  0CD5  00C6               	movwf	?_wait
+  1411  0CD6  30C3               	movlw	195
+  1412  0CD7  00C7               	movwf	?_wait+1
+  1413  0CD8  3000               	movlw	0
+  1414  0CD9  01C8               	clrf	?_wait+2
+  1415  0CDA  01C9               	clrf	?_wait+3
+  1416  0CDB  20B6               	fcall	_wait
+  1417                           ;CustomDM4.c: 218: LEDOFF();
+  1418  0CDC  24EC               	fcall	_LEDOFF
+  1419                           ;CustomDM4.c: 219: wait(5000);
+  1420  0CDD  3088               	movlw	136
+  1421  0CDE  00C6               	movwf	?_wait
+  1422  0CDF  3013               	movlw	19
+  1423  0CE0  00C7               	movwf	?_wait+1
+  1424  0CE1  01C8               	clrf	?_wait+2
+  1425  0CE2  01C9               	clrf	?_wait+3
+  1426  0CE3  28B6               	ljmp	_wait
+  1427  0CE4                     _COLORCYCLE
+  1428                           ;CustomDM4.c: 160: void COLORCYCLE(void)
+  1429  0CE4  3001               	movlw	1
+  1430  0CE5  24D1  158A         	fcall	_BLINK_FAST
+  1431                           ;CustomDM4.c: 163: BLINK_FAST(0x04);
+  1432  0CE7  3004               	movlw	4
+  1433  0CE8  24D1  158A         	fcall	_BLINK_FAST
+  1434                           ;CustomDM4.c: 164: BLINK_FAST(0x02);
+  1435  0CEA  3002               	movlw	2
+  1436  0CEB  2CD1               	ljmp	_BLINK_FAST
+  1437  0CEC                     _LEDOFF
+  1438                           ;CustomDM4.c: 183: void LEDOFF(void)
+  1439  0CEC  0183               	clrf	3	;select bank 0
+  1440  0CED  1206               	bcf	6,4
+  1441  0CEE  1005               	bcf	5,0
+  1442  0CEF  1286               	bcf	6,5
+  1443                           ;CustomDM4.c: 186: }
+  1444  0CF0  0008               	return	;W free
+  1445  0CF1                     _EDITMODECYCLE
+  1446                           ;CustomDM4.c: 170: void EDITMODECYCLE(void)
+  1447  0CF1  24EC               	fcall	_LEDOFF
+  1448                           ;CustomDM4.c: 173: COLORCYCLE();
+  1449  0CF2  24E4  158A         	fcall	_COLORCYCLE
+  1450                           ;CustomDM4.c: 174: COLORCYCLE();
+  1451  0CF4  24E4  158A         	fcall	_COLORCYCLE
+  1452                           ;CustomDM4.c: 175: COLORCYCLE();
+  1453  0CF6  24E4  158A         	fcall	_COLORCYCLE
+  1454                           ;CustomDM4.c: 176: COLORCYCLE();
+  1455  0CF8  24E4  158A         	fcall	_COLORCYCLE
+  1456                           ;CustomDM4.c: 177: wait(1000000);
+  1457  0CFA  3040               	movlw	64
+  1458  0CFB  00C6               	movwf	?_wait
+  1459  0CFC  3042               	movlw	66
+  1460  0CFD  00C7               	movwf	?_wait+1
+  1461  0CFE  300F               	movlw	15
+  1462  0CFF  00C8               	movwf	?_wait+2
+  1463  0D00  01C9               	clrf	?_wait+3
+  1464  0D01  28B6               	ljmp	_wait
+  1465  0D02                     _Mode_Proc
+  1466                           ;	_mincount assigned to ?a_Mode_Proc+0
+  1467  0000                     _Mode_Proc$mincount	set	?a_Mode_Proc
+  1468                           ;	_varcount assigned to ?a_Mode_Proc+1
+  1469  0000                     _Mode_Proc$varcount	set	?a_Mode_Proc+1
+  1470                           ;	_x assigned to ?a_Mode_Proc+2
+  1471  0000                     _Mode_Proc$x	set	?a_Mode_Proc+2
+  1472                           ;	_premin assigned to ?a_Mode_Proc+3
+  1473  0000                     _Mode_Proc$premin	set	?a_Mode_Proc+3
+  1474                           ;CustomDM4.c: 586: WORD Mode_Proc(WORD var, WOR
+      +                          D min, WORD max, WORD inc, BYTE RGB)
+  1475  0D02  0183               	clrf	3	;select bank 0
+  1476  0D03  083E               	movf	?_Mode_Proc+7,w
+  1477  0D04  00F3               	movwf	btemp+3
+  1478  0D05  083D               	movf	?_Mode_Proc+6,w
+  1479  0D06  00F2               	movwf	btemp+2
+  1480  0D07  083A               	movf	?_Mode_Proc+3,w
+  1481  0D08  00F1               	movwf	btemp+1
+  1482  0D09  0839               	movf	?_Mode_Proc+2,w
+  1483  0D0A  00F0               	movwf	btemp
+  1484  0D0B  118A  2705         	fcall	lwdiv
+  1485  0D0D  0874               	movf	btemp+4,w
+  1486  0D0E  00C0               	movwf	?a_Mode_Proc
+  1487                           ;CustomDM4.c: 590: BYTE varcount = (var/inc)+1;
+  1488  0D0F  083E               	movf	?_Mode_Proc+7,w
+  1489  0D10  00F3               	movwf	btemp+3
+  1490  0D11  083D               	movf	?_Mode_Proc+6,w
+  1491  0D12  00F2               	movwf	btemp+2
+  1492  0D13  0838               	movf	?_Mode_Proc+1,w
+  1493  0D14  00F1               	movwf	btemp+1
+  1494  0D15  0837               	movf	?_Mode_Proc,w
+  1495  0D16  00F0               	movwf	btemp
+  1496  0D17  118A  2705  158A   	fcall	lwdiv
+  1497  0D1A  0874               	movf	btemp+4,w
+  1498  0D1B  00F0               	movwf	btemp
+  1499  0D1C  0A70               	incf	btemp,w
+  1500  0D1D  00C1               	movwf	?a_Mode_Proc+1
+  1501                           ;CustomDM4.c: 591: WORD premin = min-inc;
+  1502  0D1E  083D               	movf	?_Mode_Proc+6,w
+  1503  0D1F  0239               	subwf	?_Mode_Proc+2,w
+  1504  0D20  00C3               	movwf	?a_Mode_Proc+3
+  1505  0D21  083E               	movf	?_Mode_Proc+7,w
+  1506  0D22  1C03               	btfss	3,0
+  1507  0D23  0A3E               	incf	?_Mode_Proc+7,w
+  1508  0D24  023A               	subwf	?_Mode_Proc+3,w
+  1509  0D25  00C4               	movwf	?a_Mode_Proc+4
+  1510                           ;CustomDM4.c: 593: if (G_Mode_Choose == 0)
+  1511  0D26  08A4               	movf	_G_Mode_Choose
+  1512  0D27  1D03               	btfss	3,2
+  1513  0D28  2D2C               	goto	l64
+  1514                           ;CustomDM4.c: 594: {
+  1515  0D29  083F               	movf	?_Mode_Proc+8,w
+  1516  0D2A  24A9               	fcall	_LEDCOLOR
+  1517                           ;CustomDM4.c: 596: }
+  1518  0D2B  2D69               	goto	l65
+  1519  0D2C                     l64
+  1520                           ;CustomDM4.c: 597: else if (G_Mode_Choose == 2)
+  1521  0D2C  0824               	movf	_G_Mode_Choose,w
+  1522  0D2D  3A02               	xorlw	2
+  1523  0D2E  1D03               	btfss	3,2
+  1524  0D2F  2D45               	goto	l66
+  1525                           ;CustomDM4.c: 598: {
+  1526  0D30  0840               	movf	?a_Mode_Proc,w
+  1527  0D31  00C2               	movwf	?a_Mode_Proc+2
+  1528  0D32                     l70
+  1529  0D32  0842               	movf	?a_Mode_Proc+2,w
+  1530  0D33  0241               	subwf	?a_Mode_Proc+1,w
+  1531  0D34  1C03               	btfss	3,0
+  1532  0D35  2D3D               	goto	l68
+  1533                           ;CustomDM4.c: 601: {
+  1534  0D36  083F               	movf	?_Mode_Proc+8,w
+  1535  0D37  24BC  158A         	fcall	_BLINK
+  1536                           ;CustomDM4.c: 604: if (!(RB1 == 0)) break;
+  1537  0D39  1886               	btfsc	6,1
+  1538  0D3A  2D3D               	goto	l68
+  1539  0D3B  0AC2               	incf	?a_Mode_Proc+2
+  1540  0D3C  2D32               	goto	l70
+  1541  0D3D                     l68
+  1542                           ;CustomDM4.c: 605: }
+  1543  0D3D  0843               	movf	?a_Mode_Proc+3,w
+  1544  0D3E  00B7               	movwf	?_Mode_Proc
+  1545  0D3F  0844               	movf	?a_Mode_Proc+4,w
+  1546  0D40  00B8               	movwf	?_Mode_Proc+1
+  1547                           ;CustomDM4.c: 607: G_Mode_Choose = 1;
+  1548  0D41  01A4               	clrf	_G_Mode_Choose
+  1549  0D42  0AA4               	incf	_G_Mode_Choose
+  1550                           ;CustomDM4.c: 608: ACTION();
+  1551  0D43  2096               	fcall	_ACTION
+  1552                           ;CustomDM4.c: 609: }
+  1553  0D44  2D69               	goto	l65
+  1554  0D45                     l66
+  1555                           ;CustomDM4.c: 610: else if (G_Mode_Choose == 1)
+  1556  0D45  0B24               	decfsz	_G_Mode_Choose,w
+  1557  0D46  2D69               	goto	l65
+  1558                           ;CustomDM4.c: 611: {
+  1559  0D47  118A  247E  158A   	fcall	_TRIGGER_FIRSTPULL
+  1560  0D4A  3800               	iorlw	0
+  1561  0D4B  1903               	btfsc	3,2
+  1562  0D4C  2D69               	goto	l65
+  1563                           ;CustomDM4.c: 614: {
+  1564  0D4D  083D               	movf	?_Mode_Proc+6,w
+  1565  0D4E  07B7               	addwf	?_Mode_Proc
+  1566  0D4F  1803               	btfsc	3,0
+  1567  0D50  0AB8               	incf	?_Mode_Proc+1
+  1568  0D51  083E               	movf	?_Mode_Proc+7,w
+  1569  0D52  07B8               	addwf	?_Mode_Proc+1
+  1570                           ;CustomDM4.c: 617: G_Trigger_FP = 1;
+  1571  0D53  1683               	bsf	3,5
+  1572  0D54  01B9               	clrf	_G_Trigger_FP^(0+128)
+  1573  0D55  0AB9               	incf	_G_Trigger_FP^(0+128)
+  1574  0D56  01BA               	clrf	(_G_Trigger_FP+1)^(0+128)
+  1575  0D57  01BB               	clrf	(_G_Trigger_FP+2)^(0+128)
+  1576  0D58  01BC               	clrf	(_G_Trigger_FP+3)^(0+128)
+  1577                           ;CustomDM4.c: 618: ACTION();
+  1578  0D59  2096               	fcall	_ACTION
+  1579                           ;CustomDM4.c: 621: if (var > max)
+  1580  0D5A  0838               	movf	?_Mode_Proc+1,w
+  1581  0D5B  023C               	subwf	?_Mode_Proc+5,w
+  1582  0D5C  1D03               	btfss	3,2
+  1583  0D5D  2D60               	goto	u805
+  1584  0D5E  0837               	movf	?_Mode_Proc,w
+  1585  0D5F  023B               	subwf	?_Mode_Proc+4,w
+  1586  0D60                     u805
+  1587  0D60  1803               	btfsc	3,0
+  1588  0D61  2D69               	goto	l65
+  1589                           ;CustomDM4.c: 622: {
+  1590  0D62  083B               	movf	?_Mode_Proc+4,w
+  1591  0D63  00B7               	movwf	?_Mode_Proc
+  1592  0D64  083C               	movf	?_Mode_Proc+5,w
+  1593  0D65  00B8               	movwf	?_Mode_Proc+1
+  1594                           ;CustomDM4.c: 626: EDITMODECYCLE();
+  1595  0D66  24F1  158A         	fcall	_EDITMODECYCLE
+  1596                           ;CustomDM4.c: 627: G_Mode_Choose = 0;
+  1597  0D68  01A4               	clrf	_G_Mode_Choose
+  1598  0D69                     l65
+  1599                           ;CustomDM4.c: 628: }
+  1600  0D69  0844               	movf	?a_Mode_Proc+4,w
+  1601  0D6A  0638               	xorwf	?_Mode_Proc+1,w
+  1602  0D6B  1D03               	btfss	3,2
+  1603  0D6C  2D6F               	goto	u815
+  1604  0D6D  0843               	movf	?a_Mode_Proc+3,w
+  1605  0D6E  0637               	xorwf	?_Mode_Proc,w
+  1606  0D6F                     u815
+  1607  0D6F  1D03               	btfss	3,2
+  1608  0D70  2D72               	goto	l76
+  1609                           ;CustomDM4.c: 634: ACTION();
+  1610  0D71  2096               	fcall	_ACTION
+  1611  0D72                     l76
+  1612                           ;CustomDM4.c: 636: return var;
+  1613  0D72  0838               	movf	?_Mode_Proc+1,w
+  1614  0D73  00F1               	movwf	btemp+1
+  1615  0D74  0837               	movf	?_Mode_Proc,w
+  1616  0D75  00F0               	movwf	btemp
+  1617                           ;CustomDM4.c: 637: }
+  1618  0D76  0008               	return	;W free
+  1619  0D77                     _NEXTMODE
+  1620                           ;CustomDM4.c: 139: void NEXTMODE(void)
+  1621  0D77  3006               	movlw	6
+  1622  0D78  0183               	clrf	3	;select bank 0
+  1623  0D79  0223               	subwf	_G_Mode,w	;volatile
+  1624                           ;CustomDM4.c: 142: {
+  1625  0D7A  138B               	bcf	11,7
+  1626  0D7B  1803               	btfsc	3,0
+  1627  0D7C  2D81               	goto	L1
+  1628                           ;CustomDM4.c: 144: G_Mode++;
+  1629  0D7D  0AA3               	incf	_G_Mode	;volatile
+  1630                           ;CustomDM4.c: 145: (GIE = 1);
+  1631  0D7E  178B               	bsf	11,7
+  1632                           ;CustomDM4.c: 146: asm("nop");
+  1633  0D7F  0000               	nop	;#
+  1634                           ;CustomDM4.c: 147: }
+  1635  0D80  0008               	return
+  1636                           ;CustomDM4.c: 148: else
+  1637  0D81                     L1
+  1638                           ;CustomDM4.c: 151: G_Mode = 0x00+1;
+  1639  0D81  3001               	movlw	1
+  1640  0D82  00A3               	movwf	_G_Mode	;volatile
+  1641                           ;CustomDM4.c: 152: (GIE = 1);
+  1642  0D83  178B               	bsf	11,7
+  1643                           ;CustomDM4.c: 153: asm("nop");
+  1644  0D84  0000               	nop	;#
+  1645                           ;CustomDM4.c: 154: }
+  1646  0D85  0008               	return	;W free
+  1647  0D86                     _ChangeModeProc
+  1648                           ;CustomDM4.c: 643: void ChangeModeProc(void)
+  1649  0D86  0183               	clrf	3	;select bank 0
+  1650  0D87  08A4               	movf	_G_Mode_Choose
+  1651  0D88  1D03               	btfss	3,2
+  1652  0D89  2DF0               	goto	l78
+  1653                           ;CustomDM4.c: 646: {
+  1654  0D8A  082B               	movf	_G_Debounce,w
+  1655  0D8B  00C9               	movwf	?_TRIGGER_ISUP
+  1656  0D8C  082C               	movf	_G_Debounce+1,w
+  1657  0D8D  00CA               	movwf	?_TRIGGER_ISUP+1
+  1658  0D8E  118A  2448  158A   	fcall	_TRIGGER_ISUP
+  1659  0D91  00F0               	movwf	btemp
+  1660  0D92  01F1               	clrf	btemp+1
+  1661  0D93  0471               	iorwf	btemp+1,w
+  1662                           ;CustomDM4.c: 649: {
+  1663  0D94  1683               	bsf	3,5
+  1664  0D95  1903               	btfsc	3,2
+  1665  0D96  2DA4               	goto	L17
+  1666  0D97  083C               	movf	(_G_Trigger_FP+3)^(0+128),w
+  1667  0D98  043B               	iorwf	(_G_Trigger_FP+2)^(0+128),w
+  1668  0D99  043A               	iorwf	(_G_Trigger_FP+1)^(0+128),w
+  1669  0D9A  0439               	iorwf	_G_Trigger_FP^(0+128),w
+  1670  0D9B  1903               	btfsc	3,2
+  1671  0D9C  2E29               	goto	l77
+  1672                           ;CustomDM4.c: 651: {
+  1673  0D9D  2577               	fcall	_NEXTMODE
+  1674                           ;CustomDM4.c: 654: G_Trigger_FP = 0;
+  1675  0D9E  1683               	bsf	3,5
+  1676  0D9F  01B9               	clrf	_G_Trigger_FP^(0+128)
+  1677  0DA0  01BA               	clrf	(_G_Trigger_FP+1)^(0+128)
+  1678  0DA1  01BB               	clrf	(_G_Trigger_FP+2)^(0+128)
+  1679  0DA2  01BC               	clrf	(_G_Trigger_FP+3)^(0+128)
+  1680                           ;CustomDM4.c: 655: }
+  1681  0DA3  2E29               	goto	l77
+  1682                           ;CustomDM4.c: 657: else
+  1683  0DA4                     L17
+  1684  0DA4  083C               	movf	(_G_Trigger_FP+3)^(0+128),w
+  1685  0DA5  043B               	iorwf	(_G_Trigger_FP+2)^(0+128),w
+  1686  0DA6  043A               	iorwf	(_G_Trigger_FP+1)^(0+128),w
+  1687  0DA7  0439               	iorwf	_G_Trigger_FP^(0+128),w
+  1688                           ;CustomDM4.c: 660: {
+  1689  0DA8  138B               	bcf	11,7
+  1690  0DA9  1D03               	btfss	3,2
+  1691  0DAA  2DBE               	goto	L18
+  1692                           ;CustomDM4.c: 662: G_Trigger_FP = G_TickCount;
+  1693  0DAB  1283               	bcf	3,5
+  1694  0DAC  0833               	movf	_G_TickCount,w	;volatile
+  1695  0DAD  1683               	bsf	3,5
+  1696  0DAE  00B9               	movwf	_G_Trigger_FP^(0+128)
+  1697  0DAF  1283               	bcf	3,5
+  1698  0DB0  0834               	movf	_G_TickCount+1,w	;volatile
+  1699  0DB1  1683               	bsf	3,5
+  1700  0DB2  00BA               	movwf	(_G_Trigger_FP+1)^(0+128)
+  1701  0DB3  1283               	bcf	3,5
+  1702  0DB4  0835               	movf	_G_TickCount+2,w	;volatile
+  1703  0DB5  1683               	bsf	3,5
+  1704  0DB6  00BB               	movwf	(_G_Trigger_FP+2)^(0+128)
+  1705  0DB7  1283               	bcf	3,5
+  1706  0DB8  0836               	movf	_G_TickCount+3,w	;volatile
+  1707  0DB9  1683               	bsf	3,5
+  1708  0DBA  00BC               	movwf	(_G_Trigger_FP+3)^(0+128)
+  1709                           ;CustomDM4.c: 663: (GIE = 1);
+  1710  0DBB  178B               	bsf	11,7
+  1711                           ;CustomDM4.c: 664: asm("nop");
+  1712  0DBC  0000               	nop	;#
+  1713                           ;CustomDM4.c: 665: }
+  1714  0DBD  138B               	bcf	11,7
+  1715  0DBE                     L18
+  1716                           ;CustomDM4.c: 669: if (G_TickCount > G_Trigger_
+      +                          FP+1000000)
+  1717  0DBE  3040               	movlw	64
+  1718  0DBF  00F0               	movwf	btemp
+  1719  0DC0  3042               	movlw	66
+  1720  0DC1  00F1               	movwf	btemp+1
+  1721  0DC2  300F               	movlw	15
+  1722  0DC3  00F2               	movwf	btemp+2
+  1723  0DC4  01F3               	clrf	btemp+3
+  1724  0DC5  0870               	movf	btemp,w
+  1725  0DC6  0739               	addwf	_G_Trigger_FP^(0+128),w
+  1726  0DC7  00F4               	movwf	btemp+4
+  1727  0DC8  083A               	movf	(_G_Trigger_FP+1)^(0+128),w
+  1728  0DC9  00F5               	movwf	btemp+5
+  1729  0DCA  0871               	movf	btemp+1,w
+  1730  0DCB  1803               	btfsc	3,0
+  1731  0DCC  0F71               	incfsz	btemp+1,w
+  1732  0DCD  07F5               	addwf	btemp+5
+  1733  0DCE  083B               	movf	(_G_Trigger_FP+2)^(0+128),w
+  1734  0DCF  00F6               	movwf	btemp+6
+  1735  0DD0  0872               	movf	btemp+2,w
+  1736  0DD1  1803               	btfsc	3,0
+  1737  0DD2  0F72               	incfsz	btemp+2,w
+  1738  0DD3  07F6               	addwf	btemp+6
+  1739  0DD4  083C               	movf	(_G_Trigger_FP+3)^(0+128),w
+  1740  0DD5  00F7               	movwf	btemp+7
+  1741  0DD6  0873               	movf	btemp+3,w
+  1742  0DD7  1803               	btfsc	3,0
+  1743  0DD8  0F73               	incfsz	btemp+3,w
+  1744  0DD9  07F7               	addwf	btemp+7
+  1745  0DDA  1283               	bcf	3,5
+  1746  0DDB  0836               	movf	_G_TickCount+3,w	;volatile
+  1747  0DDC  0277               	subwf	btemp+7,w
+  1748  0DDD  1D03               	btfss	3,2
+  1749  0DDE  2DE9               	goto	u865
+  1750  0DDF  0835               	movf	_G_TickCount+2,w	;volatile
+  1751  0DE0  0276               	subwf	btemp+6,w
+  1752  0DE1  1D03               	btfss	3,2
+  1753  0DE2  2DE9               	goto	u865
+  1754  0DE3  0834               	movf	_G_TickCount+1,w	;volatile
+  1755  0DE4  0275               	subwf	btemp+5,w
+  1756  0DE5  1D03               	btfss	3,2
+  1757  0DE6  2DE9               	goto	u865
+  1758  0DE7  0833               	movf	_G_TickCount,w	;volatile
+  1759  0DE8  0274               	subwf	btemp+4,w
+  1760  0DE9                     u865
+  1761                           ;CustomDM4.c: 670: {
+  1762  0DE9  178B               	bsf	11,7
+  1763                           ;CustomDM4.c: 672: asm("nop");
+  1764  0DEA  0000               	nop	;#
+  1765  0DEB  1803               	btfsc	3,0
+  1766  0DEC  2E29               	goto	l77
+  1767                           ;CustomDM4.c: 673: G_Mode_Choose = 2;
+  1768  0DED  3002               	movlw	2
+  1769  0DEE  00A4               	movwf	_G_Mode_Choose
+  1770  0DEF  2E27               	goto	l85
+  1771                           ;CustomDM4.c: 674: }
+  1772                           ;CustomDM4.c: 676: asm("nop");
+  1773                           ;CustomDM4.c: 677: }
+  1774  0DF0                     l78
+  1775                           ;CustomDM4.c: 679: else
+  1776  0DF0  138B               	bcf	11,7
+  1777                           ;CustomDM4.c: 683: if (G_TickCount > G_Last_Act
+      +                          ion+(1000000*2))
+  1778  0DF1  3080               	movlw	128
+  1779  0DF2  00F0               	movwf	btemp
+  1780  0DF3  3084               	movlw	132
+  1781  0DF4  00F1               	movwf	btemp+1
+  1782  0DF5  301E               	movlw	30
+  1783  0DF6  00F2               	movwf	btemp+2
+  1784  0DF7  01F3               	clrf	btemp+3
+  1785  0DF8  0870               	movf	btemp,w
+  1786  0DF9  072F               	addwf	_G_Last_Action,w
+  1787  0DFA  00F4               	movwf	btemp+4
+  1788  0DFB  0830               	movf	_G_Last_Action+1,w
+  1789  0DFC  00F5               	movwf	btemp+5
+  1790  0DFD  0871               	movf	btemp+1,w
+  1791  0DFE  1803               	btfsc	3,0
+  1792  0DFF  0F71               	incfsz	btemp+1,w
+  1793  0E00  07F5               	addwf	btemp+5
+  1794  0E01  0831               	movf	_G_Last_Action+2,w
+  1795  0E02  00F6               	movwf	btemp+6
+  1796  0E03  0872               	movf	btemp+2,w
+  1797  0E04  1803               	btfsc	3,0
+  1798  0E05  0F72               	incfsz	btemp+2,w
+  1799  0E06  07F6               	addwf	btemp+6
+  1800  0E07  0832               	movf	_G_Last_Action+3,w
+  1801  0E08  00F7               	movwf	btemp+7
+  1802  0E09  0873               	movf	btemp+3,w
+  1803  0E0A  1803               	btfsc	3,0
+  1804  0E0B  0F73               	incfsz	btemp+3,w
+  1805  0E0C  07F7               	addwf	btemp+7
+  1806  0E0D  0836               	movf	_G_TickCount+3,w	;volatile
+  1807  0E0E  0277               	subwf	btemp+7,w
+  1808  0E0F  1D03               	btfss	3,2
+  1809  0E10  2E1B               	goto	u875
+  1810  0E11  0835               	movf	_G_TickCount+2,w	;volatile
+  1811  0E12  0276               	subwf	btemp+6,w
+  1812  0E13  1D03               	btfss	3,2
+  1813  0E14  2E1B               	goto	u875
+  1814  0E15  0834               	movf	_G_TickCount+1,w	;volatile
+  1815  0E16  0275               	subwf	btemp+5,w
+  1816  0E17  1D03               	btfss	3,2
+  1817  0E18  2E1B               	goto	u875
+  1818  0E19  0833               	movf	_G_TickCount,w	;volatile
+  1819  0E1A  0274               	subwf	btemp+4,w
+  1820  0E1B                     u875
+  1821                           ;CustomDM4.c: 684: {
+  1822  0E1B  178B               	bsf	11,7
+  1823                           ;CustomDM4.c: 686: asm("nop");
+  1824  0E1C  0000               	nop	;#
+  1825  0E1D  1803               	btfsc	3,0
+  1826  0E1E  2E29               	goto	l77
+  1827                           ;CustomDM4.c: 687: EDITMODECYCLE();
+  1828  0E1F  24F1  158A         	fcall	_EDITMODECYCLE
+  1829                           ;CustomDM4.c: 688: G_Mode_Choose = 0;
+  1830  0E21  01A4               	clrf	_G_Mode_Choose
+  1831                           ;CustomDM4.c: 689: G_Trigger_FP = 0;
+  1832  0E22  1683               	bsf	3,5
+  1833  0E23  01B9               	clrf	_G_Trigger_FP^(0+128)
+  1834  0E24  01BA               	clrf	(_G_Trigger_FP+1)^(0+128)
+  1835  0E25  01BB               	clrf	(_G_Trigger_FP+2)^(0+128)
+  1836  0E26  01BC               	clrf	(_G_Trigger_FP+3)^(0+128)
+  1837  0E27                     l85
+  1838                           ;CustomDM4.c: 690: }
+  1839  0E27  178B               	bsf	11,7
+  1840                           ;CustomDM4.c: 692: asm("nop");
+  1841  0E28  0000               	nop	;#
+  1842                           ;CustomDM4.c: 693: }
+  1843  0E29                     l77
+  1844  0E29  1283               	bcf	3,5
+  1845  0E2A  0008               	return	;W free
+  1846  0E2B                     _main
+  1847                           ;CustomDM4.c: 874: void main()
+  1848  0E2B  23D4               	fcall	_StartUp
+  1849                           ;CustomDM4.c: 878: ShutDown();
+  1850  0E2C  27AA  158A         	fcall	_ShutDown
+  1851  0E2E                     l100
+  1852                           ;CustomDM4.c: 880: while(1)
+  1853                           ;CustomDM4.c: 881: {
+  1854  0E2E  0825               	movf	_G_Quit,w	;volatile
+  1855  0E2F  1D03               	btfss	3,2
+  1856  0E30  2ED8               	goto	l102
+  1857                           ;CustomDM4.c: 883: {
+  1858  0E31  0823               	movf	_G_Mode,w	;volatile
+  1859  0E32  1D03               	btfss	3,2
+  1860  0E33  2EC1               	goto	l105
+  1861  0E34  2ED7               	goto	l103
+  1862                           ;CustomDM4.c: 886: {
+  1863  0E35                     l106
+  1864                           ;CustomDM4.c: 888: {
+  1865                           ;CustomDM4.c: 890: G_Debounce = Mode_Proc(G_Deb
+      +                          ounce, 0, 60000, 1000, 0x01);
+  1866  0E35  082B               	movf	_G_Debounce,w
+  1867  0E36  00B7               	movwf	?_Mode_Proc
+  1868  0E37  082C               	movf	_G_Debounce+1,w
+  1869  0E38  00B8               	movwf	?_Mode_Proc+1
+  1870  0E39  01B9               	clrf	?_Mode_Proc+2
+  1871  0E3A  01BA               	clrf	?_Mode_Proc+3
+  1872  0E3B  3060               	movlw	96
+  1873  0E3C  00BB               	movwf	?_Mode_Proc+4
+  1874  0E3D  30EA               	movlw	234
+  1875  0E3E  00BC               	movwf	?_Mode_Proc+5
+  1876  0E3F  30E8               	movlw	232
+  1877  0E40  00BD               	movwf	?_Mode_Proc+6
+  1878  0E41  3003               	movlw	3
+  1879  0E42  00BE               	movwf	?_Mode_Proc+7
+  1880  0E43  01BF               	clrf	?_Mode_Proc+8
+  1881  0E44  0ABF               	incf	?_Mode_Proc+8
+  1882  0E45  2502  158A         	fcall	_Mode_Proc
+  1883  0E47  0870               	movf	btemp,w
+  1884  0E48  00AB               	movwf	_G_Debounce
+  1885  0E49  0871               	movf	btemp+1,w
+  1886  0E4A  00AC               	movwf	_G_Debounce+1
+  1887                           ;CustomDM4.c: 891: break;
+  1888  0E4B  2ED4               	goto	l104
+  1889  0E4C                     l107
+  1890                           ;CustomDM4.c: 893: case 0x02:
+  1891                           ;CustomDM4.c: 894: G_Dwell = Mode_Proc(G_Dwell,
+      +                           1000, 35000, 1000, 0x02);
+  1892  0E4C  082D               	movf	_G_Dwell,w
+  1893  0E4D  00B7               	movwf	?_Mode_Proc
+  1894  0E4E  082E               	movf	_G_Dwell+1,w
+  1895  0E4F  00B8               	movwf	?_Mode_Proc+1
+  1896  0E50  30E8               	movlw	232
+  1897  0E51  00B9               	movwf	?_Mode_Proc+2
+  1898  0E52  3003               	movlw	3
+  1899  0E53  00BA               	movwf	?_Mode_Proc+3
+  1900  0E54  30B8               	movlw	184
+  1901  0E55  00BB               	movwf	?_Mode_Proc+4
+  1902  0E56  3088               	movlw	136
+  1903  0E57  00BC               	movwf	?_Mode_Proc+5
+  1904  0E58  30E8               	movlw	232
+  1905  0E59  00BD               	movwf	?_Mode_Proc+6
+  1906  0E5A  3003               	movlw	3
+  1907  0E5B  00BE               	movwf	?_Mode_Proc+7
+  1908  0E5C  3002               	movlw	2
+  1909  0E5D  00BF               	movwf	?_Mode_Proc+8
+  1910  0E5E  2502  158A         	fcall	_Mode_Proc
+  1911  0E60  0870               	movf	btemp,w
+  1912  0E61  00AD               	movwf	_G_Dwell
+  1913  0E62  0871               	movf	btemp+1,w
+  1914  0E63  00AE               	movwf	_G_Dwell+1
+  1915                           ;CustomDM4.c: 895: break;
+  1916  0E64  2ED4               	goto	l104
+  1917  0E65                     l108
+  1918                           ;CustomDM4.c: 897: case 0x03:
+  1919                           ;CustomDM4.c: 898: G_ROF = Mode_Proc(G_ROF, 11,
+      +                           25, 1, 0x04);
+  1920  0E65  0826               	movf	_G_ROF,w
+  1921  0E66  00B7               	movwf	?_Mode_Proc
+  1922  0E67  01B8               	clrf	?_Mode_Proc+1
+  1923  0E68  300B               	movlw	11
+  1924  0E69  00B9               	movwf	?_Mode_Proc+2
+  1925  0E6A  01BA               	clrf	?_Mode_Proc+3
+  1926  0E6B  3019               	movlw	25
+  1927  0E6C  00BB               	movwf	?_Mode_Proc+4
+  1928  0E6D  01BC               	clrf	?_Mode_Proc+5
+  1929  0E6E  01BD               	clrf	?_Mode_Proc+6
+  1930  0E6F  0ABD               	incf	?_Mode_Proc+6
+  1931  0E70  01BE               	clrf	?_Mode_Proc+7
+  1932  0E71  3004               	movlw	4
+  1933  0E72  00BF               	movwf	?_Mode_Proc+8
+  1934  0E73  2502  158A         	fcall	_Mode_Proc
+  1935  0E75  0870               	movf	btemp,w
+  1936  0E76  00A6               	movwf	_G_ROF
+  1937                           ;CustomDM4.c: 899: break;
+  1938  0E77  2ED4               	goto	l104
+  1939  0E78                     l109
+  1940                           ;CustomDM4.c: 901: case 0x04:
+  1941                           ;CustomDM4.c: 902: if ((RB3 == 0))
+  1942  0E78  1986               	btfsc	6,3
+  1943  0E79  2E93               	goto	l110
+  1944                           ;CustomDM4.c: 903: G_AMB = Mode_Proc(G_AMB, 100
+      +                          0, 40000, 1000, 0x05);
+  1945  0E7A  0827               	movf	_G_AMB,w
+  1946  0E7B  00B7               	movwf	?_Mode_Proc
+  1947  0E7C  0828               	movf	_G_AMB+1,w
+  1948  0E7D  00B8               	movwf	?_Mode_Proc+1
+  1949  0E7E  30E8               	movlw	232
+  1950  0E7F  00B9               	movwf	?_Mode_Proc+2
+  1951  0E80  3003               	movlw	3
+  1952  0E81  00BA               	movwf	?_Mode_Proc+3
+  1953  0E82  3040               	movlw	64
+  1954  0E83  00BB               	movwf	?_Mode_Proc+4
+  1955  0E84  309C               	movlw	156
+  1956  0E85  00BC               	movwf	?_Mode_Proc+5
+  1957  0E86  30E8               	movlw	232
+  1958  0E87  00BD               	movwf	?_Mode_Proc+6
+  1959  0E88  3003               	movlw	3
+  1960  0E89  00BE               	movwf	?_Mode_Proc+7
+  1961  0E8A  3005               	movlw	5
+  1962  0E8B  00BF               	movwf	?_Mode_Proc+8
+  1963  0E8C  2502  158A         	fcall	_Mode_Proc
+  1964  0E8E  0870               	movf	btemp,w
+  1965  0E8F  00A7               	movwf	_G_AMB
+  1966  0E90  0871               	movf	btemp+1,w
+  1967  0E91  00A8               	movwf	_G_AMB+1
+  1968  0E92  2ED4               	goto	l104
+  1969  0E93                     l110
+  1970                           ;CustomDM4.c: 904: else
+  1971  0E93  2577               	fcall	_NEXTMODE
+  1972                           ;CustomDM4.c: 906: break;
+  1973  0E94  2ED4               	goto	l104
+  1974  0E95                     l112
+  1975                           ;CustomDM4.c: 908: case 0x05:
+  1976                           ;CustomDM4.c: 909: G_BIP = Mode_Proc(G_BIP, 500
+      +                          , 20000, 500, 0x03);
+  1977  0E95  0829               	movf	_G_BIP,w
+  1978  0E96  00B7               	movwf	?_Mode_Proc
+  1979  0E97  082A               	movf	_G_BIP+1,w
+  1980  0E98  00B8               	movwf	?_Mode_Proc+1
+  1981  0E99  30F4               	movlw	244
+  1982  0E9A  00B9               	movwf	?_Mode_Proc+2
+  1983  0E9B  3001               	movlw	1
+  1984  0E9C  00BA               	movwf	?_Mode_Proc+3
+  1985  0E9D  3020               	movlw	32
+  1986  0E9E  00BB               	movwf	?_Mode_Proc+4
+  1987  0E9F  304E               	movlw	78
+  1988  0EA0  00BC               	movwf	?_Mode_Proc+5
+  1989  0EA1  30F4               	movlw	244
+  1990  0EA2  00BD               	movwf	?_Mode_Proc+6
+  1991  0EA3  3001               	movlw	1
+  1992  0EA4  00BE               	movwf	?_Mode_Proc+7
+  1993  0EA5  3003               	movlw	3
+  1994  0EA6  00BF               	movwf	?_Mode_Proc+8
+  1995  0EA7  2502  158A         	fcall	_Mode_Proc
+  1996  0EA9  0870               	movf	btemp,w
+  1997  0EAA  00A9               	movwf	_G_BIP
+  1998  0EAB  0871               	movf	btemp+1,w
+  1999  0EAC  00AA               	movwf	_G_BIP+1
+  2000                           ;CustomDM4.c: 910: break;
+  2001  0EAD  2ED4               	goto	l104
+  2002  0EAE                     l113
+  2003                           ;CustomDM4.c: 912: case 0x06:
+  2004                           ;CustomDM4.c: 913: G_FMD = Mode_Proc(G_FMD, 1, 
+      +                          4, 1, 0x06);
+  2005  0EAE  0822               	movf	_G_FMD,w
+  2006  0EAF  00B7               	movwf	?_Mode_Proc
+  2007  0EB0  01B8               	clrf	?_Mode_Proc+1
+  2008  0EB1  01B9               	clrf	?_Mode_Proc+2
+  2009  0EB2  0AB9               	incf	?_Mode_Proc+2
+  2010  0EB3  01BA               	clrf	?_Mode_Proc+3
+  2011  0EB4  3004               	movlw	4
+  2012  0EB5  00BB               	movwf	?_Mode_Proc+4
+  2013  0EB6  01BC               	clrf	?_Mode_Proc+5
+  2014  0EB7  01BD               	clrf	?_Mode_Proc+6
+  2015  0EB8  0ABD               	incf	?_Mode_Proc+6
+  2016  0EB9  01BE               	clrf	?_Mode_Proc+7
+  2017  0EBA  3006               	movlw	6
+  2018  0EBB  00BF               	movwf	?_Mode_Proc+8
+  2019  0EBC  2502  158A         	fcall	_Mode_Proc
+  2020  0EBE  0870               	movf	btemp,w
+  2021  0EBF  00A2               	movwf	_G_FMD
+  2022                           ;CustomDM4.c: 914: break;
+  2023  0EC0  2ED4               	goto	l104
+  2024  0EC1                     l105
+  2025  0EC1  0823               	movf	_G_Mode,w	;volatile
+  2026  0EC2  3A01               	xorlw	1
+  2027  0EC3  1903               	btfsc	3,2
+  2028  0EC4  2E35               	goto	l106
+  2029  0EC5  3A03               	xorlw	3
+  2030  0EC6  1903               	btfsc	3,2
+  2031  0EC7  2E4C               	goto	l107
+  2032  0EC8  3A01               	xorlw	1
+  2033  0EC9  1903               	btfsc	3,2
+  2034  0ECA  2E65               	goto	l108
+  2035  0ECB  3A07               	xorlw	7
+  2036  0ECC  1903               	btfsc	3,2
+  2037  0ECD  2E78               	goto	l109
+  2038  0ECE  3A01               	xorlw	1
+  2039  0ECF  1903               	btfsc	3,2
+  2040  0ED0  2E95               	goto	l112
+  2041  0ED1  3A03               	xorlw	3
+  2042  0ED2  1903               	btfsc	3,2
+  2043  0ED3  2EAE               	goto	l113
+  2044  0ED4                     l104
+  2045                           ;CustomDM4.c: 917: ChangeModeProc();
+  2046  0ED4  2586  158A         	fcall	_ChangeModeProc
+  2047                           ;CustomDM4.c: 918: }
+  2048  0ED6  2ED8               	goto	l102
+  2049  0ED7                     l103
+  2050                           ;CustomDM4.c: 919: else
+  2051  0ED7  20F5               	fcall	_Mode_Fire
+  2052  0ED8                     l102
+  2053                           ;CustomDM4.c: 923: }
+  2054  0ED8  2792               	fcall	_T_POWERBUTTON_ISDOWN
+  2055  0ED9  3800               	iorlw	0
+  2056                           ;CustomDM4.c: 928: {
+  2057  0EDA  1683               	bsf	3,5
+  2058  0EDB  1903               	btfsc	3,2
+  2059  0EDC  2F3C               	goto	L21
+  2060  0EDD  0868               	movf	(_G_PowerButton_FP+3)^(0+128),w
+  2061  0EDE  0467               	iorwf	(_G_PowerButton_FP+2)^(0+128),w
+  2062  0EDF  0466               	iorwf	(_G_PowerButton_FP+1)^(0+128),w
+  2063  0EE0  0465               	iorwf	_G_PowerButton_FP^(0+128),w
+  2064                           ;CustomDM4.c: 930: {
+  2065  0EE1  138B               	bcf	11,7
+  2066  0EE2  1D03               	btfss	3,2
+  2067  0EE3  2EF7               	goto	L22
+  2068                           ;CustomDM4.c: 932: G_PowerButton_FP = G_TickCou
+      +                          nt;
+  2069  0EE4  1283               	bcf	3,5
+  2070  0EE5  0833               	movf	_G_TickCount,w	;volatile
+  2071  0EE6  1683               	bsf	3,5
+  2072  0EE7  00E5               	movwf	_G_PowerButton_FP^(0+128)
+  2073  0EE8  1283               	bcf	3,5
+  2074  0EE9  0834               	movf	_G_TickCount+1,w	;volatile
+  2075  0EEA  1683               	bsf	3,5
+  2076  0EEB  00E6               	movwf	(_G_PowerButton_FP+1)^(0+128)
+  2077  0EEC  1283               	bcf	3,5
+  2078  0EED  0835               	movf	_G_TickCount+2,w	;volatile
+  2079  0EEE  1683               	bsf	3,5
+  2080  0EEF  00E7               	movwf	(_G_PowerButton_FP+2)^(0+128)
+  2081  0EF0  1283               	bcf	3,5
+  2082  0EF1  0836               	movf	_G_TickCount+3,w	;volatile
+  2083  0EF2  1683               	bsf	3,5
+  2084  0EF3  00E8               	movwf	(_G_PowerButton_FP+3)^(0+128)
+  2085                           ;CustomDM4.c: 933: (GIE = 1);
+  2086  0EF4  178B               	bsf	11,7
+  2087                           ;CustomDM4.c: 934: asm("nop");
+  2088  0EF5  0000               	nop	;#
+  2089                           ;CustomDM4.c: 935: }
+  2090  0EF6  138B               	bcf	11,7
+  2091  0EF7                     L22
+  2092                           ;CustomDM4.c: 938: if (G_TickCount > G_PowerBut
+      +                          ton_FP+(500000*3))
+  2093  0EF7  3060               	movlw	96
+  2094  0EF8  00F0               	movwf	btemp
+  2095  0EF9  30E3               	movlw	227
+  2096  0EFA  00F1               	movwf	btemp+1
+  2097  0EFB  3016               	movlw	22
+  2098  0EFC  00F2               	movwf	btemp+2
+  2099  0EFD  01F3               	clrf	btemp+3
+  2100  0EFE  0870               	movf	btemp,w
+  2101  0EFF  0765               	addwf	_G_PowerButton_FP^(0+128),w
+  2102  0F00  00F4               	movwf	btemp+4
+  2103  0F01  0866               	movf	(_G_PowerButton_FP+1)^(0+128),w
+  2104  0F02  00F5               	movwf	btemp+5
+  2105  0F03  0871               	movf	btemp+1,w
+  2106  0F04  1803               	btfsc	3,0
+  2107  0F05  0F71               	incfsz	btemp+1,w
+  2108  0F06  07F5               	addwf	btemp+5
+  2109  0F07  0867               	movf	(_G_PowerButton_FP+2)^(0+128),w
+  2110  0F08  00F6               	movwf	btemp+6
+  2111  0F09  0872               	movf	btemp+2,w
+  2112  0F0A  1803               	btfsc	3,0
+  2113  0F0B  0F72               	incfsz	btemp+2,w
+  2114  0F0C  07F6               	addwf	btemp+6
+  2115  0F0D  0868               	movf	(_G_PowerButton_FP+3)^(0+128),w
+  2116  0F0E  00F7               	movwf	btemp+7
+  2117  0F0F  0873               	movf	btemp+3,w
+  2118  0F10  1803               	btfsc	3,0
+  2119  0F11  0F73               	incfsz	btemp+3,w
+  2120  0F12  07F7               	addwf	btemp+7
+  2121  0F13  1283               	bcf	3,5
+  2122  0F14  0836               	movf	_G_TickCount+3,w	;volatile
+  2123  0F15  0277               	subwf	btemp+7,w
+  2124  0F16  1D03               	btfss	3,2
+  2125  0F17  2F22               	goto	u1025
+  2126  0F18  0835               	movf	_G_TickCount+2,w	;volatile
+  2127  0F19  0276               	subwf	btemp+6,w
+  2128  0F1A  1D03               	btfss	3,2
+  2129  0F1B  2F22               	goto	u1025
+  2130  0F1C  0834               	movf	_G_TickCount+1,w	;volatile
+  2131  0F1D  0275               	subwf	btemp+5,w
+  2132  0F1E  1D03               	btfss	3,2
+  2133  0F1F  2F22               	goto	u1025
+  2134  0F20  0833               	movf	_G_TickCount,w	;volatile
+  2135  0F21  0274               	subwf	btemp+4,w
+  2136  0F22                     u1025
+  2137                           ;CustomDM4.c: 939: {
+  2138  0F22  178B               	bsf	11,7
+  2139                           ;CustomDM4.c: 941: asm("nop");
+  2140  0F23  0000               	nop	;#
+  2141  0F24  1803               	btfsc	3,0
+  2142  0F25  2F46               	goto	l120
+  2143                           ;CustomDM4.c: 942: G_PowerButton_FP = 0;
+  2144  0F26  1683               	bsf	3,5
+  2145  0F27  01E5               	clrf	_G_PowerButton_FP^(0+128)
+  2146  0F28  01E6               	clrf	(_G_PowerButton_FP+1)^(0+128)
+  2147  0F29  01E7               	clrf	(_G_PowerButton_FP+2)^(0+128)
+  2148  0F2A  01E8               	clrf	(_G_PowerButton_FP+3)^(0+128)
+  2149                           ;CustomDM4.c: 945: (GIE = 0);
+  2150  0F2B  138B               	bcf	11,7
+  2151                           ;CustomDM4.c: 946: if (G_Quit)
+  2152  0F2C  1283               	bcf	3,5
+  2153  0F2D  0825               	movf	_G_Quit,w	;volatile
+  2154                           ;CustomDM4.c: 947: {
+  2155  0F2E  178B               	bsf	11,7
+  2156  0F2F  1903               	btfsc	3,2
+  2157  0F30  2F34               	goto	L24
+  2158                           ;CustomDM4.c: 949: asm("nop");
+  2159  0F31  0000               	nop	;#
+  2160                           ;CustomDM4.c: 951: StartUp();
+  2161  0F32  23D4               	fcall	_StartUp
+  2162                           ;CustomDM4.c: 952: }
+  2163  0F33  2F37               	goto	l119
+  2164                           ;CustomDM4.c: 953: else
+  2165  0F34                     L24
+  2166                           ;CustomDM4.c: 956: asm("nop");
+  2167  0F34  0000               	nop	;#
+  2168                           ;CustomDM4.c: 958: ShutDown();
+  2169  0F35  27AA  158A         	fcall	_ShutDown
+  2170  0F37                     l119
+  2171                           ;CustomDM4.c: 959: }
+  2172  0F37  178B               	bsf	11,7
+  2173                           ;CustomDM4.c: 961: asm("nop");
+  2174  0F38  0000               	nop	;#
+  2175                           ;CustomDM4.c: 962: }
+  2176  0F39  178B               	bsf	11,7
+  2177                           ;CustomDM4.c: 964: asm("nop");
+  2178  0F3A  0000               	nop	;#
+  2179                           ;CustomDM4.c: 965: }
+  2180  0F3B  2F46               	goto	l120
+  2181                           ;CustomDM4.c: 966: else
+  2182  0F3C                     L21
+  2183  0F3C  01E5               	clrf	_G_PowerButton_FP^(0+128)
+  2184  0F3D  01E6               	clrf	(_G_PowerButton_FP+1)^(0+128)
+  2185  0F3E  01E7               	clrf	(_G_PowerButton_FP+2)^(0+128)
+  2186  0F3F  01E8               	clrf	(_G_PowerButton_FP+3)^(0+128)
+  2187                           ;CustomDM4.c: 970: if (G_Quit)
+  2188  0F40  1283               	bcf	3,5
+  2189  0F41  0825               	movf	_G_Quit,w	;volatile
+  2190  0F42  1903               	btfsc	3,2
+  2191  0F43  2F46               	goto	l120
+  2192                           ;CustomDM4.c: 971: {
+  2193  0F44  27AA  158A         	fcall	_ShutDown
+  2194  0F46                     l120
+  2195                           ;CustomDM4.c: 973: }
+  2196  0F46  138B               	bcf	11,7
+  2197                           ;CustomDM4.c: 978: if (G_TickCount > G_Last_Act
+      +                          ion+(1000000*600))
+  2198  0F47  01F0               	clrf	btemp
+  2199  0F48  3046               	movlw	70
+  2200  0F49  00F1               	movwf	btemp+1
+  2201  0F4A  30C3               	movlw	195
+  2202  0F4B  00F2               	movwf	btemp+2
+  2203  0F4C  3023               	movlw	35
+  2204  0F4D  00F3               	movwf	btemp+3
+  2205  0F4E  0870               	movf	btemp,w
+  2206  0F4F  072F               	addwf	_G_Last_Action,w
+  2207  0F50  00F4               	movwf	btemp+4
+  2208  0F51  0830               	movf	_G_Last_Action+1,w
+  2209  0F52  00F5               	movwf	btemp+5
+  2210  0F53  0871               	movf	btemp+1,w
+  2211  0F54  1803               	btfsc	3,0
+  2212  0F55  0F71               	incfsz	btemp+1,w
+  2213  0F56  07F5               	addwf	btemp+5
+  2214  0F57  0831               	movf	_G_Last_Action+2,w
+  2215  0F58  00F6               	movwf	btemp+6
+  2216  0F59  0872               	movf	btemp+2,w
+  2217  0F5A  1803               	btfsc	3,0
+  2218  0F5B  0F72               	incfsz	btemp+2,w
+  2219  0F5C  07F6               	addwf	btemp+6
+  2220  0F5D  0832               	movf	_G_Last_Action+3,w
+  2221  0F5E  00F7               	movwf	btemp+7
+  2222  0F5F  0873               	movf	btemp+3,w
+  2223  0F60  1803               	btfsc	3,0
+  2224  0F61  0F73               	incfsz	btemp+3,w
+  2225  0F62  07F7               	addwf	btemp+7
+  2226  0F63  0836               	movf	_G_TickCount+3,w	;volatile
+  2227  0F64  0277               	subwf	btemp+7,w
+  2228  0F65  1D03               	btfss	3,2
+  2229  0F66  2F71               	goto	u1055
+  2230  0F67  0835               	movf	_G_TickCount+2,w	;volatile
+  2231  0F68  0276               	subwf	btemp+6,w
+  2232  0F69  1D03               	btfss	3,2
+  2233  0F6A  2F71               	goto	u1055
+  2234  0F6B  0834               	movf	_G_TickCount+1,w	;volatile
+  2235  0F6C  0275               	subwf	btemp+5,w
+  2236  0F6D  1D03               	btfss	3,2
+  2237  0F6E  2F71               	goto	u1055
+  2238  0F6F  0833               	movf	_G_TickCount,w	;volatile
+  2239  0F70  0274               	subwf	btemp+4,w
+  2240  0F71                     u1055
+  2241                           ;CustomDM4.c: 979: {
+  2242  0F71  178B               	bsf	11,7
+  2243                           ;CustomDM4.c: 981: asm("nop");
+  2244  0F72  0000               	nop	;#
+  2245  0F73  1803               	btfsc	3,0
+  2246  0F74  2F7A               	goto	L25
+  2247                           ;CustomDM4.c: 983: ACTION();
+  2248  0F75  2096               	fcall	_ACTION
+  2249                           ;CustomDM4.c: 985: ShutDown();
+  2250  0F76  27AA  158A         	fcall	_ShutDown
+  2251                           ;CustomDM4.c: 986: }
+  2252  0F78  178B               	bsf	11,7
+  2253                           ;CustomDM4.c: 988: asm("nop");
+  2254  0F79  0000               	nop	;#
+  2255  0F7A                     L25
+  2256                           ;CustomDM4.c: 991: (GIE = 0);
+  2257  0F7A  138B               	bcf	11,7
+  2258                           ;CustomDM4.c: 992: if (G_TickCount > ((1000000*
+      +                          600)*3))
+  2259  0F7B  306B               	movlw	107
+  2260  0F7C  0236               	subwf	_G_TickCount+3,w	;volatile
+  2261  0F7D  1D03               	btfss	3,2
+  2262  0F7E  2F89               	goto	u1065
+  2263  0F7F  3049               	movlw	73
+  2264  0F80  0235               	subwf	_G_TickCount+2,w	;volatile
+  2265  0F81  1D03               	btfss	3,2
+  2266  0F82  2F89               	goto	u1065
+  2267  0F83  30D2               	movlw	210
+  2268  0F84  0234               	subwf	_G_TickCount+1,w	;volatile
+  2269  0F85  1D03               	btfss	3,2
+  2270  0F86  2F89               	goto	u1065
+  2271  0F87  3001               	movlw	1
+  2272  0F88  0233               	subwf	_G_TickCount,w	;volatile
+  2273  0F89                     u1065
+  2274                           ;CustomDM4.c: 993: {
+  2275  0F89  178B               	bsf	11,7
+  2276                           ;CustomDM4.c: 995: asm("nop");
+  2277  0F8A  0000               	nop	;#
+  2278  0F8B  1C03               	btfss	3,0
+  2279  0F8C  2F90               	goto	L26
+  2280                           ;CustomDM4.c: 997: CLEARTIMER();
+  2281  0F8D  2388               	fcall	_CLEARTIMER
+  2282                           ;CustomDM4.c: 998: }
+  2283  0F8E  178B               	bsf	11,7
+  2284                           ;CustomDM4.c: 1000: asm("nop");
+  2285  0F8F  0000               	nop	;#
+  2286  0F90                     L26
+  2287                           ;CustomDM4.c: 1003: asm("clrwdt");
+  2288  0F90  0064               	clrwdt	;#
+  2289  0F91  2E2E               	goto	l100
+  2290  0F92                     _T_POWERBUTTON_ISDOWN
+  2291                           ;CustomDM4.c: 243: BOOL T_POWERBUTTON_ISDOWN(vo
+      +                          id)
+  2292  0F92  1683               	bsf	3,5
+  2293  0F93  1303               	bcf	3,6	;carry unused
+  2294  0F94  1306               	bcf	6,6
+  2295  0F95  1283               	bcf	3,5
+  2296  0F96  1706               	bsf	6,6
+  2297  0F97  1683               	bsf	3,5
+  2298  0F98  1706               	bsf	6,6
+  2299  0F99  3000               	movlw	0
+  2300  0F9A  1283               	bcf	3,5
+  2301  0F9B  1F06               	btfss	6,6
+  2302  0F9C  3001               	movlw	1
+  2303                           ;CustomDM4.c: 246: }
+  2304  0F9D  0008               	return	;uses W
+  2305  0F9E                     _eeprom_write_word
+  2306                           ;	_addr assigned to ?a_eeprom_write_word+0
+  2307  0000                     _eeprom_write_word$addr	set	?a_eeprom_write_wor
+      +                          d
+  2308                           ;_addr stored from w
+  2309  0F9E  0183               	clrf	3	;select bank 0
+  2310  0F9F  00B9               	movwf	?a_eeprom_write_word
+  2311                           ;CustomDM4.c: 225: void eeprom_write_word(BYTE 
+      +                          addr, WORD val)
+  2312  0FA0  0838               	movf	?_eeprom_write_word+1,w
+  2313  0FA1  00BA               	movwf	?_eeprom_write
+  2314  0FA2  0839               	movf	?a_eeprom_write_word,w
+  2315  0FA3  118A  21F6         	fcall	_eeprom_write
+  2316                           ;CustomDM4.c: 228: eeprom_write(addr+1, ( val))
+      +                          ;
+  2317  0FA5  0837               	movf	?_eeprom_write_word,w
+  2318  0FA6  00BA               	movwf	?_eeprom_write
+  2319  0FA7  0A39               	incf	?a_eeprom_write_word,w
+  2320  0FA8  118A  29F6         	ljmp	_eeprom_write
+  2321  0FAA                     _ShutDown
+  2322                           ;CustomDM4.c: 816: void ShutDown(void)
+  2323  0FAA  0183               	clrf	3	;select bank 0
+  2324  0FAB  0823               	movf	_G_Mode,w	;volatile
+  2325  0FAC  1903               	btfsc	3,2
+  2326  0FAD  2FE4               	goto	l94
+  2327                           ;CustomDM4.c: 827: {
+  2328  0FAE  3009               	movlw	9
+  2329  0FAF  00BA               	movwf	?_eeprom_write
+  2330  0FB0  3000               	movlw	0
+  2331  0FB1  118A  21F6         	fcall	_eeprom_write
+  2332                           ;CustomDM4.c: 830: eeprom_write(0x01, 0x100-(0x
+      +                          FF&(0x09+(0x00FF&G_Dwell)+G_ROF)));
+  2333  0FB3  0826               	movf	_G_ROF,w
+  2334  0FB4  3C00               	sublw	0
+  2335  0FB5  00F0               	movwf	btemp
+  2336  0FB6  082D               	movf	_G_Dwell,w
+  2337  0FB7  0270               	subwf	btemp,w
+  2338  0FB8  3EF7               	addlw	-9
+  2339  0FB9  00BA               	movwf	?_eeprom_write
+  2340  0FBA  3001               	movlw	1
+  2341  0FBB  118A  21F6  158A   	fcall	_eeprom_write
+  2342                           ;CustomDM4.c: 831: eeprom_write_word(0x02, G_De
+      +                          bounce);
+  2343  0FBE  082B               	movf	_G_Debounce,w
+  2344  0FBF  00B7               	movwf	?_eeprom_write_word
+  2345  0FC0  082C               	movf	_G_Debounce+1,w
+  2346  0FC1  00B8               	movwf	?_eeprom_write_word+1
+  2347  0FC2  3002               	movlw	2
+  2348  0FC3  279E  158A         	fcall	_eeprom_write_word
+  2349                           ;CustomDM4.c: 832: eeprom_write_word(0x04, G_Dw
+      +                          ell);
+  2350  0FC5  082D               	movf	_G_Dwell,w
+  2351  0FC6  00B7               	movwf	?_eeprom_write_word
+  2352  0FC7  082E               	movf	_G_Dwell+1,w
+  2353  0FC8  00B8               	movwf	?_eeprom_write_word+1
+  2354  0FC9  3004               	movlw	4
+  2355  0FCA  279E               	fcall	_eeprom_write_word
+  2356                           ;CustomDM4.c: 833: eeprom_write(0x06, G_ROF);
+  2357  0FCB  0826               	movf	_G_ROF,w
+  2358  0FCC  00BA               	movwf	?_eeprom_write
+  2359  0FCD  3006               	movlw	6
+  2360  0FCE  118A  21F6  158A   	fcall	_eeprom_write
+  2361                           ;CustomDM4.c: 834: eeprom_write_word(0x07, G_AM
+      +                          B);
+  2362  0FD1  0827               	movf	_G_AMB,w
+  2363  0FD2  00B7               	movwf	?_eeprom_write_word
+  2364  0FD3  0828               	movf	_G_AMB+1,w
+  2365  0FD4  00B8               	movwf	?_eeprom_write_word+1
+  2366  0FD5  3007               	movlw	7
+  2367  0FD6  279E  158A         	fcall	_eeprom_write_word
+  2368                           ;CustomDM4.c: 835: eeprom_write_word(0x09, G_BI
+      +                          P);
+  2369  0FD8  0829               	movf	_G_BIP,w
+  2370  0FD9  00B7               	movwf	?_eeprom_write_word
+  2371  0FDA  082A               	movf	_G_BIP+1,w
+  2372  0FDB  00B8               	movwf	?_eeprom_write_word+1
+  2373  0FDC  3009               	movlw	9
+  2374  0FDD  279E               	fcall	_eeprom_write_word
+  2375                           ;CustomDM4.c: 836: eeprom_write(0x0B, G_FMD);
+  2376  0FDE  0822               	movf	_G_FMD,w
+  2377  0FDF  00BA               	movwf	?_eeprom_write
+  2378  0FE0  300B               	movlw	11
+  2379  0FE1  118A  21F6  158A   	fcall	_eeprom_write
+  2380  0FE4                     l94
+  2381                           ;CustomDM4.c: 837: }
+  2382  0FE4  24EC               	fcall	_LEDOFF
+  2383                           ;CustomDM4.c: 841: G_Eye_On = 0;
+  2384  0FE5  1683               	bsf	3,5
+  2385  0FE6  01C8               	clrf	_G_Eye_On^(0+128)
+  2386                           ;CustomDM4.c: 844: (GIE = 0);
+  2387  0FE7  138B               	bcf	11,7
+  2388                           ;CustomDM4.c: 845: G_Quit = 1;
+  2389  0FE8  3001               	movlw	1
+  2390  0FE9  1283               	bcf	3,5
+  2391  0FEA  00A5               	movwf	_G_Quit	;volatile
+  2392                           ;CustomDM4.c: 846: G_LED_Off = 1;
+  2393  0FEB  1683               	bsf	3,5
+  2394  0FEC  00CC               	movwf	_G_LED_Off^(0+128)	;volatile
+  2395                           ;CustomDM4.c: 847: G_Fire_RGB = 0x00;
+  2396  0FED  01CA               	clrf	_G_Fire_RGB^(0+128)
+  2397                           ;CustomDM4.c: 849: while (T_POWERBUTTON_ISDOWN(
+      +                          ))
+  2398  0FEE                     l95
+  2399  0FEE  2792               	fcall	_T_POWERBUTTON_ISDOWN
+  2400  0FEF  3800               	iorlw	0
+  2401                           ;CustomDM4.c: 850: {
+  2402  0FF0  178B               	bsf	11,7
+  2403  0FF1  1903               	btfsc	3,2
+  2404  0FF2  2FF8               	goto	L20
+  2405                           ;CustomDM4.c: 852: asm("nop");
+  2406  0FF3  0000               	nop	;#
+  2407                           ;CustomDM4.c: 853: asm("clrwdt");
+  2408  0FF4  0064               	clrwdt	;#
+  2409                           ;CustomDM4.c: 854: PORTB = 0x00;
+  2410  0FF5  0186               	clrf	6	;volatile
+  2411                           ;CustomDM4.c: 855: (GIE = 0);
+  2412  0FF6  138B               	bcf	11,7
+  2413  0FF7  2FEE               	goto	l95
+  2414                           ;CustomDM4.c: 856: }
+  2415  0FF8                     L20
+  2416                           ;CustomDM4.c: 858: asm("nop");
+  2417  0FF8  0000               	nop	;#
+  2418                           ;CustomDM4.c: 861: RBIE = 1;
+  2419  0FF9  158B               	bsf	11,3
+  2420                           ;CustomDM4.c: 863: T_POWERBUTTON_ISDOWN();
+  2421  0FFA  2792               	fcall	_T_POWERBUTTON_ISDOWN
+  2422                           ;CustomDM4.c: 866: _POWERSAVE();
+  2423  0FFB  118A  21DF  158A   	fcall	__POWERSAVE
+  2424                           ;CustomDM4.c: 867: asm("sleep");
+  2425  0FFE  0063               	sleep	;#
+  2426                           ;CustomDM4.c: 868: }
+  2427  0FFF  0008               	return	;W free
+  2428                           
+  2429                           	psect	config
+  2430  2007  1F1C               	dw	7964	;#
+  2431                           
+  2432                           	psect	intcode
+  2433  000B                     _INT
+  2434  000B                     int_func
+  2435                           ;CustomDM4.c: 252: void interrupt INT(void)
+  2436  000B  1D0B               	btfss	11,2
+  2437  000C  281B               	goto	l17
+  2438                           ;CustomDM4.c: 256: {
+  2439  000D  30FF               	movlw	255
+  2440  000E  1283               	bcf	3,5
+  2441  000F  1303               	bcf	3,6	;carry unused
+  2442  0010  07B3               	addwf	_G_TickCount	;volatile
+  2443  0011  3001               	movlw	1
+  2444  0012  1803               	btfsc	3,0
+  2445  0013  07B4               	addwf	_G_TickCount+1	;volatile
+  2446  0014  1803               	btfsc	3,0
+  2447  0015  07B5               	addwf	_G_TickCount+2	;volatile
+  2448  0016  1803               	btfsc	3,0
+  2449  0017  07B6               	addwf	_G_TickCount+3	;volatile
+  2450                           ;CustomDM4.c: 258: TMR0 -= 255;
+  2451  0018  3001               	movlw	-255
+  2452  0019  0781               	addwf	1	;volatile
+  2453                           ;CustomDM4.c: 259: T0IF = 0;
+  2454  001A  110B               	bcf	11,2
+  2455  001B                     l17
+  2456                           ;CustomDM4.c: 260: }
+  2457  001B  1283               	bcf	3,5
+  2458  001C  1303               	bcf	3,6	;carry unused
+  2459  001D  1C0C               	btfss	12,0
+  2460  001E  285A               	goto	l18
+  2461                           ;CustomDM4.c: 264: {
+  2462  001F  0825               	movf	_G_Quit,w	;volatile
+  2463  0020  1D03               	btfss	3,2
+  2464  0021  2858               	goto	l19
+  2465  0022  0823               	movf	_G_Mode,w	;volatile
+  2466  0023  1D03               	btfss	3,2
+  2467  0024  2858               	goto	l19
+  2468                           ;CustomDM4.c: 266: {
+  2469  0025  1C05               	btfss	5,0
+  2470  0026  1A86               	btfsc	6,5
+  2471  0027  282A               	goto	u170
+  2472  0028  1E06               	btfss	6,4
+  2473  0029  2835               	goto	l20
+  2474  002A                     u170
+  2475  002A  1683               	bsf	3,5
+  2476  002B  084B               	movf	_G_LED_Bright^(0+128),w	;volatile
+  2477  002C  1D03               	btfss	3,2
+  2478  002D  2835               	goto	l20
+  2479                           ;CustomDM4.c: 268: {
+  2480  002E  158A  24EC  118A   	fcall	_LEDOFF
+  2481                           ;CustomDM4.c: 270: TMR1L = 0x5F;
+  2482  0031  305F               	movlw	95
+  2483  0032  008E               	movwf	14	;volatile
+  2484                           ;CustomDM4.c: 271: TMR1H = 0xF0;
+  2485  0033  30F0               	movlw	-16
+  2486  0034  2857               	goto	L2
+  2487                           ;CustomDM4.c: 272: }
+  2488  0035                     l20
+  2489                           ;CustomDM4.c: 273: else if (!G_LED_Off)
+  2490  0035  1683               	bsf	3,5
+  2491  0036  084C               	movf	_G_LED_Off^(0+128),w	;volatile
+  2492  0037  1D03               	btfss	3,2
+  2493  0038  2858               	goto	l19
+  2494                           ;CustomDM4.c: 274: {
+  2495  0039  0C4A               	rrf	_G_Fire_RGB^(0+128),w
+  2496  003A  1283               	bcf	3,5
+  2497  003B  1C03               	btfss	3,0
+  2498  003C  283F               	goto	L3
+  2499  003D  1405               	bsf	5,0
+  2500  003E  2840               	goto	u224
+  2501  003F                     L3
+  2502  003F  1005               	bcf	5,0
+  2503  0040                     u224
+  2504                           ;CustomDM4.c: 276: RB5 = ((0x02&G_Fire_RGB) == 
+      +                          0x02);
+  2505  0040  1683               	bsf	3,5
+  2506  0041  1303               	bcf	3,6	;carry unused
+  2507  0042  1CCA               	btfss	_G_Fire_RGB^(0+128),1
+  2508  0043  2847               	goto	u230
+  2509  0044  1283               	bcf	3,5
+  2510  0045  1686               	bsf	6,5
+  2511  0046  2849               	goto	u244
+  2512  0047                     u230
+  2513  0047  1283               	bcf	3,5
+  2514  0048  1286               	bcf	6,5
+  2515  0049                     u244
+  2516                           ;CustomDM4.c: 277: RB4 = ((0x04&G_Fire_RGB) == 
+      +                          0x04);
+  2517  0049  1683               	bsf	3,5
+  2518  004A  1303               	bcf	3,6	;carry unused
+  2519  004B  1D4A               	btfss	_G_Fire_RGB^(0+128),2
+  2520  004C  2850               	goto	u250
+  2521  004D  1283               	bcf	3,5
+  2522  004E  1606               	bsf	6,4
+  2523  004F  2852               	goto	u264
+  2524  0050                     u250
+  2525  0050  1283               	bcf	3,5
+  2526  0051  1206               	bcf	6,4
+  2527  0052                     u264
+  2528                           ;CustomDM4.c: 278: TMR1L = 0x17;
+  2529  0052  3017               	movlw	23
+  2530  0053  1283               	bcf	3,5
+  2531  0054  1303               	bcf	3,6	;carry unused
+  2532  0055  008E               	movwf	14	;volatile
+  2533                           ;CustomDM4.c: 279: TMR1H = 0xFC;
+  2534  0056  30FC               	movlw	-4
+  2535  0057                     L2
+  2536  0057  008F               	movwf	15	;volatile
+  2537  0058                     l19
+  2538                           ;CustomDM4.c: 280: }
+  2539  0058  1283               	bcf	3,5
+  2540  0059  100C               	bcf	12,0
+  2541  005A                     l18
+  2542                           ;CustomDM4.c: 283: }
+  2543  005A  1C0B               	btfss	11,0
+  2544  005B  2863               	goto	l23
+  2545                           ;CustomDM4.c: 287: {
+  2546  005C  0000               	nop	;#
+  2547                           ;CustomDM4.c: 289: if ((RB1 == 0))
+  2548  005D  1886               	btfsc	6,1
+  2549  005E  2862               	goto	l24
+  2550                           ;CustomDM4.c: 290: LEDOFF();
+  2551  005F  158A  24EC  118A   	fcall	_LEDOFF
+  2552  0062                     l24
+  2553                           ;CustomDM4.c: 291: RBIF = 0;
+  2554  0062  100B               	bcf	11,0
+  2555  0063                     l23
+  2556                           ;CustomDM4.c: 292: }
+  2557  0063  1683               	bsf	3,5
+  2558  0064  0849               	movf	_G_Eye_Waiting^(0+128),w	;volatile
+  2559  0065  1903               	btfsc	3,2
+  2560  0066  2872               	goto	l16
+  2561                           ;CustomDM4.c: 296: {
+  2562  0067  1283               	bcf	3,5
+  2563  0068  1806               	btfsc	6,0
+  2564  0069  2872               	goto	l16
+  2565                           ;CustomDM4.c: 299: {
+  2566  006A  1683               	bsf	3,5
+  2567  006B  01C9               	clrf	_G_Eye_Waiting^(0+128)	;volatile
+  2568                           ;CustomDM4.c: 303: if (G_Eye_Malfunc)
+  2569  006C  0847               	movf	_G_Eye_Malfunc^(0+128),w	;volatile
+  2570  006D  1903               	btfsc	3,2
+  2571  006E  2872               	goto	l16
+  2572                           ;CustomDM4.c: 304: {
+  2573  006F  158A  23BC  118A   	fcall	_CLEAREYEMALFUNC
+  2574                           ;CustomDM4.c: 306: }
+  2575  0072                     l16
+  2576  0072  1303               	bcf	3,6	;carry unused
+  2577  0073  1283               	bcf	3,5
+  2578                           
+  2579                           	psect	intsave_0
+  2580  007C                     saved_w
+  2581  007C                     	ds	1
+  2582                           
+  2583                           	psect	intret
+  2584  0074  0850               	movf	saved_pclath,w
+  2585  0075  008A               	movwf	10
+  2586  0076                     int_restore
+  2587  0076  084F               	movf	saved_status,w
+  2588  0077  0083               	movwf	3
+  2589  0078  0EFC               	swapf	saved_w
+  2590  0079  0E7C               	swapf	saved_w,w
+  2591  007A  0009               	retfie
+  2592                           
+  2593                           	psect	intentry
+  2594  0004                     int_entry
+  2595  0004  00FC               	movwf	saved_w
+  2596  0005  0803               	movf	3,w
+  2597  0006  0183               	clrf	3
+  2598  0007  00CF               	movwf	saved_status
+  2599  0008  080A               	movf	10,w
+  2600  0009  00D0               	movwf	saved_pclath
+  2601  000A  018A               	clrf	10
+  2602                           ;       param _microseconds assigned to ?_wait+
+      +                          0
+  2603  0000                     _wait$microseconds	set	?_wait
+  2604                           
+  2605                           	psect	intsave
+  2606  004F                     saved_status
+  2607  004F                     	ds	1
+  2608  0050                     saved_pclath
+  2609  0050                     	ds	1
+  2610                           
+  2611                           	psect	rdata_1
+  2612                           ;CustomDM4.c: 337: void Mode_Fire(void)
+  2613  00E9                     F442
+  2614  00E9                     	ds	1
+  2615                           ;	_end assigned to ?a_Mode_Fire+0
+  2616  0000                     _Mode_Fire$end	set	?a_Mode_Fire
+  2617                           
+  2618                           	psect	idata_1
+  2619  0003  3401               	retlw	1
+  2620                           
+  2621                           	psect	text21
+  2622  0000                     
+  2623  0000                     
+  2624  0000                     
+  2625  0000                     
+  2626  0000                     
+  2627  0000                     
+  2628  0000                     
+  2629  0000                     
+  2630  0000                     
+  2631  0000                     
+  2632  0000                     
+  2633  0000                     
+  2634  0000                     
+  2635  0000                     
+  2636  0000                     
+  2637  0000                     
+  2638  0000                     
+  2639  0000                     
+  2640  0000                     
+  2641  0000                     
+  2642  0000                     
+  2643  0000                     
+  2644  0000                     
+  2645  0000                     
+  2646  0000                     
+  2647  0000                     
+  2648  0000                     
+  2649  0000                     
+  2650  0000                     
+  2651  0000                     
+  2652  0000                     
+  2653  0000                     
+  2654  0000                     
+  2655  0000                     
+  2656  0000                     
+  2657  0000                     
+  2658  0000                     
+  2659  0000                     
+  2660  0000                     
+  2661  0000                     
+  2662  0000                     
+  2663  0000                     
+  2664  0000                     
+  2665  0000                     
+  2666  0000                     
+  2667  0000                     
+  2668  0000                     
+  2669  0000                     
+  2670  0000                     
+  2671  0000                     
+  2672  0000                     
+  2673  0000                     
+  2674  0000                     
+  2675  0000                     
+  2676  0000                     
+  2677  0000                     
+  2678  0000                     
+  2679  0000                     
+  2680  0000                     
+  2681  0000                     
+  2682  0000                     
+  2683  0000                     
+  2684  0000                     
+  2685  0000                     
+  2686  0000                     
+  2687  0000                     
+  2688  0000                     
+  2689  0000                     
+  2690  0000                     
+  2691  0000                     
+  2692  0000                     
+  2693  0000                     
+  2694  0000                     
+  2695  0000                     
+  2696  0000                     
+  2697  0000                     
+  2698  0000                     
+  2699  0000                     
+  2700  0000                     
+  2701  0000                     
+  2702  0000                     
+  2703  0000                     
+  2704  0000                     
+  2705  0000                     
+  2706  0000                     
+  2707  0000                     
+  2708  0000                     
+  2709  0000                     
+  2710  0000                     
+  2711  0000                     
+  2712  0000                     
+  2713  0000                     
+  2714  0000                     
+  2715  0000                     
+  2716  0000                     
+  2717  0000                     
+  2718  0000                     
+  2719  0000                     
+  2720  0000                     
+  2721  0000                     
+  2722  0000                     
+  2723  0000                     
+  2724  0000                     
+  2725  0000                     
+  2726  0000                     
+  2727  0000                     
+  2728  0000                     
+  2729  0000                     
+  2730  0000                     
+  2731  0000                     
+  2732  0000                     
+  2733  0000                     
+  2734  0000                     
+  2735  0000                     
+  2736  0000                     
+  2737  0000                     
+  2738  0000                     
+  2739  0000                     
+  2740  0000                     
+  2741  0000                     
+  2742  0000                     
+  2743  0000                     
+  2744  0000                     
+  2745  0000                     
+  2746  0000                     
+  2747  0000                     
+  2748  0000                     
+  2749  0000                     
+  2750  0000                     
+  2751  0000                     
+  2752  0000                     
+  2753  0000                     
+  2754  0000                     
+  2755  0000                     
+  2756  0000                     
+  2757                           
+  2758                           	psect	rbss_1
+  2759  00C5                     _G_BPS
+  2760  00C5                     	ds	1
+  2761  00C6                     _G_Current_ROF
+  2762  00C6                     	ds	1
+  2763  00C7                     _G_Eye_Malfunc
+  2764  00C7                     	ds	1
+  2765  00C8                     _G_Eye_On
+  2766  00C8                     	ds	1
+  2767  00C9                     _G_Eye_Waiting
+  2768  00C9                     	ds	1
+  2769  00CA                     _G_Fire_RGB
+  2770  00CA                     	ds	1
+  2771  00CB                     _G_LED_Bright
+  2772  00CB                     	ds	1
+  2773  00CC                     _G_LED_Off
+  2774  00CC                     	ds	1
+  2775  00CD                     F440
+  2776  00CD                     	ds	4
+  2777  00D1                     _G_EyeButton_FP
+  2778  00D1                     	ds	4
+  2779  00D5                     _G_Eye_NextCheck
+  2780  00D5                     	ds	4
+  2781  00D9                     _G_LED_DelayOffTime
+  2782  00D9                     	ds	4
+  2783  00DD                     _G_LED_DelayOnTime
+  2784  00DD                     	ds	4
+  2785  00E1                     _G_LED_NextBlink
+  2786  00E1                     	ds	4
+  2787  00E5                     _G_PowerButton_FP
+  2788  00E5                     	ds	4
+  2789                           
+  2790                           	psect	rbss_0
+  2791  0022                     _G_FMD
+  2792  0022                     	ds	1
+  2793  0023                     _G_Mode
+  2794  0023                     	ds	1
+  2795  0024                     _G_Mode_Choose
+  2796  0024                     	ds	1
+  2797  0025                     _G_Quit
+  2798  0025                     	ds	1
+  2799  0026                     _G_ROF
+  2800  0026                     	ds	1
+  2801  0000                     
+  2802  0000                     
+  2803  0000                     
+  2804  0000                     
+  2805  0000                     
+  2806  0000                     
+  2807  0000                     
+  2808  0000                     
+  2809  0000                     
+  2810  0000                     
+  2811  0000                     
+  2812  0000                     
+  2813  0000                     
+  2814  0000                     
+  2815  0000                     
+  2816  0000                     
+  2817  0000                     
+  2818  0000                     
+  2819  0000                     
+  2820  0000                     
+  2821  0000                     
+  2822  0000                     
+  2823  0000                     
+  2824  0000                     
+  2825  0000                     
+  2826  0027                     _G_AMB
+  2827  0027                     	ds	2
+  2828  0029                     _G_BIP
+  2829  0029                     	ds	2
+  2830  002B                     _G_Debounce
+  2831  002B                     	ds	2
+  2832  002D                     _G_Dwell
+  2833  002D                     	ds	2
+  2834  002F                     _G_Last_Action
+  2835  002F                     	ds	4
+  2836  0033                     _G_TickCount
+  2837  0033                     	ds	4
+  2838                           
+  2839                           	psect	temp
+  2840  0070                     btemp
+  2841  0070                     	ds	8
+
+
+HI-TECH Software PICC Macro Assembler V9.50PL2
+Symbol Table                                          Tue Aug 11 23:56:16 2009
+
+            _G_Fire_RGB 00CA       _G_LED_DelayOnTime 00DD  
+                _ACTION 0896         _Cycle_BreakBeam 0377  
+                    l20 0035                      l23 0063  
+                    l32 0B86                      l16 0072  
+                    l24 0062                      l17 001B  
+                    l50 0A6E                      l34 0908  
+                    l18 005A                      l43 09E5  
+                    l19 0058                      l52 0A8E  
+                    l44 09EE                      l36 0A88  
+                    l45 0A71                      l37 0A85  
+                    l29 08DA                      l70 0D32  
+                    l54 0B01                      l46 0A3F  
+                    l38 09CF                      l55 0ADE  
+                    l64 0D2C                      l65 0D69  
+                    l49 0A5E                      l66 0D45  
+                    l59 0B7F                      l92 0C9B  
+                    l76 0D72                      l68 0D3D  
+                    l77 0E29                      l85 0E27  
+                    l94 0FE4                      l78 0DF0  
+                    l95 0FEE                      l87 0C2B  
+                    l88 0C27                      l89 0C13  
+                    u20 0CB0                      u40 0CB5  
+                    u34 0CB1                      u60 0CBA  
+                    u54 0CB6               _G_Ramping 00A6  
+                _LEDOFF 0CEC      _G_LED_DelayOffTime 00D9  
+                   F440 00CD                     F442 00E9  
+            _G_LimitROF 00A4     ?a_eeprom_write_word 0039  
+                   l100 0E2E                     l110 0E93  
+                   l102 0ED8                     l103 0ED7  
+                   l120 0F46                     l112 0E95  
+                   l104 0ED4                     l113 0EAE  
+                   l105 0EC1                     l106 0E35  
+                   l107 0E4C                     l108 0E65  
+                   l109 0E78                     l119 0F37  
+                _G_Mode 0023                     u230 0047  
+                   u224 0040                     u410 093D  
+                   u250 0050                     u170 002A  
+                   u244 0049                     _INT 000B  
+                   u325 08F0                     u264 0052  
+                   u435 09A6                     u605 0A4D  
+                   u555 0A26                     u395 0938  
+                _G_Quit 0025                     u805 0D60  
+                   u725 0B55                     u645 0AA5  
+                   u590 0A56                     u815 0D6F  
+                   u940 0C87                     u925 0C81  
+                   u865 0DE9                     u875 0E1B  
+            _COLORCYCLE 0CE4               ?a_StartUp 0037  
+      __EYEPOWER_ON_PTR 00C3             _G_Last_Shot 00B1  
+           _G_Last_Pull 00AD          _ChangeModeProc 0D86  
+                  f2063 003C                    f2263 0039  
+     __EYEPOWER_OFF_PTR 00C1                 _G_Dwell 002D  
+      _G_PowerButton_FP 00E5                    u1025 0F22  
+                  u1055 0F71                    u1065 0F89  
+              _LEDCOLOR 0CA9             _G_Next_Shot 00B5  
+                  _main 0E2B             _G_TickCount 0033  
+          _eeprom_write 01F6             ?a_Mode_Fire 0037  
+                  _wait 08B6                    btemp 0070  
+           ?a_Mode_Proc 0040                    lwdiv 0705  
+                  start 007B         __DIP1_ISSET_PTR 00BD  
+     _eeprom_write_word 0F9E                  saved_w 007C  
+              _NEXTMODE 0D77   __EYEBUTTON_ISDOWN_PTR 00BF  
+               _StartUp 0BD4           _G_Eye_Malfunc 00C7  
+              int_entry 0004           ?_TRIGGER_ISUP 0049  
+             _Mode_Fire 08F5                _G_Eye_On 00C8  
+             _Mode_Proc 0D02                   ?_wait 0046  
+              _G_RampIt 00A5                   _BLINK 0CBC  
+              _G_Hybrid 00A3           _G_Eye_Waiting 00C9  
+                 _G_AMB 0027                   _G_BIP 0029  
+                 _G_FMD 0022                   _G_BPS 00C5  
+                 _G_ROF 0026         _CLEAREYEMALFUNC 0BBC  
+         _EDITMODECYCLE 0CF1           _G_Last_Action 002F  
+          ?a_BLINK_FAST 0045                 code_ptr 0051  
+           string_table 00A0             _eeprom_read 01E9  
+           saved_pclath 0050      ?a_eeprom_read_word 003B  
+            __POWERSAVE 01DF    _T_POWERBUTTON_ISDOWN 0F92  
+                 pclath 000A             saved_status 004F  
+            ?a_LEDCOLOR 0046                   status 0003  
+               int_func 000B      ?_eeprom_write_word 0037  
+          _G_ShotBuffer 00A7       _TRIGGER_FIRSTPULL 047E  
+      _eeprom_read_word 08A4           _G_Current_ROF 00C6  
+          _G_LED_Bright 00CB           __CHECKBATTERY 022D  
+       _G_LED_NextBlink 00E1           _G_Mode_Choose 0024  
+        _G_EyeButton_FP 00D1               _G_LED_Off 00CC  
+              _ShutDown 0FAA            __CHOOSEBOARD 024F  
+         ?_eeprom_write 003A            _TRIGGER_ISUP 0448  
+            _CLEARTIMER 0B88            used_code_ptr 0001  
+               ?a_BLINK 0045              ?_Mode_Proc 0037  
+            _G_Debounce 002B              int_restore 0076  
+            _BLINK_FAST 0CD1              used_btemp0 0001  
+            used_btemp1 0001              used_btemp2 0001  
+            used_btemp3 0001              used_btemp4 0001  
+            used_btemp5 0001              used_btemp6 0001  
+            used_btemp7 0001         _G_Eye_NextCheck 00D5  
+          _G_Trigger_FP 00B9  
