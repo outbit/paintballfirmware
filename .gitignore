@@ -31,6 +31,9 @@
 # 
 bin/
 
+# c9.io
+.c9/
+
 # Other
 *.sym
 *.map
