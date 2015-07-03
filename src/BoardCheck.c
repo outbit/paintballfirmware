@@ -145,7 +145,8 @@ void _CHOOSEBOARD(void)
 
     // Full Battery Voltage
     G_Board_Battery = FULLBATTERY;
-    RBPU = 0;                         // PORTB Internal Pullup
+//    RBPU = 0;                // PORTB Internal Pullup (Hi-Tech C)
+    OPTION_REG &= ~(1<<7);     // PORTB Internal Pullup (mpLab)
 }
 
 void _COMPARE(BYTE vr)

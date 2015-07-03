@@ -42,3 +42,6 @@ bin/
 *.cof
 *.mcw
 *.mcs
+/CodeX.X/nbproject/private/
+/CodeX.X/build/default/
+/CodeX.X/dist/default/
