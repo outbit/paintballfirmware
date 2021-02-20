@@ -46,6 +46,8 @@
 #define LBIBOARD    0x01
 
 #define FULLBATTERY 4
+#define bank1
+#define bank0
 
 typedef BOOL (*LBI_FUNCTION_GET)(void);
 typedef void (*LBI_FUNCTION_SET)(void);
