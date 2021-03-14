@@ -158,7 +158,7 @@ WORD eeprom_read_word(BYTE addr);
 BOOL T_POWERBUTTON_ISDOWN(void);
 
 // CustomDM4 Functions
-void interrupt INT(void);
+void INT(void);
 void wait(DWORD microseconds);
 void Mode_Fire(void);
 WORD Mode_Proc(WORD var, WORD min, WORD max, WORD inc, BYTE RGB);

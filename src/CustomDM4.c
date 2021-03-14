@@ -258,7 +258,7 @@ BOOL T_POWERBUTTON_ISDOWN(void)  // Active Low (Toggle Input Bit)
 /* @Desc: Interrupt Handler (Timer0/EYE/PowerButtonWakup)
    @Return:
  */
-void interrupt INT(void)
+void INT(void)
 {
     // Timer0 (8-BIT Timer)
     if (T0IF) {
